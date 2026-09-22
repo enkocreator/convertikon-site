@@ -9,7 +9,7 @@
 <meta property="og:description" content="A desktop converter for architects, designers and construction. Metric on one side, imperial on the other. Coming to Mac and Windows.">
 <meta property="og:image" content="https://convertikon.app/assets/icon.png">
 <meta property="og:url" content="https://convertikon.app/">
-<meta name="theme-color" content="#2E2B27">
+<meta name="theme-color" content="#6B665E">
 <link rel="icon" href="./assets/icon.png" type="image/png">
 <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png">
 <style>
@@ -21,14 +21,13 @@
   @font-face { font-family: 'Chakra Petch'; font-weight: 700; font-style: normal; font-display: swap;
                src: url('./assets/fonts/ChakraPetch-Bold.ttf') format('truetype'); }
 
-  /* The app's own palette. The ground is its value colour: the one dark tone the app
-     already owns, and the only one the gold wordmark reads on. */
+  /* The app's own palette. The ground is its label grey — the lightest tone in the
+     palette on which the gold wordmark still reads (3.3:1). */
   :root {
-    --ground: #2E2B27;
+    --ground: #6B665E;
     --ink:    #DCD9D3;
-    --muted:  #C6C2BA;
-    --faint:  #9C978F;
     --gold:   #E8C32B;
+    --dark:   #2E2B27;
   }
 
   * { box-sizing: border-box; }
@@ -43,98 +42,64 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
 
   .wrap {
     width: 100%;
-    max-width: 820px;
-    margin: 0 auto;
-    padding: 40px 24px 32px;
+    max-width: 760px;
+    padding: 12vh 24px 32px;
     flex: 1;
     display: flex;
     flex-direction: column;
+    align-items: center;
   }
 
-  header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 24px;
-  }
   .wordmark {
     display: block;
-    width: clamp(200px, 56vw, 460px);
+    width: min(88vw, 620px);
     height: auto;
-    margin-top: 22px;           /* aligns the letters' cap line with the mascot's eye */
-  }
-  .mascot {
-    display: block;
-    width: clamp(72px, 14vw, 120px);
-    height: auto;
-    flex: none;
   }
 
-  main {
-    margin-top: clamp(56px, 12vh, 120px);
-    max-width: 640px;
-  }
-  h1 {
+  .tagline {
     font-weight: 700;
-    font-size: clamp(28px, 5.2vw, 44px);
-    line-height: 1.15;
+    font-size: clamp(22px, 3.6vw, 32px);
+    line-height: 1.2;
     letter-spacing: 0.5px;
-    margin: 0 0 20px;
+    margin: 36px 0 0;
+    max-width: 24ch;
     text-wrap: balance;
   }
-  h1 .name { color: var(--gold); }
-  .sub {
-    font-size: clamp(16px, 2.2vw, 19px);
-    color: var(--muted);
-    margin: 0 0 40px;
-    max-width: 52ch;
-  }
-  .sub b { color: var(--ink); font-weight: 600; }
 
-  /* Email capture */
-  .capture { max-width: 520px; }
-  .capture .capture-label, .capture label {
+  .sub {
+    font-size: clamp(15px, 2vw, 18px);
+    margin: 18px 0 0;
+    max-width: 46ch;
+    text-wrap: balance;
+  }
+  .sub b { font-weight: 600; }
+
+  .mascot {
     display: block;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--faint);
-    margin-bottom: 10px;
+    width: clamp(110px, 18vw, 150px);
+    height: auto;
+    margin: 56px 0 0;
   }
-  .row { display: flex; gap: 10px; flex-wrap: wrap; }
-  .capture input[type="email"] {
-    flex: 1 1 240px;
-    min-width: 0;
-    height: 50px;
-    padding: 0 16px;
-    font: inherit;
-    font-size: 17px;
-    color: var(--ground);
-    background: var(--ink);
-    border: 2px solid var(--ink);
-    border-radius: 0;
-    outline: none;
-  }
-  .capture input[type="email"]::placeholder { color: var(--faint); }
-  .capture input[type="email"]:focus { border-color: var(--gold); }
+
+  .capture { margin-top: 32px; }
   .btn {
-    flex: none;
-    height: 50px;
-    padding: 0 22px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    height: 52px;
+    padding: 0 28px;
     font: inherit;
     font-weight: 700;
     font-size: 14px;
     letter-spacing: 2px;
     text-transform: uppercase;
-    color: var(--ground);
+    color: var(--dark);
     background: var(--gold);
     border: 2px solid var(--gold);
     border-radius: 0;
@@ -147,24 +112,18 @@
   .note {
     margin: 14px 0 0;
     font-size: 13px;
-    color: var(--faint);
+    opacity: 0.8;
   }
 
   footer {
     margin-top: auto;
-    padding-top: 64px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px 24px;
+    padding-top: 72px;
     font-size: 13px;
-    color: var(--faint);
+    opacity: 0.8;
   }
-  footer a { color: var(--muted); text-decoration: none; }
-  footer a:hover { color: var(--gold); }
 
   @media (max-width: 480px) {
-    .wrap { padding: 28px 16px 24px; }
-    .wordmark { margin-top: 12px; }
+    .wrap { padding: 9vh 16px 24px; }
     .btn { width: 100%; }
   }
   @media (prefers-reduced-motion: no-preference) {
@@ -175,30 +134,23 @@
 <body>
 <div class="wrap">
 
-  <header>
-    <img class="wordmark" src="./assets/wordmark.svg" alt="CONVERTIKON" width="1793" height="240">
-    <img class="mascot" src="./assets/icon.png" alt="" width="512" height="512">
-  </header>
+  <img class="wordmark" src="./assets/wordmark.svg" alt="CONVERTIKON" width="1793" height="240">
 
-  <main>
-    <h1><span class="name">CONVERTIKON</span> is on its way to end your metric–imperial pain.</h1>
-    <p class="sub">A desktop converter for <b>architects, designers and construction</b>.
-      Millimetres to feet and inches and back, with real fractions. Coming to <b>Mac</b> and <b>Windows</b>.</p>
+  <h1 class="tagline">On its way to end your metric–imperial pain.</h1>
 
-    <!-- Email capture. Until the Kit form exists this is a plain mail link (README explains the swap). -->
-    <div class="capture">
-      <p class="capture-label">Be told when it launches</p>
-      <div class="row">
-        <a class="btn" href="mailto:enkokokoko@gmail.com?subject=Tell%20me%20when%20CONVERTIKON%20launches&amp;body=Please%20let%20me%20know%20when%20CONVERTIKON%20is%20out.">Tell me when</a>
-      </div>
-      <p class="note">One email on launch day. Nothing else, ever.</p>
-    </div>
-  </main>
+  <p class="sub">A desktop converter for <b>architects, designers and construction</b>.
+    Millimetres to feet and inches and back, with real fractions.
+    Coming to <b>Mac</b> and <b>Windows</b>.</p>
 
-  <footer>
-    <span>© 2026 Elizabeth Enko</span>
-    <span>convertikon.app</span>
-  </footer>
+  <img class="mascot" src="./assets/icon.png" alt="" width="512" height="512">
+
+  <!-- Email capture. Until the Kit form exists this is a plain mail link (README explains the swap). -->
+  <div class="capture">
+    <a class="btn" href="mailto:enkokokoko@gmail.com?subject=Tell%20me%20when%20CONVERTIKON%20launches&amp;body=Please%20let%20me%20know%20when%20CONVERTIKON%20is%20out.">Tell me when it launches</a>
+    <p class="note">One email on launch day. Nothing else, ever.</p>
+  </div>
+
+  <footer>© 2026 Elizabeth Enko</footer>
 
 </div>
 </body>
