@@ -95,15 +95,14 @@
   }
   .app-shape .wordmark { display: block; width: var(--wm-w); height: auto; }
 
-  /* Sized so this exact phrase, in one line, is exactly as wide as the wordmark:
-     356.36 (--wm-w at the 400px cap) / 17.18px = the wordmark's width, measured
-     against Chakra Petch Bold at 100px (2074.6px advance -> 20.746px per 1px of
-     font-size). Scales with --panel-w since --wm-w does. */
+  /* Two lines, sized so the longer one ("on its way to end your") is exactly as
+     wide as the wordmark: Chakra Petch Bold measures 1059.11px for it at 100px,
+     i.e. 10.5911px per 1px of font-size. Scales with --panel-w since --wm-w does. */
   .panel-tagline {
     color: var(--chrome);
     font-weight: 700;
-    font-size: calc(var(--wm-w) / 20.74609375);
-    line-height: 1.25;
+    font-size: calc(var(--wm-w) / 10.5911);
+    line-height: 1.1;
     white-space: nowrap;
     margin: 18px 0 0;
   }
@@ -178,7 +177,7 @@
 
   <div class="app-shape">
     <img class="wordmark" src="./assets/wordmark.svg" alt="CONVERTIKON" width="1793" height="240">
-    <h1 class="panel-tagline">on its way to end your metric–imperial pain</h1>
+    <h1 class="panel-tagline">on its way to end your<br>metric–imperial pain</h1>
     <p class="panel-sub">A desktop converter for <b>architects, designers and construction</b>.
       Millimetres to feet and inches and back, with real fractions.
       Coming to <b>Mac</b> and <b>Windows</b>.</p>
