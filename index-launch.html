@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- LAUNCH PAGE — DRAFT. On launch day this file replaces index.html (rename it; keep the
+     coming-soon page as index-coming-soon.html). Every [BRACKETED, GOLD] bit is a placeholder. -->
+<title>CONVERTIKON — length converter for architects</title>
+<meta name="description" content="[META DESCRIPTION — e.g. CONVERTIKON is a desktop length converter for architects, designers and construction: millimetres, centimetres, metres, feet and inches with real fractions, on Mac and Windows.]">
+<meta property="og:title" content="CONVERTIKON">
+<meta property="og:description" content="[OG DESCRIPTION — one sentence]">
+<meta property="og:image" content="https://convertikon.app/assets/icon.png">
+<meta property="og:url" content="https://convertikon.app/">
+<meta name="theme-color" content="#DCD9D3">
+<link rel="icon" href="./assets/icon.png" type="image/png">
+<link rel="apple-touch-icon" href="./assets/apple-touch-icon.png">
+<style>
+  /* Same face, colours and panel geometry as the coming-soon page. Units: 1 u = --panel-w / 330,
+     so everything measured against the app scales as one block. */
+  @font-face { font-family: 'Chakra Petch'; font-weight: 500; font-style: normal; font-display: swap;
+               src: url('./assets/fonts/ChakraPetch-Medium.ttf') format('truetype'); }
+  @font-face { font-family: 'Chakra Petch'; font-weight: 700; font-style: normal; font-display: swap;
+               src: url('./assets/fonts/ChakraPetch-Bold.ttf') format('truetype'); }
+  :root {
+    --ground: #DCD9D3; --ink: #2E2B27; --gold: #E8C32B; --label: #6B665E; --chrome: #C6C2BA;
+    --panel-w: clamp(280px, calc(100vw - 32px), 425.5px);
+    --u: calc(var(--panel-w) / 330);
+    --col: 1040px;
+  }
+  * { box-sizing: border-box; }
+  html { background: var(--ground); scroll-behavior: smooth; }
+  body { margin: 0; background: var(--ground); color: var(--ink); font-family: 'Chakra Petch', 'Segoe UI', system-ui, sans-serif;
+         font-weight: 500; line-height: 1.5; }
+  .todo { background: var(--gold); color: var(--ink); font-weight: 700; padding: 0 5px; }   /* PLACEHOLDER: replace before publishing */
+  section { width: 100%; max-width: var(--col); margin: 0 auto; padding: 64px 20px; }
+  h2 { font-size: 15px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--label); margin: 0 0 18px; }
+  h2::before { content: ''; display: inline-block; width: 28px; height: 3px; background: var(--gold); vertical-align: middle; margin-right: 12px; }
+  p { font-size: 18px; margin: 0 0 14px; max-width: 620px; }
+  .cut { clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px); }
+
+  /* ── Hero: the asphalt panel with the wordmark, as on the coming-soon page, plus the app itself. ── */
+  .hero { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; padding-top: 72px; }
+  .app-shape {
+    width: var(--panel-w); height: calc(var(--u) * 455); padding: calc(var(--u) * 49.64) calc(var(--u) * 18) 0;
+    background: #8A8A88 url('./assets/backdrop-asphalt.png') top left / var(--panel-w) auto no-repeat;
+    clip-path: polygon(calc(var(--u) * 28) 0, 100% 0, 100% calc(100% - var(--u) * 28), calc(100% - var(--u) * 28) 100%, 0 100%, 0 calc(var(--u) * 28));
+    color: var(--ground); flex: none; justify-self: center;
+  }
+  .wordmark { display: block; width: calc(var(--u) * 294); height: auto; }
+  .tagline { margin: calc(var(--u) * 9.5) calc(var(--u) * -12) 0; font-weight: 700; font-size: calc(var(--u) * 28.696); line-height: 1.189;
+             word-spacing: calc(var(--u) * -1.63); white-space: nowrap; text-align: center; }
+  .hero-copy { margin: calc(var(--u) * 40) calc(var(--u) * 2.5) 0 0; font-size: calc(var(--u) * 21); line-height: 1.25; text-align: center; color: var(--ground); }
+  .hero-shot { justify-self: center; width: min(100%, 420px); }
+  .hero-shot img { display: block; width: 100%; height: auto; }
+  .mascot-hero { position: absolute; right: clamp(16px, 4.25vw, 54.5px); top: 24px; width: clamp(56px, 8vw, 110px); height: auto; pointer-events: none; }
+  .top { position: relative; }
+
+  /* ── Buy button: the gold block from the coming-soon page. ── */
+  .buy { display: flex; align-items: center; justify-content: center; width: var(--panel-w); max-width: 100%; height: calc(var(--u) * 59.33);
+         margin: 28px auto 0; background: var(--gold); color: var(--ink); font-weight: 700; font-size: calc(var(--u) * 16.6);
+         letter-spacing: calc(var(--u) * 1.49); text-transform: uppercase; text-decoration: none; white-space: nowrap; }
+  .buy:hover { background: #F0CE3F; }
+  .buy:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+  .under { text-align: center; font-size: 14px; color: var(--label); margin-top: 10px; }
+
+  /* ── Feature rows ── */
+  .cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .card { background: #fff; border: 1px solid rgba(53,49,43,.10); padding: 22px 22px 18px; }
+  .card h3 { font-size: 20px; font-weight: 700; margin: 0 0 8px; }
+  .card p { font-size: 16px; margin: 0; }
+
+  /* ── Feet and inches table ── */
+  table { border-collapse: collapse; width: 100%; max-width: 620px; font-size: 18px; }
+  th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid rgba(53,49,43,.15); }
+  th { font-size: 13px; letter-spacing: .06em; text-transform: uppercase; color: var(--label); }
+  td:first-child { font-weight: 700; white-space: nowrap; }
+
+  /* ── Screenshots: the real app, transparent PNGs, on the ground ── */
+  .shots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+  .shots figure { margin: 0; }
+  .shots img { display: block; width: 100%; height: auto; }
+  .shots figcaption { font-size: 14px; color: var(--label); margin-top: 10px; text-align: center; }
+
+  /* ── Price ── */
+  .price { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+  .amount { font-size: 64px; font-weight: 700; line-height: 1; margin: 0; }
+  .amount small { font-size: 18px; font-weight: 500; color: var(--label); margin-left: 8px; }
+  .price ul { padding-left: 22px; margin: 0; font-size: 18px; }
+  .price li { margin-bottom: 6px; }
+
+  footer { padding: 40px 20px 48px; text-align: center; font-size: 13px; opacity: .8; }
+  footer a { color: var(--ink); margin: 0 8px; }
+
+  @media (max-width: 860px) {
+    .hero, .price { grid-template-columns: 1fr; }
+    .cols, .shots { grid-template-columns: 1fr; }
+    section { padding: 48px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top">
+<section class="hero">
+  <div class="app-shape">
+    <img class="wordmark" src="./assets/wordmark.svg" alt="CONVERTIKON" width="1793" height="240">
+    <h1 class="tagline"><span class="todo">[HERO LINE 1]</span><br><span class="todo">[HERO LINE 2]</span></h1>
+    <p class="hero-copy"><span class="todo">[HERO COPY — two or three short lines, e.g. A desktop converter for architects, designers and construction. Metric on one side, imperial on the other.]</span></p>
+  </div>
+  <div class="hero-shot">
+    <img src="./assets/screenshots/convertikon-typing-ft@2x.png" alt="The CONVERTIKON panel, typing 6'-3 1/2&quot; in the FT field" width="660" height="910">
+  </div>
+</section>
+<img class="mascot-hero" src="./assets/mascot.png" alt="" width="448" height="448">
+</div>
+
+<section>
+  <a class="buy" href="[LEMON SQUEEZY CHECKOUT LINK]">Buy CONVERTIKON — $6.99</a>
+  <p class="under">One-time purchase · Mac and Windows · free updates · <span class="todo">[REFUND WINDOW, e.g. 14-day refund]</span></p>
+</section>
+
+<section>
+  <h2>What it does</h2>
+  <div class="cols">
+    <div class="card cut"><h3><span class="todo">[FEATURE 1 TITLE]</span></h3><p><span class="todo">[Type into any one of MM, CM, M, FT or IN and the other four update as you type.]</span></p></div>
+    <div class="card cut"><h3><span class="todo">[FEATURE 2 TITLE]</span></h3><p><span class="todo">[Real fractions to 1/16", the way they're written on drawings: 6'-3 1/2". Or decimal, with one click.]</span></p></div>
+    <div class="card cut"><h3><span class="todo">[FEATURE 3 TITLE]</span></h3><p><span class="todo">[A small panel that stays on top of your drawing, lives in the menu bar if you want, and never goes online.]</span></p></div>
+  </div>
+</section>
+
+<section>
+  <h2>How you type feet and inches</h2>
+  <p><span class="todo">[INTRO LINE — e.g. Write them the way you'd say them. All of these mean 6 feet 3 inches:]</span></p>
+  <table>
+    <tr><th>You type</th><th>It means</th></tr>
+    <tr><td>6-3</td><td>6 feet 3 inches</td></tr>
+    <tr><td>6'3</td><td>6 feet 3 inches</td></tr>
+    <tr><td>6 3</td><td>6 feet 3 inches</td></tr>
+    <tr><td>6'-3 1/2"</td><td>6 feet 3½ inches, drawing style</td></tr>
+    <tr><td>6'3.5</td><td>6 feet 3½ inches</td></tr>
+    <tr><td>6.25</td><td>6¼ feet, in DECIMAL mode</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2>Screenshots</h2>
+  <div class="shots">
+    <figure><img src="./assets/screenshots/convertikon-empty@2x.png" alt="CONVERTIKON, empty, showing the 1 metre hints" width="660" height="910"><figcaption><span class="todo">[CAPTION — e.g. Opens ready, with 1 metre as a hint]</span></figcaption></figure>
+    <figure><img src="./assets/screenshots/convertikon-after-enter@2x.png" alt="CONVERTIKON with 1917 mm converted to every unit" width="660" height="910"><figcaption><span class="todo">[CAPTION — e.g. One number, five units]</span></figcaption></figure>
+    <figure><img src="./assets/screenshots/convertikon-decimal@2x.png" alt="CONVERTIKON in DECIMAL mode" width="660" height="910"><figcaption><span class="todo">[CAPTION — e.g. Fractions or decimals, one click]</span></figcaption></figure>
+  </div>
+</section>
+
+<section>
+  <h2>Price</h2>
+  <div class="price">
+    <div>
+      <p class="amount">$6.99<small>USD, one time</small></p>
+      <p><span class="todo">[PRICE COPY — e.g. Pay once, use it on your Mac and your PC, and get every update free.]</span></p>
+    </div>
+    <ul>
+      <li>Mac (Apple Silicon and Intel) and Windows downloads with your purchase</li>
+      <li>Free updates</li>
+      <li>No account, no subscription, no data collected</li>
+      <li><span class="todo">[REFUND LINE — e.g. Not for you? Full refund within 14 days.]</span></li>
+    </ul>
+  </div>
+  <a class="buy" href="[LEMON SQUEEZY CHECKOUT LINK]">Buy CONVERTIKON — $6.99</a>
+  <p class="under">Secure checkout by Lemon Squeezy · receipt and downloads by email</p>
+</section>
+
+<footer>© 2026 Elizabeth Enko <a href="./privacy/">Privacy</a> <a href="./support/">Support</a></footer>
+</body>
+</html>

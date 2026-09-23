@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CONVERTIKON — support</title>
+<meta name="description" content="Help with CONVERTIKON: installing on Mac and Windows, typing feet and inches, receipts and refunds, and how to reach us.">
+<meta name="theme-color" content="#DCD9D3">
+<link rel="icon" href="../assets/icon.png" type="image/png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+  /* Same face and colours as the landing page (index.html); a reading layout instead of the panel. */
+  @font-face { font-family: 'Chakra Petch'; font-weight: 500; font-style: normal; font-display: swap;
+               src: url('../assets/fonts/ChakraPetch-Medium.ttf') format('truetype'); }
+  @font-face { font-family: 'Chakra Petch'; font-weight: 700; font-style: normal; font-display: swap;
+               src: url('../assets/fonts/ChakraPetch-Bold.ttf') format('truetype'); }
+  :root { --ground: #DCD9D3; --ink: #2E2B27; --gold: #E8C32B; --label: #6B665E; }
+  * { box-sizing: border-box; }
+  html { background: var(--ground); }
+  body {
+    margin: 0; background: var(--ground); color: var(--ink);
+    font-family: 'Chakra Petch', 'Segoe UI', system-ui, sans-serif; font-weight: 500; line-height: 1.55;
+    min-height: 100vh; display: flex; flex-direction: column; align-items: center;
+  }
+  header { width: 100%; max-width: 680px; padding: 40px 20px 0; }
+  header img { display: block; width: 220px; height: auto; }
+  .slab { display: inline-block; padding: 14px 18px 12px; background: #8A8A88 url('../assets/backdrop-asphalt.png') top left / 330px auto;
+          clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px); }
+  main { width: 100%; max-width: 680px; padding: 28px 20px 40px; }
+  h1 { font-size: 30px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; margin: 0 0 6px; }
+  .lead { font-size: 18px; margin: 0 0 28px; }
+  h2 { font-size: 16px; font-weight: 700; letter-spacing: .11em; text-transform: uppercase; margin: 34px 0 10px; padding-top: 12px; border-top: 2px solid var(--gold); }
+  h3 { font-size: 17px; font-weight: 700; margin: 20px 0 6px; }
+  p, li { font-size: 17px; margin: 0 0 12px; }
+  ol, ul { padding-left: 22px; }
+  li { margin-bottom: 8px; }
+  a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--gold); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+  a:hover { text-decoration-color: var(--ink); }
+  kbd, code { font-family: 'Chakra Petch', monospace; font-weight: 700; background: #fff; padding: 1px 6px; border: 1px solid rgba(53,49,43,.15); }
+  .box { background: #fff; border: 1px solid rgba(53,49,43,.10); padding: 14px 18px; margin: 0 0 14px;
+         clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px); }
+  .box p:last-child { margin-bottom: 0; }
+  table { border-collapse: collapse; width: 100%; margin: 0 0 14px; font-size: 17px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid rgba(53,49,43,.15); vertical-align: top; }
+  th { font-weight: 700; letter-spacing: .06em; text-transform: uppercase; font-size: 13px; color: var(--label); }
+  td:first-child { font-weight: 700; white-space: nowrap; }
+  .todo { background: var(--gold); color: var(--ink); font-weight: 700; padding: 0 5px; }   /* PLACEHOLDER: replace before publishing */
+  footer { margin-top: auto; padding: 32px 20px 40px; font-size: 13px; opacity: .8; text-align: center; }
+  footer a { margin: 0 8px; }
+</style>
+</head>
+<body>
+<header>
+  <a href="../" aria-label="CONVERTIKON home"><span class="slab"><img src="../assets/wordmark.svg" alt="CONVERTIKON" width="1793" height="240"></span></a>
+</header>
+
+<main>
+  <h1>Support</h1>
+  <p class="lead">Stuck, or found something odd? Write to <a href="mailto:support@convertikon.app">support@convertikon.app</a>. A real person answers, usually within <span class="todo">[e.g. one business day]</span>. Say whether you're on Mac or Windows, and a screenshot helps.</p>
+
+  <h2>Installing on a Mac</h2>
+  <ol>
+    <li>Open the downloaded <strong>convertikon-<span class="todo">[VERSION]</span>-mac.dmg</strong>. A window opens with an arrow.</li>
+    <li>Drag CONVERTIKON onto the <strong>Applications</strong> folder.</li>
+    <li>Eject the disk (the ⏏ next to CONVERTIKON in the Finder sidebar).</li>
+    <li>Open CONVERTIKON from Applications. The first time, macOS may say the app was downloaded from the internet. Click <strong>Open</strong>. The app is signed and notarised by Apple, so there's no other warning.</li>
+  </ol>
+  <p>If you open the app straight from the disk window instead, it offers to move itself to Applications. Click <strong>Move to Applications Folder</strong>. Running it from the disk is what stops the disk from ejecting.</p>
+  <p>CONVERTIKON runs on Macs with Apple Silicon and Intel, macOS <span class="todo">[MINIMUM VERSION — e.g. 11 Big Sur]</span> or later.</p>
+
+  <h2>Installing on Windows</h2>
+  <p>There are two files. Either works; you don't need both.</p>
+  <ul>
+    <li><strong>convertikon-<span class="todo">[VERSION]</span>-windows-setup.exe</strong> installs the app, with shortcuts on the desktop and in the Start menu. Run it and follow the steps.</li>
+    <li><strong>convertikon-<span class="todo">[VERSION]</span>-windows-portable.exe</strong> needs no installation. Put it anywhere and double-click it.</li>
+  </ul>
+
+  <h3>"Windows protected your PC"</h3>
+  <div class="box">
+    <p>On first run, Windows may show a blue box saying <strong>Windows protected your PC</strong>, from a feature called SmartScreen. It appears for any new app that hasn't yet built up a download history with Microsoft, and it is not saying the file is harmful. To continue: click <strong>More info</strong>, then <strong>Run anyway</strong>. You only have to do this once.</p>
+    <p>Two ways to be sure you have the real file: download it only from convertikon.app or the link in your receipt, and check that <strong>Elizabeth Enko</strong> is listed as the publisher in the file's Properties → Details.</p>
+  </div>
+  <p>CONVERTIKON runs on Windows 10 and 11 (64-bit).</p>
+
+  <h2>Typing feet and inches</h2>
+  <p>Type into any field and the other four follow. In the <strong>FT</strong> field you can write feet and inches almost any way you'd say them:</p>
+  <table>
+    <tr><th>You type</th><th>It means</th></tr>
+    <tr><td>6</td><td>6 feet</td></tr>
+    <tr><td>6-3</td><td>6 feet 3 inches</td></tr>
+    <tr><td>6'3</td><td>6 feet 3 inches</td></tr>
+    <tr><td>6 3</td><td>6 feet 3 inches (a space works when whole inches follow)</td></tr>
+    <tr><td>6'-3 1/2"</td><td>6 feet 3½ inches, the way it's written on drawings</td></tr>
+    <tr><td>6'3.5</td><td>6 feet 3½ inches</td></tr>
+    <tr><td>164 0 1/2</td><td>164 feet ½ inch</td></tr>
+  </table>
+  <p>In the <strong>IN</strong> field, type inches with a fraction (<code>75 1/2</code>) or a decimal (<code>75.5</code>). Fractions are shown to the nearest 1/16".</p>
+  <p><strong>FRACTIONAL</strong> shows feet-and-inches with fractions (<code>6'-3 1/2"</code>); <strong>DECIMAL</strong> shows decimal feet and decimal inches (<code>6.29</code>, <code>75.5</code>), and there you can also type decimal feet such as <code>6.25</code>. Click the grey word at the bottom right to switch; the app remembers your choice.</p>
+  <p>A comma works as a decimal point (<code>1,5</code>), for keyboards whose number pad types one.</p>
+
+  <h3>Handy keys</h3>
+  <ul>
+    <li><strong>Click</strong> a field: its value is selected, so you can type straight over it. Click again to place the cursor.</li>
+    <li><strong>Double-click</strong> a value to copy it. COPIED appears for a moment.</li>
+    <li><kbd>Enter</kbd> finishes the field. <kbd>Esc</kbd> clears all five.</li>
+    <li>The <strong>pin</strong> (bottom left) keeps the window on top of your other apps.</li>
+    <li>The <strong>icon in the menu bar</strong> (Mac) or <strong>tray</strong> (Windows) shows and hides the window. Right-click it to take the app out of the Dock or taskbar, or to quit.</li>
+  </ul>
+
+  <h2>Receipts, refunds and your download</h2>
+  <ul>
+    <li>Purchases are handled by <strong>Lemon Squeezy</strong>, our merchant of record. Your <strong>receipt</strong> comes from Lemon Squeezy by email right after you pay, with the download links. Look for a message from Lemon Squeezy if you don't see it, and check your spam folder.</li>
+    <li>Lost the email? You can get your order and downloads again from Lemon Squeezy's order page: <a href="https://app.lemonsqueezy.com/my-orders" rel="noopener">app.lemonsqueezy.com/my-orders</a> (it emails you a sign-in link).</li>
+    <li><strong>Refunds:</strong> if CONVERTIKON isn't for you, write to <a href="mailto:support@convertikon.app">support@convertikon.app</a> within <span class="todo">[REFUND WINDOW — e.g. 14 days]</span> of buying, with the email address you paid with, and we'll refund you in full. Refunds are issued through Lemon Squeezy and take a few days to show on your statement.</li>
+    <li>One purchase covers the Mac and Windows versions, and updates are free. <span class="todo">[CONFIRM: how many computers one purchase may be used on]</span></li>
+  </ul>
+
+  <h2>Privacy</h2>
+  <p>The app collects nothing and never goes online. Details are on the <a href="../privacy/">privacy page</a>.</p>
+</main>
+
+<footer>© 2026 Elizabeth Enko <a href="../">Home</a> <a href="../privacy/">Privacy</a></footer>
+</body>
+</html>
