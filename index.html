@@ -310,13 +310,13 @@
       caret.style.animation = 'none'; void caret.offsetWidth; caret.style.animation = '';
     }
     ['focus', 'input', 'keydown', 'keyup', 'click', 'select'].forEach(function (ev) {
-      field.addEventListener(ev, function () { requestAnimationFrame(placeCaret); });
+      field.addEventListener(ev, function () { setTimeout(placeCaret, 0); });   // after the browser moves the cursor
     });
     document.addEventListener('selectionchange', function () {
-      if (document.activeElement === field) requestAnimationFrame(placeCaret);
+      if (document.activeElement === field) setTimeout(placeCaret, 0);
     });
     field.addEventListener('blur', function () { caret.classList.remove('on'); });
-    window.addEventListener('resize', function () { requestAnimationFrame(placeCaret); });
+    window.addEventListener('resize', function () { setTimeout(placeCaret, 0); });
 
     function open() {
       form.classList.add('open');
