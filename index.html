@@ -103,24 +103,27 @@
     font-weight: 700;
     font-size: calc(var(--wm-w) / 10.5911);
     line-height: 1.1;
+    width: 100%;
     white-space: nowrap;
+    text-align: justify;
+    text-align-last: justify;  /* the shorter second line spreads to the same width */
     margin: 18px 0 0;
   }
 
-  /* 1.5x the size that fitted it on five lines; wraps freely, and every line is
-     justified so the block spans exactly the wordmark's width. */
+  /* The largest size at which this text wraps onto five lines inside the wordmark's
+     width (measured: 22.1px at 356px, i.e. 16.12 per px of font-size; 16.3 leaves a
+     hair of safety). Every line is justified, so all five span that width. */
   .panel-sub {
     color: var(--chrome);
     opacity: 0.85;
     font-weight: 500;
     width: 100%;
-    font-size: calc(var(--wm-w) / 18.74 * 1.5);
+    font-size: calc(var(--wm-w) / 16.3);
     line-height: 1.35;
     text-align: justify;
     text-align-last: justify;
     margin: auto 0 0;          /* rides down to the bottom, wordmark and tagline stay at the top */
   }
-  .panel-sub b { font-weight: 700; opacity: 1; color: var(--chrome); }
 
   .mascot {
     display: block;
@@ -179,9 +182,9 @@
   <div class="app-shape">
     <img class="wordmark" src="./assets/wordmark.svg" alt="CONVERTIKON" width="1793" height="240">
     <h1 class="panel-tagline">on its way to end your<br>metric–imperial pain</h1>
-    <p class="panel-sub">A desktop converter for <b>architects, designers and construction</b>.
+    <p class="panel-sub">A desktop converter for architects, designers and construction.
       Millimetres to feet and inches and back, with real fractions.
-      Coming to <b>Mac</b> and <b>Windows</b>.</p>
+      Coming to Mac and Windows.</p>
   </div>
 
   <img class="mascot" src="./assets/icon.png" alt="" width="512" height="512">
