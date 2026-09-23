@@ -97,31 +97,54 @@
   .copy span { display: block; white-space: nowrap; text-align: justify; text-align-last: justify; }
   .copy span:last-child { text-align: center; text-align-last: center; }
 
-  /* Sign-up: a dark field sitting straight on the gold button, one block as wide as
-     the panel. The field borrows the app's own value colour and gold focus. */
+  /* Sign-up: one block the size of the gold button. Closed, it is the button; clicked,
+     the same block becomes a dark email field (the app's value colour, gold focus) with
+     a gold send square at its end. Enter sends, Esc closes it again. */
   .signup {
+    position: relative;
     width: var(--panel-w);
+    height: calc(var(--u) * 59.33);
     margin-top: calc(var(--u) * 28.3);
-    display: flex;
-    flex-direction: column;
   }
+  .signup .field-row { display: none; height: 100%; }
+  .signup.open .btn { display: none; }
+  .signup.open .field-row { display: flex; }
   .signup input[type="email"] {
-    width: 100%;
-    height: calc(var(--u) * 52);
+    flex: 1;
+    min-width: 0;
+    height: 100%;
     padding: 0 calc(var(--u) * 18);
     font: inherit;
     font-weight: 500;
     font-size: calc(var(--u) * 16.6);
-    text-align: center;
     color: var(--ground);
     caret-color: var(--gold);
     background: var(--ink);
     border: 2px solid var(--ink);
+    border-right: 0;
     border-radius: 0;
     outline: none;
   }
   .signup input[type="email"]::placeholder { color: #9C978F; }
   .signup input[type="email"]:focus { border-color: var(--gold); }
+  .signup .send {
+    flex: none;
+    width: calc(var(--u) * 59.33);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    cursor: pointer;
+    color: var(--ink);
+    background: var(--gold);
+  }
+  .signup .send:hover { background: #F0CE3F; }
+  .signup .send:disabled { cursor: default; opacity: .7; }
+  .signup .send:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+  .signup .send svg { width: calc(var(--u) * 18); height: calc(var(--u) * 18); }
   .signup .trap { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
   .signup-msg {
     width: var(--panel-w);
@@ -132,7 +155,7 @@
   .signup-done {
     width: var(--panel-w);
     margin-top: calc(var(--u) * 28.3);
-    height: calc(var(--u) * 111.33);
+    height: calc(var(--u) * 59.33);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -149,7 +172,7 @@
     align-items: center;
     justify-content: center;
     width: 100%;
-    height: calc(var(--u) * 59.33);
+    height: 100%;
     margin: 0;
     padding: 0;
     border: 0;
@@ -210,10 +233,15 @@
   <!-- Email sign-up. Each address becomes a row in a private Google Sheet, through a
        small Apps Script web app (README explains the setup). -->
   <form class="signup" id="signup" novalidate>
-    <label for="email" class="trap">Email</label>
-    <input type="email" id="email" name="email" placeholder="your@email.com" autocomplete="email" inputmode="email" required>
+    <button class="btn" type="button" id="signup-open" aria-expanded="false" aria-controls="email">Tell me when it launches</button>
+    <div class="field-row">
+      <label for="email" class="trap">Your email</label>
+      <input type="email" id="email" name="email" placeholder="your@email.com" autocomplete="email" inputmode="email" required>
+      <button class="send" type="submit" aria-label="Send">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true"><path d="M4 12 L19 12 M13 6 L19 12 L13 18"/></svg>
+      </button>
+    </div>
     <input type="text" name="website" class="trap" tabindex="-1" autocomplete="off" aria-hidden="true">
-    <button class="btn" type="submit">Tell me when it launches</button>
   </form>
   <p class="signup-msg" id="signup-msg" role="status" aria-live="polite"></p>
 
@@ -223,15 +251,38 @@
 <img class="mascot" src="./assets/mascot.png" alt="" width="448" height="448">
 <script>
   // The Google Apps Script web-app URL that writes to the sign-up sheet. Until it is set,
-  // the button falls back to opening an email, so nothing is ever lost.
+  // sending falls back to opening an email, so nothing is ever lost.
   var SIGNUP_URL = '';
 
   (function () {
     var form = document.getElementById('signup');
-    var msg = document.getElementById('signup-msg');
+    var opener = document.getElementById('signup-open');
     var field = document.getElementById('email');
-    var button = form.querySelector('.btn');
+    var send = form.querySelector('.send');
+    var msg = document.getElementById('signup-msg');
     var valid = function (v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) && v.length <= 254; };
+
+    function open() {
+      form.classList.add('open');
+      opener.setAttribute('aria-expanded', 'true');
+      field.focus();
+    }
+    function close() {
+      form.classList.remove('open');
+      opener.setAttribute('aria-expanded', 'false');
+      msg.textContent = '';
+      opener.focus();
+    }
+    opener.addEventListener('click', open);
+    field.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') { e.preventDefault(); close(); }
+    });
+    // Clicking away from an empty field turns it back into the button.
+    field.addEventListener('blur', function () {
+      setTimeout(function () {
+        if (!field.value.trim() && !form.contains(document.activeElement)) close();
+      }, 150);
+    });
 
     form.addEventListener('submit', function (e) {
       e.preventDefault();
@@ -242,7 +293,7 @@
                         '&body=' + encodeURIComponent('Please let me know when CONVERTIKON is out: ' + email);
         return;
       }
-      button.disabled = true; msg.textContent = 'Sending\u2026';
+      send.disabled = true; msg.textContent = 'Sending\u2026';
       var body = new URLSearchParams({ email: email, website: form.website.value, source: location.hostname });
       // no-cors: Apps Script can't answer cross-origin, so the reply is opaque; a network
       // failure still rejects, which is the case worth telling the visitor about.
@@ -255,7 +306,7 @@
           msg.textContent = 'We\u2019ll email you once, on launch day.';
         })
         .catch(function () {
-          button.disabled = false;
+          send.disabled = false;
           msg.textContent = 'Couldn\u2019t send just now \u2014 please try again.';
         });
     });
