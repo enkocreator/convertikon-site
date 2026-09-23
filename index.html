@@ -128,6 +128,26 @@
     outline: none;
   }
   .signup #email::placeholder { color: var(--ground); opacity: 1; }
+  /* Browser autofill paints the field white/blue over our colours, and that paint can't be
+     switched off. A gold inner shadow covers it, the text-fill keeps the typed colour, and
+     the long transition stops Chrome fading its own colour back in. Firefox tints with a
+     filter instead, so that is cleared too. */
+  .signup #email:-webkit-autofill,
+  .signup #email:-webkit-autofill:hover,
+  .signup #email:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 1000px var(--gold) inset;
+    box-shadow: 0 0 0 1000px var(--gold) inset;
+    -webkit-text-fill-color: var(--ink);
+    caret-color: transparent;
+    filter: none;
+    transition: background-color 600000s 0s, color 600000s 0s;
+  }
+  /* separate rule: a browser that doesn't know :autofill would drop the whole list above */
+  .signup #email:autofill {
+    box-shadow: 0 0 0 1000px var(--gold) inset;
+    -webkit-text-fill-color: var(--ink);
+    filter: none;
+  }
   .signup .caret {
     position: absolute;
     top: 50%;
