@@ -13,8 +13,9 @@ The gold button turns into an email field; Enter sends. Each address is posted t
 Google Form (one short-answer question), whose answers land in the form's linked Google
 Sheet. Only the form's public submit address is in the page; the sheet stays private.
 Set `SIGNUP.url` (`https://docs.google.com/forms/d/e/<form id>/formResponse`) and
-`SIGNUP.field` (`entry.<question id>`) in `index.html`. Until both are set, sending opens
-an email to Elizabeth instead, so nothing is lost.
+`SIGNUP.field` (`entry.<question id>`) in `index.html`. Connected to the form
+"CONVERTIKON launch list". The form must NOT limit to one response or allow response
+editing: both make Google require sign-in, and every submission from the page is refused (401).
 
 `apps-script/signup.gs` is an alternative (an Apps Script web app writing to a sheet
 directly); it is not in use.

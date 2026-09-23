@@ -268,8 +268,7 @@
 <img class="mascot" src="./assets/mascot.png" alt="" width="448" height="448">
 <script>
   // Where sign-ups go: a Google Form whose answers land in a Google Sheet. `url` is the
-  // form's formResponse address, `field` its email question (entry.NNN). Until both are
-  // set, sending falls back to opening an email, so no address is ever lost.
+  // form's formResponse address, `field` its email question (entry.NNN).
   var SIGNUP = {
     url: 'https://docs.google.com/forms/d/e/1FAIpQLSd3Uc2S6SZ-JmmQx1zKFOch7JgQe3TaTFTBQvv5V0dxAndRxQ/formResponse',
     field: 'entry.446317156'                   // the form's "email" question
@@ -357,11 +356,6 @@
       var email = field.value.trim();
       if (!valid(email)) { msg.textContent = 'That doesn\u2019t look like an email address.'; field.focus(); return; }
       if (form.website.value) { thank(); return; }       // a bot filled the hidden field
-      if (!SIGNUP.url || !SIGNUP.field) {
-        location.href = 'mailto:enkokokoko@gmail.com?subject=' + encodeURIComponent('Tell me when CONVERTIKON launches') +
-                        '&body=' + encodeURIComponent('Please let me know when CONVERTIKON is out: ' + email);
-        return;
-      }
       sending = true; msg.textContent = 'Sending\u2026';
       var body = new URLSearchParams();
       body.append(SIGNUP.field, email);
