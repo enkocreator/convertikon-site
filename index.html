@@ -97,13 +97,65 @@
   .copy span { display: block; white-space: nowrap; text-align: justify; text-align-last: justify; }
   .copy span:last-child { text-align: center; text-align-last: center; }
 
+  /* Sign-up: a dark field sitting straight on the gold button, one block as wide as
+     the panel. The field borrows the app's own value colour and gold focus. */
+  .signup {
+    width: var(--panel-w);
+    margin-top: calc(var(--u) * 28.3);
+    display: flex;
+    flex-direction: column;
+  }
+  .signup input[type="email"] {
+    width: 100%;
+    height: calc(var(--u) * 52);
+    padding: 0 calc(var(--u) * 18);
+    font: inherit;
+    font-weight: 500;
+    font-size: calc(var(--u) * 16.6);
+    text-align: center;
+    color: var(--ground);
+    caret-color: var(--gold);
+    background: var(--ink);
+    border: 2px solid var(--ink);
+    border-radius: 0;
+    outline: none;
+  }
+  .signup input[type="email"]::placeholder { color: #9C978F; }
+  .signup input[type="email"]:focus { border-color: var(--gold); }
+  .signup .trap { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+  .signup-msg {
+    width: var(--panel-w);
+    margin: calc(var(--u) * 10) 0 0;
+    min-height: 1.5em;
+    font-size: 14px;
+  }
+  .signup-done {
+    width: var(--panel-w);
+    margin-top: calc(var(--u) * 28.3);
+    height: calc(var(--u) * 111.33);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: calc(var(--u) * 16.6);
+    letter-spacing: calc(var(--u) * 1.49);
+    text-transform: uppercase;
+    color: var(--ink);
+    background: var(--gold);
+  }
+
   .btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: var(--panel-w);
+    width: 100%;
     height: calc(var(--u) * 59.33);
-    margin-top: calc(var(--u) * 28.3);
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    cursor: pointer;
+    font-family: inherit;
     font-weight: 700;
     font-size: calc(var(--u) * 16.6);
     letter-spacing: calc(var(--u) * 1.49);
@@ -114,6 +166,7 @@
     white-space: nowrap;
   }
   .btn:hover { background: #F0CE3F; }
+  .btn:disabled { cursor: default; opacity: .7; }
   .btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 
   footer {
@@ -154,12 +207,59 @@
     </p>
   </div>
 
-  <!-- Email capture. Until the Kit form exists this is a plain mail link (README explains the swap). -->
-  <a class="btn" href="mailto:enkokokoko@gmail.com?subject=Tell%20me%20when%20CONVERTIKON%20launches&amp;body=Please%20let%20me%20know%20when%20CONVERTIKON%20is%20out.">Tell me when it launches</a>
+  <!-- Email sign-up. Each address becomes a row in a private Google Sheet, through a
+       small Apps Script web app (README explains the setup). -->
+  <form class="signup" id="signup" novalidate>
+    <label for="email" class="trap">Email</label>
+    <input type="email" id="email" name="email" placeholder="your@email.com" autocomplete="email" inputmode="email" required>
+    <input type="text" name="website" class="trap" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <button class="btn" type="submit">Tell me when it launches</button>
+  </form>
+  <p class="signup-msg" id="signup-msg" role="status" aria-live="polite"></p>
 
   <footer>© 2026 Elizabeth Enko</footer>
 
 </div>
 <img class="mascot" src="./assets/mascot.png" alt="" width="448" height="448">
+<script>
+  // The Google Apps Script web-app URL that writes to the sign-up sheet. Until it is set,
+  // the button falls back to opening an email, so nothing is ever lost.
+  var SIGNUP_URL = '';
+
+  (function () {
+    var form = document.getElementById('signup');
+    var msg = document.getElementById('signup-msg');
+    var field = document.getElementById('email');
+    var button = form.querySelector('.btn');
+    var valid = function (v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) && v.length <= 254; };
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var email = field.value.trim();
+      if (!valid(email)) { msg.textContent = 'That doesn\u2019t look like an email address.'; field.focus(); return; }
+      if (!SIGNUP_URL) {
+        location.href = 'mailto:enkokokoko@gmail.com?subject=' + encodeURIComponent('Tell me when CONVERTIKON launches') +
+                        '&body=' + encodeURIComponent('Please let me know when CONVERTIKON is out: ' + email);
+        return;
+      }
+      button.disabled = true; msg.textContent = 'Sending\u2026';
+      var body = new URLSearchParams({ email: email, website: form.website.value, source: location.hostname });
+      // no-cors: Apps Script can't answer cross-origin, so the reply is opaque; a network
+      // failure still rejects, which is the case worth telling the visitor about.
+      fetch(SIGNUP_URL, { method: 'POST', mode: 'no-cors', body: body })
+        .then(function () {
+          var done = document.createElement('div');
+          done.className = 'signup-done';
+          done.textContent = 'You\u2019re on the list';
+          form.replaceWith(done);
+          msg.textContent = 'We\u2019ll email you once, on launch day.';
+        })
+        .catch(function () {
+          button.disabled = false;
+          msg.textContent = 'Couldn\u2019t send just now \u2014 please try again.';
+        });
+    });
+  })();
+</script>
 </body>
 </html>
