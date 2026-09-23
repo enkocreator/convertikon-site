@@ -97,38 +97,53 @@
   .copy span { display: block; white-space: nowrap; text-align: justify; text-align-last: justify; }
   .copy span:last-child { text-align: center; text-align-last: center; }
 
-  /* Sign-up: one block the size of the gold button. Closed, it is the button; clicked,
-     the same block becomes a dark email field (the app's value colour, gold focus) with
-     a gold send square at its end. Enter sends, Esc closes it again. */
+  /* Sign-up: one gold block the size of the button. Clicked, the same gold block becomes
+     the email field — a light hint in the page colour and a thick pulsing caret, like
+     the app's own — with a send arrow at its right end. Enter sends, Esc closes it. */
   .signup {
     position: relative;
     width: var(--panel-w);
     height: calc(var(--u) * 59.33);
     margin-top: calc(var(--u) * 28.3);
+    background: var(--gold);
   }
-  .signup .field-row { display: none; height: 100%; }
+  .signup .field-row { display: none; position: relative; height: 100%; }
   .signup.open .btn { display: none; }
-  .signup.open .field-row { display: flex; }
+  .signup.open .field-row { display: block; }
   .signup input[type="email"] {
-    flex: 1;
-    min-width: 0;
+    display: block;
+    width: 100%;
     height: 100%;
-    padding: 0 calc(var(--u) * 18);
+    padding: 0 calc(var(--u) * 59.33);         /* room for the arrow on both sides keeps it centred */
     font: inherit;
     font-weight: 500;
     font-size: calc(var(--u) * 16.6);
-    color: var(--ground);
-    caret-color: var(--gold);
-    background: var(--ink);
-    border: 2px solid var(--ink);
-    border-right: 0;
+    text-align: center;
+    color: var(--ink);
+    caret-color: transparent;                  /* the fake caret below replaces the thin native one */
+    background: var(--gold);
+    border: 0;
     border-radius: 0;
     outline: none;
   }
-  .signup input[type="email"]::placeholder { color: #9C978F; }
-  .signup input[type="email"]:focus { border-color: var(--gold); }
+  .signup input[type="email"]::placeholder { color: var(--ground); opacity: 1; }
+  .signup .caret {
+    position: absolute;
+    top: 50%;
+    width: calc(var(--u) * 2.4);
+    height: calc(var(--u) * 19);
+    margin-top: calc(var(--u) * -9.5);
+    background: var(--ink);
+    pointer-events: none;
+    display: none;
+    animation: caret-pulse 1.1s ease-in-out infinite;
+  }
+  .signup .caret.on { display: block; }
+  @keyframes caret-pulse { 0%, 100% { opacity: 1; } 50% { opacity: .12; } }
   .signup .send {
-    flex: none;
+    position: absolute;
+    top: 0;
+    right: 0;
     width: calc(var(--u) * 59.33);
     height: 100%;
     display: flex;
@@ -139,11 +154,11 @@
     border-radius: 0;
     cursor: pointer;
     color: var(--ink);
-    background: var(--gold);
+    background: transparent;
   }
   .signup .send:hover { background: #F0CE3F; }
-  .signup .send:disabled { cursor: default; opacity: .7; }
-  .signup .send:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+  .signup .send:disabled { cursor: default; opacity: .5; }
+  .signup .send:focus-visible { outline: 2px solid var(--ink); outline-offset: -4px; }
   .signup .send svg { width: calc(var(--u) * 18); height: calc(var(--u) * 18); }
   .signup .trap { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
   .signup-msg {
@@ -237,6 +252,7 @@
     <div class="field-row">
       <label for="email" class="trap">Your email</label>
       <input type="email" id="email" name="email" placeholder="your@email.com" autocomplete="email" inputmode="email" required>
+      <span class="caret" aria-hidden="true"></span>
       <button class="send" type="submit" aria-label="Send">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true"><path d="M4 12 L19 12 M13 6 L19 12 L13 18"/></svg>
       </button>
@@ -262,10 +278,48 @@
     var msg = document.getElementById('signup-msg');
     var valid = function (v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) && v.length <= 254; };
 
+    // The fake caret: measured with the field's own font, so it sits exactly where the
+    // real (hidden) caret is; restarting the pulse keeps it solid while it moves.
+    var caret = form.querySelector('.caret');
+    var ctx = document.createElement('canvas').getContext('2d');
+    function textWidth(t) {
+      var cs = getComputedStyle(field);
+      ctx.font = cs.fontStyle + ' ' + cs.fontWeight + ' ' + cs.fontSize + ' ' + cs.fontFamily;
+      return ctx.measureText(t).width;
+    }
+    function placeCaret() {
+      if (document.activeElement !== field || field.selectionStart !== field.selectionEnd) {
+        caret.classList.remove('on'); return;
+      }
+      var cs = getComputedStyle(field);
+      var padL = parseFloat(cs.paddingLeft), padR = parseFloat(cs.paddingRight);
+      var room = field.clientWidth - padL - padR;
+      var x;
+      if (!field.value) {
+        x = padL + Math.max(0, (room - textWidth(field.placeholder)) / 2);   // start of the hint
+      } else {
+        var total = textWidth(field.value);
+        var start = total <= room ? padL + (room - total) / 2 : padL - field.scrollLeft;
+        x = start + textWidth(field.value.slice(0, field.selectionStart));
+      }
+      caret.style.left = (x - caret.offsetWidth / 2) + 'px';
+      caret.classList.add('on');
+      caret.style.animation = 'none'; void caret.offsetWidth; caret.style.animation = '';
+    }
+    ['focus', 'input', 'keydown', 'keyup', 'click', 'select'].forEach(function (ev) {
+      field.addEventListener(ev, function () { requestAnimationFrame(placeCaret); });
+    });
+    document.addEventListener('selectionchange', function () {
+      if (document.activeElement === field) requestAnimationFrame(placeCaret);
+    });
+    field.addEventListener('blur', function () { caret.classList.remove('on'); });
+    window.addEventListener('resize', function () { requestAnimationFrame(placeCaret); });
+
     function open() {
       form.classList.add('open');
       opener.setAttribute('aria-expanded', 'true');
       field.focus();
+      document.fonts.ready.then(placeCaret);
     }
     function close() {
       form.classList.remove('open');
