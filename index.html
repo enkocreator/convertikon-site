@@ -90,27 +90,35 @@
     align-items: flex-start;
     text-align: left;
     flex: none;
+    /* the wordmark's own width — everything measured against it below */
+    --wm-w: calc(var(--panel-w) / 330 * 294);
   }
-  .app-shape .wordmark { display: block; width: 100%; height: auto; }
+  .app-shape .wordmark { display: block; width: var(--wm-w); height: auto; }
 
+  /* Sized so this exact phrase, in one line, is exactly as wide as the wordmark:
+     356.36 (--wm-w at the 400px cap) / 17.18px = the wordmark's width, measured
+     against Chakra Petch Bold at 100px (2074.6px advance -> 20.746px per 1px of
+     font-size). Scales with --panel-w since --wm-w does. */
   .panel-tagline {
-    width: 100%;
     color: var(--chrome);
     font-weight: 700;
-    font-size: clamp(21px, 5vw, 27px);
+    font-size: calc(var(--wm-w) / 20.74609375);
     line-height: 1.25;
-    letter-spacing: 0.2px;
+    white-space: nowrap;
     margin: 18px 0 0;
   }
 
+  /* Anchored to the bottom of the panel: margin-top:auto eats the slack in the
+     flex column, so this sits flush on the same padding as the wordmark's top. */
   .panel-sub {
     width: 100%;
     color: var(--chrome);
     opacity: 0.85;
     font-weight: 500;
-    font-size: clamp(14px, 3vw, 16px);
+    font-size: clamp(15px, 3.6vw, 19px);
     line-height: 1.5;
-    margin: 16px 0 0;
+    margin: 16px 0 0 0;
+    margin-top: auto;
   }
   .panel-sub b { font-weight: 700; opacity: 1; color: var(--chrome); }
 
@@ -170,7 +178,7 @@
 
   <div class="app-shape">
     <img class="wordmark" src="./assets/wordmark.svg" alt="CONVERTIKON" width="1793" height="240">
-    <h1 class="panel-tagline">on its way to end your metric–imperial pain.</h1>
+    <h1 class="panel-tagline">on its way to end your metric–imperial pain</h1>
     <p class="panel-sub">A desktop converter for <b>architects, designers and construction</b>.
       Millimetres to feet and inches and back, with real fractions.
       Coming to <b>Mac</b> and <b>Windows</b>.</p>
