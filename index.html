@@ -267,9 +267,10 @@
 </div>
 <img class="mascot" src="./assets/mascot.png" alt="" width="448" height="448">
 <script>
-  // The Google Apps Script web-app URL that writes to the sign-up sheet. Until it is set,
-  // sending falls back to opening an email, so nothing is ever lost.
-  var SIGNUP_URL = '';
+  // Where sign-ups go: a Google Form whose answers land in a Google Sheet. `url` is the
+  // form's formResponse address, `field` its email question (entry.NNN). Until both are
+  // set, sending falls back to opening an email, so no address is ever lost.
+  var SIGNUP = { url: '', field: '' };
 
   (function () {
     var form = document.getElementById('signup');
@@ -277,6 +278,14 @@
     var field = document.getElementById('email');
     var msg = document.getElementById('signup-msg');
     var sending = false;
+
+    function thank() {
+      var done = document.createElement('div');
+      done.className = 'signup-done';
+      done.textContent = 'Measured twice, saved once';
+      form.replaceWith(done);
+      msg.textContent = 'You\u2019re on the list. One note from us on launch day \u2014 see you soon!';
+    }
     var valid = function (v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) && v.length <= 254; };
 
     // The fake caret: measured with the field's own font, so it sits exactly where the
@@ -344,23 +353,19 @@
       e.preventDefault();
       var email = field.value.trim();
       if (!valid(email)) { msg.textContent = 'That doesn\u2019t look like an email address.'; field.focus(); return; }
-      if (!SIGNUP_URL) {
+      if (form.website.value) { thank(); return; }       // a bot filled the hidden field
+      if (!SIGNUP.url || !SIGNUP.field) {
         location.href = 'mailto:enkokokoko@gmail.com?subject=' + encodeURIComponent('Tell me when CONVERTIKON launches') +
                         '&body=' + encodeURIComponent('Please let me know when CONVERTIKON is out: ' + email);
         return;
       }
       sending = true; msg.textContent = 'Sending\u2026';
-      var body = new URLSearchParams({ email: email, website: form.website.value, source: location.hostname });
-      // no-cors: Apps Script can't answer cross-origin, so the reply is opaque; a network
+      var body = new URLSearchParams();
+      body.append(SIGNUP.field, email);
+      // no-cors: Google can't answer a cross-origin post, so the reply is opaque; a network
       // failure still rejects, which is the case worth telling the visitor about.
-      fetch(SIGNUP_URL, { method: 'POST', mode: 'no-cors', body: body })
-        .then(function () {
-          var done = document.createElement('div');
-          done.className = 'signup-done';
-          done.textContent = 'You\u2019re on the list';
-          form.replaceWith(done);
-          msg.textContent = 'We\u2019ll email you once, on launch day.';
-        })
+      fetch(SIGNUP.url, { method: 'POST', mode: 'no-cors', body: body })
+        .then(thank)
         .catch(function () {
           sending = false;
           msg.textContent = 'Couldn\u2019t send just now \u2014 please try again.';

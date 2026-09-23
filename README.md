@@ -9,15 +9,15 @@ at the custom domain convertikon.app (the `CNAME` file), served over HTTPS only.
 
 ## Email sign-up
 
-The page has an email field and a button. Each address is posted to a small Google Apps
-Script web app, which appends it as a row (date, email, source) to the "Signups" tab of a
-private Google Sheet. Duplicates and bot submissions are skipped. The sheet itself is
-never public; the page only knows the script's URL.
+The gold button turns into an email field; Enter sends. Each address is posted to a
+Google Form (one short-answer question), whose answers land in the form's linked Google
+Sheet. Only the form's public submit address is in the page; the sheet stays private.
+Set `SIGNUP.url` (`https://docs.google.com/forms/d/e/<form id>/formResponse`) and
+`SIGNUP.field` (`entry.<question id>`) in `index.html`. Until both are set, sending opens
+an email to Elizabeth instead, so nothing is lost.
 
-Setup, once: new Google Sheet -> Extensions -> Apps Script -> paste `apps-script/signup.gs`
--> Deploy -> New deployment -> Web app, Execute as: Me, Who has access: Anyone -> authorise
--> copy the Web app URL (`https://script.google.com/macros/s/.../exec`) into `SIGNUP_URL`
-in `index.html`. Until `SIGNUP_URL` is set, the button opens an email to Elizabeth instead.
+`apps-script/signup.gs` is an alternative (an Apps Script web app writing to a sheet
+directly); it is not in use.
 
 ## More pages
 
