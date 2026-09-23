@@ -270,7 +270,10 @@
   // Where sign-ups go: a Google Form whose answers land in a Google Sheet. `url` is the
   // form's formResponse address, `field` its email question (entry.NNN). Until both are
   // set, sending falls back to opening an email, so no address is ever lost.
-  var SIGNUP = { url: '', field: '' };
+  var SIGNUP = {
+    url: 'https://docs.google.com/forms/d/e/1FAIpQLSd3Uc2S6SZ-JmmQx1zKFOch7JgQe3TaTFTBQvv5V0dxAndRxQ/formResponse',
+    field: 'entry.446317156'                   // the form's "email" question
+  };
 
   (function () {
     var form = document.getElementById('signup');
