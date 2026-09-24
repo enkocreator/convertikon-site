@@ -56,7 +56,7 @@
   .hero { position: relative; overflow: hidden; height: max(100vh, calc(var(--u) * 600)); }
   @supports (height: 100svh) { .hero { height: max(100svh, calc(var(--u) * 600)); } }
   .hero .stage { width: auto; height: 100%; }
-  .card { --c: calc(var(--u) * 32); position: absolute; left: calc(var(--u) * 83); top: calc(var(--u) * 33);
+  .card { --c: calc(var(--u) * 32); position: absolute; left: calc(25% - var(--u) * 162.5); top: calc(var(--u) * 33);   /* centred between the window edge and the panel */
           width: calc(var(--u) * 372); height: calc(var(--u) * 512); padding: calc(var(--u) * 71) calc(var(--u) * 21) 0;
           background: #5E5F5B url('./assets/backdrop-asphalt.png') center / cover; color: var(--light);
           display: flex; flex-direction: column; }
