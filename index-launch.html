@@ -66,7 +66,12 @@
 
   /* ── Screen 2 · the gold band ── */
   .band { position: relative; overflow: hidden; background: var(--gold); }
-  .sticker { position: absolute; inset: 0; color: var(--light); }
+  .sticker { position: absolute; inset: 0; z-index: 1; color: var(--light); text-decoration: none; pointer-events: none; }   /* a buy link: only the star itself is clickable */
+  .sticker polygon, .sticker .amount, .sticker .once, .sticker .price-list { pointer-events: auto; cursor: pointer; }
+  .sticker polygon { transition: fill .15s; }
+  .sticker:hover polygon { fill: var(--slate-hi); }
+  .sticker:focus-visible { outline: none; }
+  .sticker:focus-visible polygon { stroke: var(--gold); stroke-width: 3; }
   .burst { position: absolute; left: calc(var(--u) * -143.7); top: calc(var(--u) * 3.36); width: calc(var(--u) * 583.3); height: calc(var(--u) * 481.2); }
   .burst svg { position: absolute; inset: 0; width: 100%; height: 100%; }
   .amount, .once { position: absolute; font-weight: 700; line-height: 1; white-space: nowrap;
@@ -174,7 +179,7 @@
 
 <!-- Screen 2 · price + big things -->
 <section class="band">
-  <div class="sticker">
+  <a class="sticker" href="https://convertikon.gumroad.com/l/convertikon" aria-label="Get CONVERTIKON for CAD$9.99">
     <div class="burst">
       <svg viewBox="-180 0 570 470" preserveAspectRatio="none" aria-hidden="true">
         <polygon fill="#3E5A6E" points="104,6 134,94 225,60 194,131 382,107 229,170 304,196 241,216 321,246 223,268 287,317 180,331 240,404 134,357 92,463 13,350 -70,409 -40,300 -175,246 -45,192 -86,25 47,95"/>
@@ -189,7 +194,7 @@
       <li>no account</li>
       <li>no fuss</li>
     </ul>
-  </div>
+  </a>
   <div class="stage"><div class="inner">
     <h2>Big things you can do</h2>
     <ul class="big tilde">
