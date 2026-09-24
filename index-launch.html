@@ -95,13 +95,12 @@
          margin-top: calc(var(--u) * 24); font-size: calc(var(--u) * 22); line-height: calc(var(--u) * 27); }
   .big li, .little li { text-wrap: pretty; }
   @media (min-width: 1412px) {   /* room for two columns: items 1-2 left, 3-4 right */
-    .big { grid-template-columns: repeat(2, minmax(0, calc(var(--u) * 470))); grid-template-rows: auto auto; grid-auto-flow: column; column-gap: calc(var(--u) * 56); }
+    .big { grid-template-columns: repeat(2, minmax(0, calc(var(--u) * 470))); grid-template-rows: auto auto; grid-auto-flow: column; column-gap: calc(var(--u) * 56); align-items: center; }   /* paired items share a centre line */
   }
-  .big s { text-decoration-thickness: .09em; }
 
   /* ── Screen 3 · little things ── */
   .little.stage { width: min(calc(100% - var(--u) * 102), calc(var(--u) * 1336)); padding: calc(var(--u) * 15) 0 0; }   /* two 640 u columns when there is room */
-  .little ul { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: repeat(4, auto); grid-auto-flow: column;
+  .little ul { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: repeat(4, auto); grid-auto-flow: column; align-items: center;
                column-gap: calc(var(--u) * 56); row-gap: calc(var(--u) * 6.5);
                margin-top: calc(var(--u) * 26); font-size: calc(var(--u) * 22); line-height: calc(var(--u) * 29); }
 
@@ -191,7 +190,7 @@
     <h2>Big things you can do</h2>
     <ul class="big tilde">
       <li>type ft-and-inch any way you write it, from the full <span class="v">6'-3 1/2"</span> down to a quick <span class="v">6 3 1/2</span>, it gets every one</li>
-      <li>get feet back in ft-and-inch every time, in standard architectural format <span class="v">6'-3 1/2"</span>, never <s>6.29'</s></li>
+      <li>get feet back in ft-and-inch every time, in standard architectural format <span class="v">6'-3 1/2"</span>, never 6.29'</li>
       <li>watch fractions simplified to the nearest <span class="v">1/16"</span>, so <span class="v">8/16</span> shows as <span class="v">1/2</span></li>
       <li>flip between fractional and decimal with one click, and your numbers survive the switch, just in a new format</li>
     </ul>
