@@ -98,6 +98,21 @@
     --c: calc(var(--u) * 17.5);
     clip-path: polygon(var(--c) 0, 100% 0, 100% calc(100% - var(--c)), calc(100% - var(--c)) 100%, 0 100%, 0 var(--c));
   }
+  /* 24 Sep, launch day: the go-live notice replaces the sign-up, in the same gold block. The sign-up
+     markup was taken out; its styles and script stay (the script does nothing without the form). */
+  .golive {
+    --c: calc(var(--u) * 17.5);
+    clip-path: polygon(var(--c) 0, 100% 0, 100% calc(100% - var(--c)), calc(100% - var(--c)) 100%, 0 100%, 0 var(--c));
+    margin: auto 0 calc(var(--u) * 18);
+    padding: calc(var(--u) * 14) calc(var(--u) * 10);
+    background: var(--gold);
+    color: var(--ink);
+    font-weight: 700;
+    font-size: calc(var(--u) * 16.6);
+    letter-spacing: calc(var(--u) * 1.49);
+    line-height: 1.35;
+    text-transform: uppercase;
+  }
   .signup {
     position: relative;
     width: 100%;
@@ -239,23 +254,8 @@
   <div class="app-shape">
     <img class="wordmark" src="./assets/wordmark.svg" alt="CONVERTIKON" width="1793" height="240">
     <h1 class="tagline">on its way to end your<br>metric–imperial pain</h1>
-    <!-- Email sign-up. Each address becomes a row in a private Google Sheet, through a
-         small Apps Script web app (README explains the setup). -->
-    <form class="signup" id="signup" novalidate>
-      <button class="btn" type="button" id="signup-open" aria-expanded="false" aria-controls="email">Tell me when it launches</button>
-      <div class="field-row">
-        <label for="email" class="trap">Your email</label>
-        <!-- type="text", not "email": email fields hide the cursor position, which the pulsing
-             caret needs. inputmode + autocomplete still give the email keyboard and autofill. -->
-        <input type="text" id="email" name="email" placeholder="your@email.com" autocomplete="email" inputmode="email"
-               autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="send" required>
-        <span class="caret" aria-hidden="true"></span>
-      </div>
-      <input type="text" name="website" class="trap" tabindex="-1" autocomplete="off" aria-hidden="true">
-    </form>
+    <p class="golive">Goes live today<br>from 12:15PM to 12:45PM</p>
   </div>
-
-  <p class="signup-msg" id="signup-msg" role="status" aria-live="polite"></p>
 
   <footer>© 2026 Elizabeth Enko</footer>
 
@@ -271,6 +271,7 @@
 
   (function () {
     var form = document.getElementById('signup');
+    if (!form) return;                         // no sign-up on the page (launch day)
     var opener = document.getElementById('signup-open');
     var field = document.getElementById('email');
     var msg = document.getElementById('signup-msg');
