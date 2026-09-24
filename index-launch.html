@@ -32,6 +32,8 @@
      (1920 x 941 px, u = 1.2632 px). The whole design scales as one block with the window: u follows the
      window's width, or its height when the window is short, so nothing moves relative to anything else. */
   @supports (width: 1cqw) { .page > * { --u: min(calc(100cqw / 1520), calc(100vh / 745)); } }
+  .page > * { --screen: min(100vh, calc(var(--u) * 968)); }   /* a section that fills one screen */
+  @supports (height: 100svh) { .page > * { --screen: min(100svh, calc(var(--u) * 968)); } }
   * { box-sizing: border-box; }
   html { background: var(--ground); }
   body { margin: 0; background: var(--ground); color: var(--ink); font-family: 'Chakra Petch', 'Segoe UI', system-ui, sans-serif;
@@ -42,7 +44,9 @@
   a { color: inherit; }
   .stage { position: relative; width: calc(var(--u) * 950); margin-left: auto; margin-right: auto; }
   .chamfer { clip-path: polygon(var(--c) 0, 100% 0, 100% calc(100% - var(--c)), calc(100% - var(--c)) 100%, 0 100%, 0 var(--c)); }
-  h2 { font-weight: 700; font-size: calc(var(--u) * 35.5); line-height: 1.15; text-transform: uppercase; text-align: center; }
+  h2 { font-weight: 700; font-size: calc(var(--u) * 71); line-height: 1.1; text-transform: uppercase; text-align: center; }
+  .band h2 { color: var(--ground); }   /* the page's backdrop colour on the gold */
+  .little h2 { color: var(--slate); }
   .tilde li::before { content: '~ '; }
   .v { color: var(--slate); font-weight: 700; white-space: nowrap; }   /* numbers: bold slate, like a value being typed in the app */
 
@@ -79,7 +83,9 @@
   .amount { left: calc(var(--u) * 4.75); top: calc(var(--u) * 145.65); font-size: calc(var(--u) * 44.21); letter-spacing: .105em; }
   .once { left: calc(var(--u) * 7.6); top: calc(var(--u) * 184.97); font-size: calc(var(--u) * 25.52); letter-spacing: .031em; }
   .price-list { position: absolute; left: calc(var(--u) * 17.34); top: calc(var(--u) * 215.97); font-size: max(12px, calc(var(--u) * 17.8)); line-height: max(14.5px, calc(var(--u) * 21.4)); }
-  .band .stage { width: auto; margin: 0; min-height: calc(var(--u) * 504.3); padding: calc(var(--u) * 68.78) calc(var(--u) * 30) calc(var(--u) * 40) calc(var(--u) * 417.3); }
+  .band .stage { width: auto; margin: 0; min-height: max(calc(var(--u) * 504.3), var(--screen));
+                 padding: calc(var(--u) * 48) calc(var(--u) * 30) calc(var(--u) * 48) calc(var(--u) * 417.3);
+                 display: flex; flex-direction: column; justify-content: center; }
   .band .inner { width: min(100%, calc(var(--u) * 1017.2)); }
   .big { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: auto auto; grid-auto-flow: column;
          column-gap: calc(var(--u) * 12); row-gap: calc(var(--u) * 57); margin-top: calc(var(--u) * 35.85);
@@ -87,16 +93,18 @@
   .big li { white-space: nowrap; }   /* desktop lines follow Elizabeth's breaks only; bold numbers must not push a word onto its own line */
 
   /* ── Screen 3 · little things ── */
-  .little.stage { width: min(calc(100% - var(--u) * 102), calc(var(--u) * 1273)); padding-top: calc(var(--u) * 32.37); }
+  .ground { min-height: calc(var(--screen) + var(--u) * 62.75); padding: calc(var(--u) * 40) 0 calc(var(--u) * 102.75);
+            display: flex; flex-direction: column; justify-content: center; }
+  .little.stage { width: min(calc(100% - var(--u) * 102), calc(var(--u) * 1273)); }
   .little ul { display: grid; grid-template-columns: fit-content(calc(51% - var(--u) * 20)) fit-content(calc(49% - var(--u) * 20)); grid-template-rows: repeat(4, auto);
                grid-auto-flow: column; justify-content: space-between; column-gap: calc(var(--u) * 40);
                margin-top: calc(var(--u) * 43.76); font-size: calc(var(--u) * 23.75); line-height: calc(var(--u) * 38); }
 
   /* ── Screen 4 · buy ── */
-  .close { display: flex; flex-direction: column; align-items: center; padding-top: calc(var(--u) * 58.8); }
+  .close { display: flex; flex-direction: column; align-items: center; padding-top: calc(var(--u) * 72); }
   .buy { --c: calc(var(--u) * 9.5); display: flex; align-items: center; justify-content: center;
          width: calc(var(--u) * 366.6); height: calc(var(--u) * 66.5); background: var(--slate); color: var(--light);
-         font-weight: 700; font-size: calc(var(--u) * 18.6); letter-spacing: .1em; text-transform: uppercase;
+         font-weight: 700; font-size: calc(var(--u) * 24); letter-spacing: .1em; text-transform: uppercase;
          text-decoration: none; white-space: nowrap; transition: background-color .15s; }
   .buy .slant { display: inline-block; transform: skewX(-13deg); }   /* same slant as the price */
   .buy:hover { background: var(--slate-hi); }
@@ -170,6 +178,7 @@
     .mascot { width: 110px; align-self: flex-end; margin: 20px 12px 0 0; }
     .sticker { --u: .8px; position: relative; inset: auto; height: calc(var(--u) * 470); }
     .band .stage { padding: 0 16px 48px; min-height: 0; }
+    .ground { display: block; min-height: 0; padding: 0; }
     .band .inner { width: auto; }
     .big { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; grid-auto-flow: row;
            font-size: 19px; line-height: 25px; row-gap: 22px; margin-top: 20px; }
@@ -180,7 +189,7 @@
     .little ul { display: block; font-size: 18px; line-height: 24px; margin-top: 24px; }
     .little li + li { margin-top: 8px; }
     .close { padding: 48px 16px 0; }
-    .buy { width: min(100%, 330px); height: 56px; font-size: 16px; }
+    .buy { width: min(100%, 330px); height: 56px; font-size: 19px; }
     .guarantee { margin-top: 8px; font-size: 14px; }
     .showcase { margin-top: 110px; padding: 150px 16px 48px; }
     .showcase { background-size: 300px auto; }
@@ -239,7 +248,8 @@
   </div></div>
 </section>
 
-<!-- Screen 3 · little things -->
+<!-- Screen 3 · little things + buy, one screen -->
+<div class="ground">
 <section class="little stage">
   <h2>Little things it gets right</h2>
   <ul class="tilde">
@@ -259,6 +269,7 @@
   <a class="buy chamfer" href="https://convertikon.gumroad.com/l/convertikon"><span class="slant">Get it for CAD$9.99</span></a>
   <p class="guarantee">14-day money back guarantee</p>
 </section>
+</div>
 
 <!-- Screen 5 · the app on asphalt -->
 <section class="showcase">
