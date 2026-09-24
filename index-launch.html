@@ -59,13 +59,13 @@
   /* The card keeps its left edge and top, and scales as one piece (cu = its own unit) until its bottom
      lines up with the bottom of "to convert." (7.5 u under the quote box); it never comes closer
      than 24 u to the panel. */
-  .card { --cu: min(calc((var(--hero-h) - var(--u) * 167) / 512), calc((25vw + var(--u) * 185.5) / 372));
-          --c: calc(var(--cu) * 32); position: absolute; left: calc(25% - var(--u) * 162.5); top: calc(var(--u) * 33);
+  .card { --cu: min(calc((var(--hero-h) - var(--u) * 167) / 512), calc((50vw - var(--u) * 13) / 372));
+          --c: calc(var(--cu) * 32); position: absolute; left: calc((50% + var(--u) * 47 - var(--cu) * 372) * .6); top: calc(var(--u) * 33);   /* free space: 60 % left, 40 % right of the card */
           width: calc(var(--cu) * 372); height: calc(var(--cu) * 512); padding: calc(var(--cu) * 71) calc(var(--cu) * 21) 0;
           background: #5E5F5B url('./assets/backdrop-asphalt.png') center / cover; color: var(--light);
           display: flex; flex-direction: column; }
   .card h1 { line-height: 0; }
-  @supports (width: 1cqw) { .card { --cu: min(calc((var(--hero-h) - var(--u) * 167) / 512), calc((25cqw + var(--u) * 185.5) / 372)); } }
+  @supports (width: 1cqw) { .card { --cu: min(calc((var(--hero-h) - var(--u) * 167) / 512), calc((50cqw - var(--u) * 13) / 372)); } }
   .wordmark { width: calc(var(--cu) * 330); height: auto; }
   .tagline { margin-top: calc(var(--cu) * 20); font-weight: 700; font-size: calc(var(--cu) * 24); line-height: calc(var(--cu) * 32.5); }
   .nowrap { white-space: nowrap; }
