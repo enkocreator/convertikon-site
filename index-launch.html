@@ -53,18 +53,22 @@
   /* ── Screen 1 · hero ── */
   /* The first screen fills the window; the gold band starts right below it. The card keeps to the
      left edge, the quote and mascot to the bottom-right corner, the panel hangs in the middle. */
-  .hero { position: relative; overflow: hidden; height: max(100vh, calc(var(--u) * 600)); }
-  @supports (height: 100svh) { .hero { height: max(100svh, calc(var(--u) * 600)); } }
+  .hero { --hero-h: max(100vh, calc(var(--u) * 600)); position: relative; overflow: hidden; height: var(--hero-h); }
+  @supports (height: 100svh) { .hero { --hero-h: max(100svh, calc(var(--u) * 600)); } }
   .hero .stage { width: auto; height: 100%; }
-  .card { --c: calc(var(--u) * 32); position: absolute; left: calc(25% - var(--u) * 162.5); top: calc(var(--u) * 33);   /* centred between the window edge and the panel */
-          width: calc(var(--u) * 372); height: calc(var(--u) * 512); padding: calc(var(--u) * 71) calc(var(--u) * 21) 0;
+  /* The card keeps its left edge and top, and scales as one piece (cu = its own unit) until its bottom
+     lines up with the bottom of "to convert." (7.5 u under the quote box); it never comes closer
+     than 24 u to the panel. */
+  .card { --cu: min(calc((var(--hero-h) - var(--u) * 167) / 512), calc((25vw + var(--u) * 185.5) / 372));
+          --c: calc(var(--cu) * 32); position: absolute; left: calc(25% - var(--u) * 162.5); top: calc(var(--u) * 33);
+          width: calc(var(--cu) * 372); height: calc(var(--cu) * 512); padding: calc(var(--cu) * 71) calc(var(--cu) * 21) 0;
           background: #5E5F5B url('./assets/backdrop-asphalt.png') center / cover; color: var(--light);
           display: flex; flex-direction: column; }
   .card h1 { line-height: 0; }
-  .wordmark { width: calc(var(--u) * 330); height: auto; }
-  .tagline { margin-top: calc(var(--u) * 20); font-weight: 700; font-size: calc(var(--u) * 24); line-height: calc(var(--u) * 32.5); }
-  .card .for { margin: calc(var(--u) * 22) 0 0; font-size: calc(var(--u) * 13); font-weight: 700; letter-spacing: .14em;
-               text-transform: uppercase; color: var(--chrome); }
+  @supports (width: 1cqw) { .card { --cu: min(calc((var(--hero-h) - var(--u) * 167) / 512), calc((25cqw + var(--u) * 185.5) / 372)); } }
+  .wordmark { width: calc(var(--cu) * 330); height: auto; }
+  .tagline { margin-top: calc(var(--cu) * 20); font-weight: 700; font-size: calc(var(--cu) * 24); line-height: calc(var(--cu) * 32.5); }
+  .nowrap { white-space: nowrap; }
   .shot { position: absolute; left: calc(50% + var(--u) * 47); top: calc(var(--u) * -108); width: calc(var(--u) * 330); height: auto; }
   .quote { position: absolute; right: calc(var(--u) * 98); bottom: calc(var(--u) * 126.5); width: calc(var(--u) * 330);
            text-align: center; font-size: calc(var(--u) * 22); line-height: calc(var(--u) * 29.5); color: var(--muted); }
@@ -120,10 +124,9 @@
     .hero { height: auto; }
     .hero .stage { height: auto; display: flex; flex-direction: column; align-items: center; padding: 16px 16px 0; }
     .card, .shot, .quote, .mascot { position: static; }
-    .card { width: 100%; max-width: 420px; height: auto; padding: 48px 22px 0; }
+    .card { --cu: 1px; width: 100%; max-width: 420px; height: auto; padding: 48px 22px 36px; }
     .wordmark { width: 100%; }
     .tagline { font-size: 22px; line-height: 30px; }
-    .card .for { margin: 18px 0 32px; }
     .shot { width: min(100%, 330px); margin-top: 40px; }
     .quote { width: auto; max-width: 330px; margin-top: 28px; font-size: 19px; line-height: 26px; text-wrap: balance; }
     .quote br { display: none; }
@@ -153,8 +156,7 @@
   <div class="stage">
     <div class="card chamfer">
       <h1><img class="wordmark" src="./assets/wordmark.svg" alt="CONVERTIKON" width="1793" height="240"></h1>
-      <p class="tagline">~ a small desktop converter for architects, interior designers, engineers and everyone who works between metric and imperial.</p>
-      <p class="for">For Mac and Windows</p>
+      <p class="tagline">~ a small desktop converter for architects, interior designers, engineers and everyone who works between metric and imperial. <span class="nowrap">For Mac and Windows.</span></p>
     </div>
     <img class="shot" src="./assets/screenshots/convertikon-typing-ft@2x.png" alt="The CONVERTIKON panel: 6'-3 1/2&quot; typed in FT, the other fields already converted" width="660" height="910">
     <p class="quote">Built by a designer who got <br>tired of opening a browser <br>to convert.</p>
