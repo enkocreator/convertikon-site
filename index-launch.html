@@ -45,8 +45,9 @@
   .stage { position: relative; width: calc(var(--u) * 950); margin-left: auto; margin-right: auto; }
   .chamfer { clip-path: polygon(var(--c) 0, 100% 0, 100% calc(100% - var(--c)), calc(100% - var(--c)) 100%, 0 100%, 0 var(--c)); }
   h2 { font-weight: 700; font-size: calc(var(--u) * 71); line-height: 1.1; text-transform: uppercase; text-align: center; }
-  .band h2 { color: var(--ground); }   /* the page's backdrop colour on the gold */
-  .little h2 { color: var(--slate); }
+  /* Each heading is exactly as wide as the text block below it, edges lined up (sizes and nudges measured). */
+  .band h2 { color: var(--ground); font-size: calc(var(--u) * 85.26); position: relative; left: calc(var(--u) * -11.4); }   /* the page's backdrop colour on the gold */
+  .little h2 { color: var(--slate); font-size: calc(var(--u) * 89.06); position: relative; left: calc(var(--u) * 9.7); }
   .tilde li::before { content: '~ '; }
   .v { color: var(--slate); font-weight: 700; white-space: nowrap; }   /* numbers: bold slate, like a value being typed in the app */
 
@@ -88,7 +89,7 @@
                  display: flex; flex-direction: column; justify-content: center; }
   .band .inner { width: min(100%, calc(var(--u) * 1017.2)); }
   .big { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: auto auto; grid-auto-flow: column;
-         column-gap: calc(var(--u) * 12); row-gap: calc(var(--u) * 57); margin-top: calc(var(--u) * 35.85);
+         column-gap: calc(var(--u) * 12); row-gap: calc(var(--u) * 57); margin-top: calc(var(--u) * 64.5);
          font-size: calc(var(--u) * 23.75); line-height: calc(var(--u) * 28.5); text-align: center; }
   .big li { white-space: nowrap; }   /* desktop lines follow Elizabeth's breaks only; bold numbers must not push a word onto its own line */
 
@@ -98,7 +99,7 @@
   .little.stage { width: min(calc(100% - var(--u) * 102), calc(var(--u) * 1273)); }
   .little ul { display: grid; grid-template-columns: fit-content(calc(51% - var(--u) * 20)) fit-content(calc(49% - var(--u) * 20)); grid-template-rows: repeat(4, auto);
                grid-auto-flow: column; justify-content: space-between; column-gap: calc(var(--u) * 40);
-               margin-top: calc(var(--u) * 43.76); font-size: calc(var(--u) * 23.75); line-height: calc(var(--u) * 38); }
+               margin-top: calc(var(--u) * 59); font-size: calc(var(--u) * 23.75); line-height: calc(var(--u) * 38); }
 
   /* ── Screen 4 · buy ── */
   .close { display: flex; flex-direction: column; align-items: center; padding-top: calc(var(--u) * 72); }
@@ -184,7 +185,7 @@
            font-size: 19px; line-height: 25px; row-gap: 22px; margin-top: 20px; }
     .big br { display: none; }
     .big li { white-space: normal; text-wrap: balance; }
-    h2 { font-size: 28px; }
+    h2, .band h2, .little h2 { font-size: 28px; left: 0; }
     .little.stage { width: auto; padding: 56px 16px 0; }
     .little ul { display: block; font-size: 18px; line-height: 24px; margin-top: 24px; }
     .little li + li { margin-top: 8px; }
