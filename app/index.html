@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<!-- WEB VERSION, built by convertikon-site/tools/build_web_app.py from the desktop app's index.html. Don't edit by hand. -->
+<title>CONVERTIKON</title>
+<script>/* Set panel scale before first paint so the restored size renders correctly (no flash). */
+  document.documentElement.style.setProperty('--scale', (window.innerWidth || 330) / 330);</script>
+<style>
+  /* Chakra Petch bundled locally (SIL OFL, licence in assets/fonts/OFL.txt) so
+     the UI font works offline. Only the weights the UI uses. */
+  @font-face { font-family: 'Chakra Petch'; font-weight: 500; font-style: normal; font-display: block;
+               src: url('../assets/fonts/ChakraPetch-Medium.ttf') format('truetype'); }
+  @font-face { font-family: 'Chakra Petch'; font-weight: 700; font-style: normal; font-display: block;
+               src: url('../assets/fonts/ChakraPetch-Bold.ttf') format('truetype'); }
+
+  :root {
+    /* "Gold" palette (design-spec Gold). One accent + four greys. */
+    --accent: #E8C32B;   /* wordmark, active mode word, pin, hovers — gold only there */
+    --focus:  #3E5A6E;   /* slate: the field being edited — its label, value and caret */
+    --label:  #2E2B27;   /* field labels MM/CM/M/FT/IN (the active one turns --focus) */
+    --hint:   #9C978F;   /* ghost hints; also the other values while one field is edited */
+    --value:  #2E2B27;   /* field values when no field is being edited */
+    --chrome: #C6C2BA;   /* footer icons default + inactive mode word */
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { background: transparent; }
+
+  body {
+    background: transparent;
+    font-family: 'Chakra Petch', sans-serif;
+    height: 100vh;
+    overflow: hidden;
+    user-select: none;
+  }
+
+  .panel {
+    width: 330px;
+    background: #8A8A88 url('../assets/backdrop-asphalt.png') top left / 330px auto no-repeat;
+    overflow: hidden;
+    clip-path: polygon(28px 0, 100% 0, 100% calc(100% - 28px), calc(100% - 28px) 100%, 0 100%, 0 28px);
+    display: flex;
+    flex-direction: column;
+    -webkit-app-region: drag;
+    /* Whole panel scales as one block off a single factor: scale = W/330,
+       set live from the window width (free resize 270–330). Every
+       dimension/alignment rides this — nothing reflows or is re-tuned. */
+    transform-origin: top left;
+    transform: scale(var(--scale, 1));
+  }
+
+  /* ── Title ── */
+  /* Wordmark is a static SVG (CONVERTIKON drawn in the custom Convertikon
+     letters, #E8C32B). Tight-cropped to the ink, so its box IS the ink box:
+     left edge on the 18px margin, width 294 → right edge at 312 (fields'
+     right edge), top at y=28. Fixed layout — no runtime measurement. */
+  .title-bar {
+    padding: 28px 18px 0;
+  }
+
+  .wordmark {
+    display: block;
+    width: 294px;
+    height: 39.358px;  /* 294 / 7.4699 aspect */
+  }
+
+  /* ── Fields ── */
+  .fields {
+    padding: 0 18px;
+  }
+
+  .field-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    height: 50px;
+    padding: 12px 14px;
+    background: #DCD9D3;
+    border: 1px solid rgba(53,49,43,0.10);
+    margin-bottom: 10px;
+    clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+    -webkit-app-region: no-drag;
+  }
+
+  .field-row:last-child { margin-bottom: 0; }
+
+  .field-label {
+    font-weight: 500;
+    font-size: 17px;
+    letter-spacing: 0.94px;
+    color: var(--label);
+    flex: none;
+    min-width: 26px;
+  }
+
+  .field-wrap {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+    display: flex;
+  }
+
+  .field-input {
+    flex: 1;
+    min-width: 0;
+    background: transparent;
+    border: none;
+    outline: none;
+    text-align: right;
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 500;
+    font-size: 18px;
+    color: var(--value);
+    width: 100%;
+    user-select: text;
+    -webkit-app-region: no-drag;
+    caret-color: transparent;   /* native 1px caret hidden — fake caret below */
+  }
+
+  .field-input::selection { background: var(--focus); color: #DCD9D3; }   /* selected value: slate */
+
+  /* Fake caret: fat blinking slate bar placed at the real (hidden) caret
+     position by placeCaret() — follows typing, arrow keys and clicks. */
+  .fake-caret {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 22px;
+    background: var(--focus);
+    display: none;
+    pointer-events: none;
+    animation: caret-blink 1s steps(1) infinite;
+  }
+  .field-wrap:focus-within .fake-caret { display: block; }
+  .fake-caret.is-hidden { visibility: hidden; }   /* a range is selected */
+  .fake-caret.is-pressing { visibility: hidden; } /* mouse button down: no flash */
+  @keyframes caret-blink { 50% { opacity: 0; } }
+
+  /* Double-click copies the value; this note says so, then fades. */
+  .copied-note {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    font-weight: 500;
+    font-size: 17px;
+    letter-spacing: 0.94px;
+    color: var(--hint);
+    pointer-events: none;
+    opacity: 0;
+  }
+  .copied-note.show { animation: copied-note 1.1s ease-out; }
+  @keyframes copied-note { 0%, 70% { opacity: 1; } 100% { opacity: 0; } }
+
+  .field-hint {
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 500;
+    font-size: 18px;
+    color: var(--hint);
+    pointer-events: none;
+  }
+
+  /* ── Footer ── */
+  .footer {
+    height: 24px;
+    padding: 0 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    -webkit-app-region: no-drag;
+  }
+
+  .icon-btns {
+    display: flex;
+    align-items: center;
+    margin-left: -6.1px;   /* 4px padding + the X's 2.1px inset: its ink sits on the 18px margin */
+  }
+
+  .icon-btn {
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    color: var(--chrome);
+    display: flex;
+    line-height: 0;
+    transition: color 0.1s;
+  }
+
+  .icon-btn:hover { color: var(--accent); }
+  .pin-btn.pinned { color: var(--accent); }
+
+  .mode-switch {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-right: -1.72px;   /* cancel the last letter's spacing: DECIMAL's ink ends on the 312 margin */
+    font-weight: 700;
+    font-size: 15.7px;
+    letter-spacing: 1.72px;
+  }
+
+  .mode-word {
+    transition: color 0.1s;
+  }
+  .mode-word.active  { color: var(--accent); cursor: default; }
+  .mode-word.inactive { color: var(--chrome); cursor: pointer; }
+  .mode-word.inactive:hover { color: var(--accent); }
+
+  /* The field being edited: label, value and caret in slate, bold; the value a
+     size up. The other values step back to the hint grey until editing ends. */
+  /* ── Licence view ── the first launch: one KEY row where the fields are, a line of
+     help under it, and ACTIVATE where the mode words are. Same rows, same footer. */
+  body.needs-key .fields, body.needs-key .mode-switch { display: none; }
+  body.needs-key .panel { min-height: 455px; }        /* the shape stays whole; the footer drops to the bottom */
+  body.needs-key .footer { margin-top: auto; }
+  body.needs-key #foot-gap-top { display: none; }
+  .license { display: none; padding: 0 18px; }
+  body.needs-key .license { display: block; }
+  .license .intro { font-weight: 700; font-size: 15.7px; letter-spacing: 1.72px; color: var(--accent); text-transform: uppercase; margin-bottom: 14px; }
+  .license .field-row { margin-bottom: 10px; }
+  .license .field-input { font-size: 13px; letter-spacing: .5px; text-align: left; }
+  .license .field-input::placeholder { color: var(--hint); font-weight: 500; }
+  .license .help { font-size: 13px; line-height: 1.35; color: #DCD9D3; min-height: 3.6em; }
+  .license .help.error { color: var(--accent); }
+  .license .help a { color: inherit; }
+  .activate { display: none; font-weight: 700; font-size: 15.7px; letter-spacing: 1.72px; color: var(--accent); cursor: pointer; }
+  .activate.busy { color: var(--chrome); cursor: default; }
+  body.needs-key .activate { display: block; }
+
+  .field-row:focus-within .field-label {
+    color: var(--focus);
+    font-weight: 700;
+  }
+  .field-row:focus-within .field-input {
+    color: var(--focus);
+    font-weight: 700;
+    font-size: 20px;
+  }
+  .fields:focus-within .field-row:not(:focus-within) .field-input { color: var(--hint); }
+
+  /* ── Web version: the panel blends into the page behind it ── */
+  .panel { background: none !important; }
+</style>
+</head>
+<body>
+
+<div class="panel" id="panel">
+
+  <div class="title-bar" id="title-bar">
+    <img class="wordmark" id="wordmark" src="../assets/wordmark.svg" alt="CONVERTIKON" draggable="false">
+  </div>
+
+  <div class="license" id="license" style="padding-top:28.642px">
+    <div class="intro">Enter your licence key</div>
+    <div class="field-row">
+      <span class="field-label">KEY</span>
+      <div class="field-wrap">
+        <input class="field-input" id="f-key" type="text" placeholder="paste your key here" autocomplete="off" spellcheck="false" autocapitalize="characters">
+      </div>
+    </div>
+    <div class="help" id="key-help">It's in your receipt email from Gumroad. Paste it and press Enter.</div>
+  </div>
+
+  <div class="fields" id="fields" style="padding-top:28.642px">
+    <div class="field-row">
+      <span class="field-label">MM</span>
+      <div class="field-wrap">
+        <input class="field-input" id="f-mm" type="text" inputmode="decimal" autocomplete="off" spellcheck="false">
+        <span class="field-hint" id="h-mm"></span>
+        <span class="fake-caret"></span>
+        <span class="copied-note">COPIED</span>
+      </div>
+    </div>
+    <div class="field-row">
+      <span class="field-label">CM</span>
+      <div class="field-wrap">
+        <input class="field-input" id="f-cm" type="text" inputmode="decimal" autocomplete="off" spellcheck="false">
+        <span class="field-hint" id="h-cm"></span>
+        <span class="fake-caret"></span>
+        <span class="copied-note">COPIED</span>
+      </div>
+    </div>
+    <div class="field-row">
+      <span class="field-label">M</span>
+      <div class="field-wrap">
+        <input class="field-input" id="f-m" type="text" inputmode="decimal" autocomplete="off" spellcheck="false">
+        <span class="field-hint" id="h-m"></span>
+        <span class="fake-caret"></span>
+        <span class="copied-note">COPIED</span>
+      </div>
+    </div>
+    <div class="field-row">
+      <span class="field-label">FT</span>
+      <div class="field-wrap">
+        <input class="field-input" id="f-ft" type="text" inputmode="decimal" autocomplete="off" spellcheck="false">
+        <span class="field-hint" id="h-ft"></span>
+        <span class="fake-caret"></span>
+        <span class="copied-note">COPIED</span>
+      </div>
+    </div>
+    <div class="field-row" style="margin-bottom:0">
+      <span class="field-label">IN</span>
+      <div class="field-wrap">
+        <input class="field-input" id="f-in" type="text" inputmode="decimal" autocomplete="off" spellcheck="false">
+        <span class="field-hint" id="h-in"></span>
+        <span class="fake-caret"></span>
+        <span class="copied-note">COPIED</span>
+      </div>
+    </div>
+  </div>
+
+  <div id="foot-gap-top" style="height:20px"></div>
+
+  <div class="footer" id="footer">
+    <div class="icon-btns">
+      <button class="icon-btn" id="btn-close" aria-label="Close" title="Close">
+        <svg width="15.2" height="15.2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="square" stroke-linejoin="miter" shape-rendering="geometricPrecision">
+          <path d="M5 5 L19 19 M19 5 L5 19"></path>
+        </svg>
+      </button>
+      <button class="icon-btn" id="btn-minimize" aria-label="Minimize" title="Minimize">
+        <svg width="15.2" height="15.2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="square" stroke-linejoin="miter" shape-rendering="geometricPrecision">
+          <path d="M5 12 L19 12"></path>
+        </svg>
+      </button>
+      <button class="icon-btn pin-btn" id="btn-pin" aria-label="Always on top" title="Always on top">
+        <svg width="15.2" height="15.2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="square" stroke-linejoin="miter" shape-rendering="geometricPrecision">
+          <path d="M6.85 4.28 L17.15 4.28 L15.88 8.46 L18.61 15.57 L5.39 15.57 L8.12 8.46 Z M12 15.57 L12 21.6"></path>
+        </svg>
+      </button>
+    </div>
+
+    <span class="activate" id="activate">ACTIVATE</span>
+    <div class="mode-switch">
+      <span class="mode-word active"  id="mode-frac">FRACTIONAL</span>
+      <span class="mode-word inactive" id="mode-dec">DECIMAL</span>
+    </div>
+  </div>
+
+  <div id="foot-gap-bot" style="height:25px"></div>
+
+</div>
+
+<script>
+  /* Web version: a stand-in for the desktop app's electronAPI. */
+  (function () {
+    var mode = 'FRAC', pinned = false;
+    try { if (localStorage.getItem('ck-mode') === 'DEC') mode = 'DEC'; } catch (e) {}
+    window.electronAPI = {
+      initialState: { mode: mode, pinned: false, licensed: true },
+      setMode: function (m) { try { localStorage.setItem('ck-mode', m); } catch (e) {} },
+      togglePin: function () { pinned = !pinned; return Promise.resolve(pinned); },
+      closeWindow: function () { window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' })); },
+      minimizeWindow: function () {},
+      activateLicense: function () { return Promise.resolve({ ok: true }); }
+    };
+  })();
+</script>
+<script src="./convert.js"></script>
+<script>
+  // Conversion rules (FACTORS, readField, formatUnit, feetPlain, trimNum, hintValue …)
+  // live in convert.js, which is loaded above.
+
+  // ── State ────────────────────────────────────────────────────
+  let base    = null;
+  let editing = null;
+  let mode    = 'FRAC';
+
+  // ── Elements ─────────────────────────────────────────────────
+  const inputs = {
+    mm: document.getElementById('f-mm'),
+    cm: document.getElementById('f-cm'),
+    m:  document.getElementById('f-m'),
+    ft: document.getElementById('f-ft'),
+    in: document.getElementById('f-in'),
+  };
+  const hintEls = {
+    mm: document.getElementById('h-mm'),
+    cm: document.getElementById('h-cm'),
+    m:  document.getElementById('h-m'),
+    ft: document.getElementById('h-ft'),
+    in: document.getElementById('h-in'),
+  };
+
+  // ── Formatting (rules in convert.js) ──────────────────────────
+  const fmt = unit => formatUnit(unit, base, mode);         // plain form: editing and copying
+  const show = unit => showUnit(unit, base, mode);          // a field's result display (50 000)
+  const hintFor = unit => hintValue(unit, mode);            // a field's ghost hint
+
+  // ── Render ───────────────────────────────────────────────────
+  function render() {
+    const hasVal = base != null;
+    Object.keys(inputs).forEach(unit => {
+      const el  = inputs[unit];
+      const hEl = hintEls[unit];
+      if (editing && editing.unit === unit) {
+        el.value = editing.raw;
+      } else {
+        el.value = show(unit);
+      }
+      const empty = !el.value;
+      hEl.textContent = (!hasVal && empty) ? hintFor(unit) : '';
+      hEl.style.display = (!hasVal && empty) ? 'flex' : 'none';
+    });
+
+    const fracActive = mode === 'FRAC';
+    document.getElementById('mode-frac').className = 'mode-word ' + (fracActive ? 'active'   : 'inactive');
+    document.getElementById('mode-dec') .className = 'mode-word ' + (fracActive ? 'inactive' : 'active');
+  }
+
+  // ── Input events ─────────────────────────────────────────────
+  Object.keys(inputs).forEach(unit => {
+    const el = inputs[unit];
+
+    el.addEventListener('focus', () => {
+      // Show an editable value on focus:
+      //  FT  -> plain dash form (e.g. "6-3 1/2"); in DECIMAL mode the shown decimal feet.
+      //  IN  -> fractional value (e.g. "75 1/2").  MM -> whole millimetres.
+      //  CM / M -> plain decimal.
+      let cur;
+      if (unit === 'ft') {
+        cur = base == null ? '' : feetPlain(base, mode);
+      } else if (unit === 'in' || unit === 'mm') {
+        cur = base == null ? '' : fmt(unit);
+      } else {
+        cur = base == null ? '' : trimNum(base / FACTORS[unit], 4);
+      }
+      editing = { unit, raw: cur };
+      el.value = cur;
+      hintEls[unit].style.display = 'none';
+    });
+
+    el.addEventListener('input', () => {
+      const val = el.value;
+      editing = { unit, raw: val };
+
+      // Hide the ghost hint on the field being typed in
+      hintEls[unit].style.display = 'none';
+      hintEls[unit].textContent = '';
+
+      // Read strictly (convert.js): empty / ok / partial (still typing) / bad
+      const r = readField(unit, val, mode);
+
+      if (r.state === 'partial' && r.value == null) {
+        // e.g. "." or "3/" — nothing complete yet: leave the other fields as they are
+      } else if (r.state === 'empty') {
+        // Empty field → clear everything, show ghost hints again
+        base = null;
+        Object.keys(inputs).forEach(u => {
+          if (u !== unit) {
+            inputs[u].value = '';
+            hintEls[u].textContent = hintFor(u);
+            hintEls[u].style.display = 'flex';
+          }
+        });
+      } else if (r.state === 'bad') {
+        // Invalid input → error signal: all other fields show 0
+        base = null;
+        Object.keys(inputs).forEach(u => {
+          if (u !== unit) {
+            inputs[u].value = '0';
+            hintEls[u].textContent = '';
+            hintEls[u].style.display = 'none';
+          }
+        });
+      } else {
+        // Complete number, or the complete part of one still being typed → convert
+        base = r.value * FACTORS[unit];
+        Object.keys(inputs).forEach(u => {
+          if (u !== unit) {
+            inputs[u].value = show(u);
+            hintEls[u].textContent = '';
+            hintEls[u].style.display = 'none';
+          }
+        });
+      }
+    });
+
+    el.addEventListener('blur', () => {
+      editing = null;
+      render();
+    });
+  });
+
+  // ── Fake caret ────────────────────────────────────────────────
+  // The native caret is invisible (caret-color: transparent) because its 1px
+  // width can't be changed. The gold bar is moved to where the real caret is,
+  // measured with the input's own font. Widths are in unscaled CSS px, the same
+  // space the bar is positioned in, so it stays correct at every panel scale.
+  const caretCtx = document.createElement('canvas').getContext('2d');
+  function textWidth(el, s) {
+    caretCtx.font = getComputedStyle(el).font;
+    return caretCtx.measureText(s).width;
+  }
+  function placeCaret(el) {
+    const caret = el.parentElement.querySelector('.fake-caret');
+    const start = el.selectionStart, end = el.selectionEnd;
+    caret.classList.toggle('is-hidden', start !== end);   // like a native caret
+    const full = textWidth(el, el.value);
+    const before = textWidth(el, el.value.slice(0, start));
+    const box = el.clientWidth;
+    // Right-aligned text ends at the box edge, unless it overflows and scrolls.
+    const x = full <= box ? box - full + before : before - el.scrollLeft;
+    const atEnd = start === el.value.length && el.value;
+    caret.style.left = (atEnd ? x + 4 : x - 1.5) + 'px';   // after the text, or centred between characters
+    caret.style.animation = 'none';                        // stay solid while moving
+    void caret.offsetWidth;
+    caret.style.animation = '';
+  }
+  Object.values(inputs).forEach(el => {
+    const update = () => requestAnimationFrame(() => placeCaret(el));
+    ['focus', 'input', 'keydown', 'keyup', 'mouseup', 'select', 'selectionchange']
+      .forEach(ev => el.addEventListener(ev, update));
+  });
+  document.addEventListener('selectionchange', () => {
+    const el = document.activeElement;
+    if (el && el.classList.contains('field-input')) placeCaret(el);
+  });
+
+  // Click placement. The first click into a field selects its whole value (on the
+  // press, so it shows at once), so
+  // typing or pasting replaces it (nothing is copied — the clipboard is left
+  // alone for a paste). In an active field, a click on the number places the
+  // cursor there, and a click in the empty space left of the number puts it at
+  // the end — the browser default would put it before the first digit.
+  // The bar stays hidden while the button is down, so it never flashes at the
+  // spot the browser picks before the rule moves it.
+  let pressing = null;                                             // { el, wasActive }
+  Object.values(inputs).forEach(el => {
+    el.addEventListener('mousedown', e => {
+      pressing = { el, wasActive: document.activeElement === el };
+      el.parentElement.querySelector('.fake-caret').classList.add('is-pressing');
+      if (!pressing.wasActive) {                 // first click: select it all right on the press
+        e.preventDefault();                      // (the browser would drop a caret there first)
+        el.focus();
+        el.setSelectionRange(0, el.value.length);
+      }
+    });
+  });
+  window.addEventListener('mouseup', e => {
+    if (!pressing) return;
+    const { el, wasActive } = pressing;
+    pressing = null;
+    if (wasActive && el.selectionStart === el.selectionEnd) {      // a click, not a drag-select
+      const full = textWidth(el, el.value), box = el.clientWidth;
+      if (full <= box) {
+        const r = el.getBoundingClientRect();
+        const x = (e.clientX - r.left) * el.offsetWidth / r.width;     // unscaled px
+        if (x < box - full - 4) el.setSelectionRange(el.value.length, el.value.length);   // left of the number
+      }
+    }
+    placeCaret(el);
+    el.parentElement.querySelector('.fake-caret').classList.remove('is-pressing');
+  });
+
+  // ── Mode switch ───────────────────────────────────────────────
+  function setMode(m) {
+    mode = m;
+    editing = null;
+    render();
+    if (window.electronAPI) window.electronAPI.setMode(m);   // remembered for next launch
+  }
+  document.getElementById('mode-frac').addEventListener('click', () => setMode('FRAC'));
+  document.getElementById('mode-dec') .addEventListener('click', () => setMode('DEC'));
+
+  // ── Window controls ───────────────────────────────────────────
+  document.getElementById('btn-close')   .addEventListener('click', () => window.electronAPI.closeWindow());
+  document.getElementById('btn-minimize').addEventListener('click', () => window.electronAPI.minimizeWindow());
+  const pinBtn = document.getElementById('btn-pin');
+  pinBtn.addEventListener('click', async () => {
+    const pinned = await window.electronAPI.togglePin();
+    pinBtn.classList.toggle('pinned', pinned);
+    pinBtn.title = pinned ? 'Unpin' : 'Always on top';
+  });
+
+  // ── Live proportional scaling ─────────────────────────────────
+  // The panel scale tracks the window's content width continuously:
+  // scale = W / 330. The main process enforces the 270–330 limits, keeps
+  // the aspect ratio, and persists the exact released width; the renderer
+  // just mirrors the current width every resize tick — smooth and uniform.
+  function syncScale() {
+    const w = window.innerWidth || 330;   // guard against a transient 0 width
+    document.documentElement.style.setProperty('--scale', w / 330);
+  }
+  window.addEventListener('resize', syncScale);
+  syncScale();
+
+  // ── Keyboard ──────────────────────────────────────────────────
+  // Enter finishes the field (it shows the formatted result). Esc clears every
+  // field; if you're in a field you stay there, ready to type a new number.
+  window.addEventListener('keydown', e => {
+    const el = document.activeElement;
+    const unit = Object.keys(inputs).find(u => inputs[u] === el);
+    if (e.key === 'Enter' && unit) { el.blur(); return; }
+    if (e.key !== 'Escape') return;
+    base = null;
+    editing = unit ? { unit, raw: '' } : null;
+    render();
+    if (unit) { hintEls[unit].style.display = 'none'; placeCaret(el); }
+  });
+
+  // ── Copy ──────────────────────────────────────────────────────
+  // Copy gives you what the field shows, and FT gets its marks back: in FT the
+  // whole value (Ctrl+C with nothing selected, or everything selected) copies as
+  // 6'-3" rather than the editing form 6-3. Copying part of the text is unchanged.
+  // Numbers copy without the thousands space (50000). A double-click selects the
+  // whole value and copies it, and a COPIED note shows for a moment.
+  Object.keys(inputs).forEach(unit => {
+    const el = inputs[unit];
+    const copyText = () => (unit === 'ft' && base != null) ? fmt('ft') : el.value;
+    el.addEventListener('keydown', e => {                        // Ctrl+C, nothing selected
+      if (!(e.ctrlKey || e.metaKey) || e.code !== 'KeyC') return;  // e.code: any keyboard layout
+      if (el.selectionStart !== el.selectionEnd || !copyText()) return;
+      e.preventDefault();
+      navigator.clipboard.writeText(copyText()).catch(() => {});
+    });
+    el.addEventListener('dblclick', () => {                      // double-click: select all, copy
+      if (!copyText()) return;
+      el.select();
+      navigator.clipboard.writeText(copyText()).catch(() => {});
+      const note = el.parentElement.querySelector('.copied-note');
+      note.classList.remove('show');
+      void note.offsetWidth;                                     // restart the fade
+      note.classList.add('show');
+    });
+    el.addEventListener('copy', e => {                           // whole value selected
+      if (unit !== 'ft' || base == null) return;
+      if (el.selectionStart !== 0 || el.selectionEnd !== el.value.length) return;
+      e.preventDefault();
+      e.clipboardData.setData('text/plain', fmt('ft'));
+    });
+  });
+
+  // ── Drag-and-drop ─────────────────────────────────────────────
+  // A file or link dropped on the window must not replace the app (main.js also
+  // blocks navigation).
+  ['dragover', 'drop'].forEach(ev => window.addEventListener(ev, e => e.preventDefault()));
+
+  // ── Licence key ───────────────────────────────────────────────
+  // Until a key is accepted the panel shows the KEY row instead of the fields. The
+  // check itself happens in main.js (license.js); this only shows its answer.
+  const keyEl = document.getElementById('f-key'), keyHelp = document.getElementById('key-help');
+  const activateEl = document.getElementById('activate');
+  let activating = false;
+  async function activate() {
+    if (activating || !keyEl.value.trim()) return;
+    activating = true; activateEl.classList.add('busy');
+    keyHelp.classList.remove('error'); keyHelp.textContent = 'Checking\u2026';
+    const r = await window.electronAPI.activateLicense(keyEl.value);
+    activating = false; activateEl.classList.remove('busy');
+    if (r.ok) {
+      document.body.classList.remove('needs-key');
+      inputs.mm.focus();
+    } else {
+      keyHelp.classList.add('error'); keyHelp.textContent = r.message;
+      keyEl.focus(); keyEl.select();
+    }
+  }
+  activateEl.addEventListener('click', activate);
+  keyEl.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); activate(); } });
+  keyEl.addEventListener('input', () => { keyHelp.classList.remove('error'); });
+
+  // ── Init ──────────────────────────────────────────────────────
+  // Restore last session's FRACTIONAL/DECIMAL choice, pin and licence state (main.js passes them in).
+  const saved = (window.electronAPI && window.electronAPI.initialState) || {};
+  if (saved.licensed === false) { document.body.classList.add('needs-key'); setTimeout(() => keyEl.focus(), 50); }
+  if (saved.mode === 'DEC') mode = 'DEC';
+  if (saved.pinned) { pinBtn.classList.add('pinned'); pinBtn.title = 'Unpin'; }
+  // Wordmark is a static SVG with fixed layout — no runtime fit/calibration.
+  render();
+</script>
+</body>
+</html>

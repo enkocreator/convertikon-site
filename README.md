@@ -24,3 +24,9 @@ directly); it is not in use.
 
 A folder with an `index.html` becomes a clean URL:
 `privacy/index.html` -> convertikon.app/privacy, `support/index.html` -> convertikon.app/support.
+
+## The free web version (app/)
+
+`app/` is the desktop app's own page (`../CONVERTIKON/index.html` + `convert.js`) running in the
+browser, shown on the launch page in the asphalt band under TRY ME!. Don't edit it by hand:
+after any change to the app, run `python tools/build_web_app.py` and commit `app/`.

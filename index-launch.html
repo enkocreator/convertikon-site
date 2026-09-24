@@ -43,6 +43,7 @@
   .chamfer { clip-path: polygon(var(--c) 0, 100% 0, 100% calc(100% - var(--c)), calc(100% - var(--c)) 100%, 0 100%, 0 var(--c)); }
   h2 { font-weight: 700; font-size: calc(var(--u) * 35.5); line-height: 1.15; text-transform: uppercase; text-align: center; }
   .tilde li::before { content: '~ '; }
+  .v { color: var(--slate); font-weight: 700; white-space: nowrap; }   /* numbers: bold slate, like a value being typed in the app */
 
   /* ── Screen 1 · hero: fills the window; the gold band starts right below it ── */
   .hero { --hero-h: max(100vh, calc(var(--u) * 680)); position: relative; overflow: hidden; height: var(--hero-h); }
@@ -103,8 +104,9 @@
 
   /* ── Screen 5 · the app on asphalt, with the TRY ME! star on its top edge ── */
   .showcase { position: relative; margin-top: calc(var(--u) * 70.9); padding: calc(var(--u) * 114.8) 0 calc(var(--u) * 97.4);
-              background: #5E5F5B url('./assets/asphalt-tile.jpg') 0 0 / 338px 570px repeat; }
-  .showcase .panel { display: block; width: calc(var(--u) * 368.9); height: auto; margin: 0 auto; }
+              background: #5E5F5B url('./assets/asphalt-seamless.png') 0 0 / calc(var(--u) * 368.9) auto repeat; }   /* the app's asphalt, at the panel's scale */
+  .showcase .panel { display: block; width: calc(var(--u) * 368.9); aspect-ratio: 330 / 455; height: auto; margin: 0 auto;
+                     border: 0; background: transparent; color-scheme: normal; }   /* the free web version (app/), no panel background of its own */
   .tryme { position: absolute; left: min(calc(50% + var(--u) * 311.6), calc(100% - var(--u) * 430)); top: calc(var(--u) * -133.65); width: calc(var(--u) * 410.9); height: calc(var(--u) * 390.8); }
   .tryme svg { position: absolute; inset: 0; width: 100%; height: 100%; }
   .tryme p { position: absolute; left: 0; right: 0; top: calc(var(--u) * 141.73); text-align: center; color: var(--slate);
@@ -148,6 +150,7 @@
     .buy { width: min(100%, 330px); height: 56px; font-size: 16px; }
     .guarantee { margin-top: 8px; font-size: 14px; }
     .showcase { margin-top: 110px; padding: 150px 16px 48px; }
+    .showcase { background-size: 300px auto; }
     .showcase .panel { width: min(100%, 300px); }
     .tryme { --u: .5px; left: auto; right: 6px; }
     .facts { grid-template-columns: 1fr 1fr; justify-content: stretch; margin: 36px 16px 0; row-gap: 24px; }
@@ -192,9 +195,9 @@
   <div class="stage"><div class="inner">
     <h2>Big things you can do</h2>
     <ul class="big tilde">
-      <li>type ft-and-inch any way you write it,<br> from the full 6'-3 1/2" down to a quick 6 3 1/2,<br> it gets every one</li>
-      <li>get feet back in ft-and-inch every time,<br> as in standard architectural format<br> 6'-3 1/2", never 6.29'</li>
-      <li>watch fractions simplified<br> to the nearest 1/16",<br> so 8/16 shows as 1/2</li>
+      <li>type ft-and-inch any way you write it,<br> from the full <span class="v">6'-3 1/2"</span> down to a quick <span class="v">6 3 1/2</span>,<br> it gets every one</li>
+      <li>get feet back in ft-and-inch every time,<br> as in standard architectural format<br> <span class="v">6'-3 1/2"</span>, never 6.29'</li>
+      <li>watch fractions simplified<br> to the nearest <span class="v">1/16"</span>,<br> so <span class="v">8/16</span> shows as <span class="v">1/2</span></li>
       <li>flip between fractional and decimal with<br> one click, and your numbers survive the<br> switch, just in a new format</li>
     </ul>
   </div></div>
@@ -207,7 +210,7 @@
     <li>copies any value with a double-click, ready to paste</li>
     <li>stays on top of all your windows when you click the pin</li>
     <li>waits by your clock as a small icon, one click away</li>
-    <li>rolls extra inches into feet: 6-15 becomes 7'-3"</li>
+    <li>rolls extra inches into feet: <span class="v">6-15</span> becomes <span class="v">7'-3"</span></li>
     <li>takes a comma as a decimal point too</li>
     <li>shows the result on Enter, clears everything on Esc</li>
     <li>resizes smaller or larger to suit your screen</li>
@@ -223,7 +226,7 @@
 
 <!-- Screen 5 · the app on asphalt -->
 <section class="showcase">
-  <img class="panel" src="./assets/screenshots/convertikon-typing-ft@2x.png" alt="The CONVERTIKON panel" width="660" height="910">
+  <iframe class="panel" src="./app/index.html" title="CONVERTIKON: type a length into any field" scrolling="no" allow="clipboard-write"></iframe>
   <div class="tryme">
     <svg viewBox="-100 -95.106 200 190.211" aria-hidden="true">
       <polygon fill="#E8C32B" points="100.00,0.00 45.81,14.89 80.90,58.78 28.31,38.97 30.90,95.11 0.00,48.17 -30.90,95.11 -28.31,38.97 -80.90,58.78 -45.81,14.89 -100.00,0.00 -45.81,-14.89 -80.90,-58.78 -28.31,-38.97 -30.90,-95.11 0.00,-48.17 30.90,-95.11 28.31,-38.97 80.90,-58.78 45.81,-14.89"/>
