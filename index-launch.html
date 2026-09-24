@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- LAUNCH PAGE — DRAFT. On launch day this file replaces index.html (rename it; keep the
      coming-soon page as index-coming-soon.html). Every [BRACKETED, GOLD] bit is a placeholder. -->
-<title>CONVERTIKON — length converter for architects</title>
-<meta name="description" content="[META DESCRIPTION — e.g. CONVERTIKON is a desktop length converter for architects, designers and construction: millimetres, centimetres, metres, feet and inches with real fractions, on Mac and Windows.]">
+<title>CONVERTIKON — feet, inches and fractions</title>
+<meta name="description" content="Feet, inches and fractions, the way you actually write them. A small converter that pins over your drawing. Mac and Windows, one-time purchase.">
 <meta property="og:title" content="CONVERTIKON">
-<meta property="og:description" content="[OG DESCRIPTION — one sentence]">
+<meta property="og:description" content="A small converter that pins over your drawing. Feet, inches and fractions, the way you actually write them.">
 <meta property="og:image" content="https://convertikon.app/assets/icon.png">
 <meta property="og:url" content="https://convertikon.app/">
 <meta name="theme-color" content="#DCD9D3">
@@ -50,6 +50,7 @@
   .tagline { margin: calc(var(--u) * 9.5) calc(var(--u) * -12) 0; font-weight: 700; font-size: calc(var(--u) * 28.696); line-height: 1.189;
              word-spacing: calc(var(--u) * -1.63); white-space: nowrap; text-align: center; }
   .hero-copy { margin: calc(var(--u) * 40) calc(var(--u) * 2.5) 0 0; font-size: calc(var(--u) * 21); line-height: 1.25; text-align: center; color: var(--ground); }
+  .tagline.two { font-size: calc(var(--u) * 24.5); white-space: normal; }
   .hero-shot { justify-self: center; width: min(100%, 420px); }
   .hero-shot img { display: block; width: 100%; height: auto; }
   .mascot-hero { position: absolute; right: clamp(16px, 4.25vw, 54.5px); top: 24px; width: clamp(56px, 8vw, 110px); height: auto; pointer-events: none; }
@@ -64,111 +65,85 @@
   .under { text-align: center; font-size: 14px; color: var(--label); margin-top: 10px; }
 
   /* ── Feature rows ── */
-  .cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-  .card { background: #fff; border: 1px solid rgba(53,49,43,.10); padding: 22px 22px 18px; }
-  .card h3 { font-size: 20px; font-weight: 700; margin: 0 0 8px; }
-  .card p { font-size: 16px; margin: 0; }
+  /* ── Screen 2: proof, set large ── */
+  .proof { display: grid; grid-template-columns: 1.2fr 1fr; gap: 48px; align-items: center; }
+  .proof .big { font-size: 34px; font-weight: 700; line-height: 1.2; margin: 0 0 18px; max-width: none; }
+  .proof .ex { color: #3E5A6E; font-weight: 700; white-space: nowrap; }
+  .proof p { font-size: 20px; max-width: none; }
+  .proof img { display: block; width: min(100%, 400px); height: auto; justify-self: center; }
+  /* ── Screen 3: details ── */
+  .details ul { list-style: none; padding: 0; margin: 0; max-width: 620px; }
+  .details li { font-size: 18px; padding: 10px 0 10px 28px; border-bottom: 1px solid rgba(53,49,43,.15); position: relative; }
+  .details li::before { content: '~'; position: absolute; left: 0; color: var(--gold); font-weight: 700; }
+  /* ── Screen 4: close ── */
+  .close { text-align: center; }
+  .close .sign { font-size: 20px; margin: 36px auto 0; }
 
   /* ── Feet and inches table ── */
-  table { border-collapse: collapse; width: 100%; max-width: 620px; font-size: 18px; }
-  th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid rgba(53,49,43,.15); }
-  th { font-size: 13px; letter-spacing: .06em; text-transform: uppercase; color: var(--label); }
-  td:first-child { font-weight: 700; white-space: nowrap; }
-
-  /* ── Screenshots: the real app, transparent PNGs, on the ground ── */
-  .shots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
-  .shots figure { margin: 0; }
-  .shots img { display: block; width: 100%; height: auto; }
-  .shots figcaption { font-size: 14px; color: var(--label); margin-top: 10px; text-align: center; }
-
-  /* ── Price ── */
-  .price { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
-  .amount { font-size: 64px; font-weight: 700; line-height: 1; margin: 0; }
-  .amount small { font-size: 18px; font-weight: 500; color: var(--label); margin-left: 8px; }
-  .price ul { padding-left: 22px; margin: 0; font-size: 18px; }
-  .price li { margin-bottom: 6px; }
 
   footer { padding: 40px 20px 48px; text-align: center; font-size: 13px; opacity: .8; }
   footer a { color: var(--ink); margin: 0 8px; }
 
   @media (max-width: 860px) {
-    .hero, .price { grid-template-columns: 1fr; }
-    .cols, .shots { grid-template-columns: 1fr; }
+    .hero, .proof { grid-template-columns: 1fr; }
     section { padding: 48px 16px; }
   }
 </style>
 </head>
 <body>
 
+<!-- Screen 1 · hero -->
 <div class="top">
 <section class="hero">
   <div class="app-shape">
     <img class="wordmark" src="./assets/wordmark.svg" alt="CONVERTIKON" width="1793" height="240">
-    <h1 class="tagline"><span class="todo">[HERO LINE 1]</span><br><span class="todo">[HERO LINE 2]</span></h1>
-    <p class="hero-copy"><span class="todo">[HERO COPY — two or three short lines, e.g. A desktop converter for architects, designers and construction. Metric on one side, imperial on the other.]</span></p>
+    <h1 class="tagline two">Feet, inches and fractions, the way you actually write them.</h1>
+    <p class="hero-copy">A small converter that pins over your drawing.</p>
   </div>
   <div class="hero-shot">
-    <img src="./assets/screenshots/convertikon-typing-ft@2x.png" alt="The CONVERTIKON panel, typing 6'-3 1/2&quot; in the FT field" width="660" height="910">
+    <img src="./assets/screenshots/convertikon-typing-ft@2x.png" alt="CONVERTIKON, typing 6'-3 1/2&quot; in the FT field" width="660" height="910">
   </div>
 </section>
 <img class="mascot-hero" src="./assets/mascot.png" alt="" width="448" height="448">
 </div>
 
 <section>
-  <a class="buy" href="[CHECKOUT LINK]">Buy CONVERTIKON — CAD$9.99</a>
-  <p class="under">One-time purchase · Mac and Windows · free updates · <span class="todo">[REFUND WINDOW, e.g. 14-day refund]</span></p>
+  <a class="buy" href="https://convertikon.gumroad.com/l/convertikon">Get it for CAD$9.99</a>
+  <p class="under">Mac and Windows. One-time purchase, no subscriptions, no ads.</p>
 </section>
 
-<section>
-  <h2>What it does</h2>
-  <div class="cols">
-    <div class="card cut"><h3><span class="todo">[FEATURE 1 TITLE]</span></h3><p><span class="todo">[Type into any one of MM, CM, M, FT or IN and the other four update as you type.]</span></p></div>
-    <div class="card cut"><h3><span class="todo">[FEATURE 2 TITLE]</span></h3><p><span class="todo">[Real fractions to 1/16", the way they're written on drawings: 6'-3 1/2". Or decimal, with one click.]</span></p></div>
-    <div class="card cut"><h3><span class="todo">[FEATURE 3 TITLE]</span></h3><p><span class="todo">[A small panel that stays on top of your drawing, lives in the menu bar if you want, and never goes online.]</span></p></div>
+<!-- Screen 2 · proof -->
+<section class="proof">
+  <div>
+    <h2>Type ft-and-inch any way you write it</h2>
+    <p class="big">From the full <span class="ex">6'-3 1/2"</span> down to a quick <span class="ex">6 3 1/2</span>. It gets every one.</p>
+    <p>In fractional mode, FT always answers in ft-and-inch, <span class="ex">6'-3 1/2"</span>, never 6.29'.</p>
   </div>
+  <img src="./assets/screenshots/convertikon-typing-ft@2x.png" alt="The FT field mid-typing" width="660" height="910">
 </section>
 
-<section>
-  <h2>How you type feet and inches</h2>
-  <p><span class="todo">[INTRO LINE — e.g. Write them the way you'd say them. All of these mean 6 feet 3 inches:]</span></p>
-  <table>
-    <tr><th>You type</th><th>It means</th></tr>
-    <tr><td>6-3</td><td>6 feet 3 inches</td></tr>
-    <tr><td>6'3</td><td>6 feet 3 inches</td></tr>
-    <tr><td>6 3</td><td>6 feet 3 inches</td></tr>
-    <tr><td>6'-3 1/2"</td><td>6 feet 3½ inches, drawing style</td></tr>
-    <tr><td>6'3.5</td><td>6 feet 3½ inches</td></tr>
-    <tr><td>6.25</td><td>6¼ feet, in DECIMAL mode</td></tr>
-  </table>
+<!-- Screen 3 · details -->
+<section class="details">
+  <h2>Little things it gets right</h2>
+  <ul>
+    <li>copies any value with a double-click, ready to paste</li>
+    <li>stays on top of all your windows when you click the pin</li>
+    <li>waits by your clock as a small icon, one click away</li>
+    <li>rolls extra inches into feet: 6-15 becomes 7'-3"</li>
+    <li>takes a comma as a decimal point too</li>
+    <li>shows the finished result on Enter, clears everything on Esc</li>
+    <li>resizes smaller or larger to suit your screen</li>
+    <li>reopens just how you left it: same size, fractional or decimal, pinned or not</li>
+  </ul>
 </section>
 
-<section>
-  <h2>Screenshots</h2>
-  <div class="shots">
-    <figure><img src="./assets/screenshots/convertikon-empty@2x.png" alt="CONVERTIKON, empty, showing the 1 metre hints" width="660" height="910"><figcaption><span class="todo">[CAPTION — e.g. Opens ready, with 1 metre as a hint]</span></figcaption></figure>
-    <figure><img src="./assets/screenshots/convertikon-after-enter@2x.png" alt="CONVERTIKON with 1917 mm converted to every unit" width="660" height="910"><figcaption><span class="todo">[CAPTION — e.g. One number, five units]</span></figcaption></figure>
-    <figure><img src="./assets/screenshots/convertikon-decimal@2x.png" alt="CONVERTIKON in DECIMAL mode" width="660" height="910"><figcaption><span class="todo">[CAPTION — e.g. Fractions or decimals, one click]</span></figcaption></figure>
-  </div>
+<!-- Screen 4 · close -->
+<section class="close">
+  <a class="buy" href="https://convertikon.gumroad.com/l/convertikon">Get it for CAD$9.99</a>
+  <p class="under"><span class="todo">[REFUND DAYS]</span>-day money back guarantee</p>
+  <p class="sign">Built by a designer who got tired of opening a browser to convert.</p>
 </section>
 
-<section>
-  <h2>Price</h2>
-  <div class="price">
-    <div>
-      <p class="amount">CAD$9.99<small>one time</small></p>
-      <p><span class="todo">[PRICE COPY — e.g. Pay once, use it on your Mac and your PC, and get every update free.]</span></p>
-    </div>
-    <ul>
-      <li>Mac (Apple Silicon and Intel) and Windows downloads with your purchase</li>
-      <li>Free updates</li>
-      <li>No account, no subscription, no data collected. One licence key, two computers.</li>
-      <li><span class="todo">[REFUND LINE — e.g. Not for you? Full refund within 14 days.]</span></li>
-    </ul>
-  </div>
-  <a class="buy" href="[CHECKOUT LINK]">Buy CONVERTIKON — CAD$9.99</a>
-  <p class="under">Secure checkout by <span class="todo">[PAYMENT PROVIDER]</span> · receipt and downloads by email</p>
-</section>
-
-<footer>© 2026 Elizabeth Enko <a href="./privacy/">Privacy</a> <a href="./support/">Support</a></footer>
+<footer>© 2026 Elizabeth Enko <a href="./privacy/">Privacy</a> <a href="./support/">Support</a> <a href="mailto:support@convertikon.app">Contact</a></footer>
 </body>
 </html>
