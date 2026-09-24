@@ -6,9 +6,9 @@
 <meta name="robots" content="noindex"><!-- PREVIEW: remove on launch day -->
 <!-- LAUNCH PAGE — DRAFT. On launch day this file replaces index.html (rename it; keep the
      coming-soon page as index-coming-soon.html). Every [BRACKETED] bit is a placeholder.
-     Layout: Elizabeth's redesign of 24 Sep 2026, drawn on a 950 px canvas. On wide screens every
-     measurement is in u = one canvas pixel (scaled so the canvas is 880–1200 px wide); below 880 px
-     the page reflows into one column. -->
+     Layout: Elizabeth's PSD of 24 Sep 2026 (CONVERTIKON_DESIGN/photoshop/convertikon-launch-page-2026-09-24.psd,
+     1920 x 926 window). Every measurement is in u = 1.2632 px at that size; below 880 px the page
+     reflows into one column. -->
 <title>CONVERTIKON — metric and imperial, feet, inches and fractions</title>
 <meta name="description" content="A small desktop converter for architects, interior designers, engineers and everyone who works between metric and imperial. Mac and Windows, one-time purchase.">
 <meta property="og:title" content="CONVERTIKON">
@@ -24,11 +24,13 @@
   @font-face { font-family: 'Chakra Petch'; font-weight: 700; font-style: normal; font-display: swap;
                src: url('./assets/fonts/ChakraPetch-Bold.ttf') format('truetype'); }
   :root {
-    --ground: #DCD9D3; --ink: #2E2B27; --gold: #E8C32B; --gold-hi: #F2D049; --slate: #3E5A6E;
-    --muted: #5C5A56; --label: #6B665E; --chrome: #C6C2BA; --light: #DCD9D3;
-    --u: min(calc(min(100vw, 1200px) / 950), calc(100vh / 600));
+    --ground: #DCD9D3; --ink: #2E2B27; --gold: #E8C32B; --slate: #3E5A6E; --slate-hi: #4A6B82;
+    --label: #6B665E; --light: #DCD9D3;
+    --u: min(calc(min(100vw, 1200px) / 950), calc(100vh / 680));
   }
-  @supports (width: 1cqw) { .page > * { --u: min(calc(min(100cqw, 1200px) / 950), calc(100vh / 600)); } }   /* short windows: the first screen still fits */
+  /* u = one unit of the page's design grid: 1.2632 px on a 1920 x 926 window (Elizabeth's PSD of 24 Sep).
+     Short windows shrink u so the first screen still fits. */
+  @supports (width: 1cqw) { .page > * { --u: min(calc(min(100cqw, 1200px) / 950), calc(100vh / 680)); } }
   * { box-sizing: border-box; }
   html { background: var(--ground); }
   body { margin: 0; background: var(--ground); color: var(--ink); font-family: 'Chakra Petch', 'Segoe UI', system-ui, sans-serif;
@@ -37,89 +39,88 @@
   h1, h2, p, ul, dl, dd { margin: 0; }
   ul { list-style: none; padding: 0; }
   a { color: inherit; }
-  .todo { background: var(--ink); color: var(--gold); font-weight: 700; padding: 0 .3em; }   /* PLACEHOLDER: replace before publishing */
   .stage { position: relative; width: calc(var(--u) * 950); margin-left: auto; margin-right: auto; }
-  .v { color: var(--slate); font-weight: 700; white-space: nowrap; }
   .chamfer { clip-path: polygon(var(--c) 0, 100% 0, 100% calc(100% - var(--c)), calc(100% - var(--c)) 100%, 0 100%, 0 var(--c)); }
+  h2 { font-weight: 700; font-size: calc(var(--u) * 35.5); line-height: 1.15; text-transform: uppercase; text-align: center; }
+  .tilde li::before { content: '~ '; }
 
-  /* ── Buy button: gold block with the field rows' 8 px corner cuts ── */
-  .buy { --c: calc(var(--u) * 8); display: flex; align-items: center; justify-content: center;
-         width: calc(var(--u) * 330); height: calc(var(--u) * 56); background: var(--gold); color: var(--ink);
-         font-weight: 700; font-size: calc(var(--u) * 16); letter-spacing: .1em; text-transform: uppercase;
-         text-decoration: none; white-space: nowrap; transition: background-color .15s; }
-  .buy:hover { background: var(--gold-hi); }
-  .buy:focus-visible { outline: 3px solid var(--slate); outline-offset: 3px; }
-
-  /* ── Screen 1 · hero ── */
-  /* The first screen fills the window; the gold band starts right below it. The card keeps to the
-     left edge, the quote and mascot to the bottom-right corner, the panel hangs in the middle. */
-  .hero { --hero-h: max(100vh, calc(var(--u) * 600)); position: relative; overflow: hidden; height: var(--hero-h); }
-  @supports (height: 100svh) { .hero { --hero-h: max(100svh, calc(var(--u) * 600)); } }
+  /* ── Screen 1 · hero: fills the window; the gold band starts right below it ── */
+  .hero { --hero-h: max(100vh, calc(var(--u) * 680)); position: relative; overflow: hidden; height: var(--hero-h); }
+  @supports (height: 100svh) { .hero { --hero-h: max(100svh, calc(var(--u) * 680)); } }
   .hero .stage { width: auto; height: 100%; }
-  /* The card keeps its left edge and top, and scales as one piece (cu = its own unit) until its bottom
-     lines up with the bottom of "to convert." (7.5 u under the quote box); it never comes closer
-     than 24 u to the panel. */
-  .card { --cu: min(calc((var(--hero-h) - var(--u) * 167) / 512), calc((50vw - var(--u) * 13) / 372));
-          --c: calc(var(--cu) * 32); position: absolute; left: calc((50% + var(--u) * 47 - var(--cu) * 372) * .6); top: calc(var(--u) * 33);   /* free space: 60 % left, 40 % right of the card */
+  /* The card scales as one piece (cu = its own unit): its bottom stays 115.6 u above the band, it keeps
+     24 u clear of the panel, and it sits in the free space left of the panel at 61 % / 39 %. */
+  .card { --cu: min(calc((var(--hero-h) - var(--u) * 115.58) / 512), calc((50vw - var(--u) * 12.92) / 372));
+          --c: calc(var(--cu) * 32); position: absolute; left: calc((50% + var(--u) * 49.08 - var(--cu) * 372) * .613); top: calc(var(--u) * 44.33);
           width: calc(var(--cu) * 372); height: calc(var(--cu) * 512); padding: calc(var(--cu) * 71) calc(var(--cu) * 21) 0;
-          background: #5E5F5B url('./assets/backdrop-asphalt.png') center / cover; color: var(--light);
-          display: flex; flex-direction: column; }
+          background: #5E5F5B url('./assets/backdrop-asphalt.png') center / cover; color: var(--light); }
+  @supports (width: 1cqw) { .card { --cu: min(calc((var(--hero-h) - var(--u) * 115.58) / 512), calc((50cqw - var(--u) * 12.92) / 372)); } }
   .card h1 { line-height: 0; }
-  @supports (width: 1cqw) { .card { --cu: min(calc((var(--hero-h) - var(--u) * 167) / 512), calc((50cqw - var(--u) * 13) / 372)); } }
   .wordmark { width: calc(var(--cu) * 330); height: auto; }
   .tagline { margin-top: calc(var(--cu) * 20); font-weight: 700; font-size: calc(var(--cu) * 24); line-height: calc(var(--cu) * 32.5); }
-  .shot { position: absolute; left: calc(50% + var(--u) * 47); top: calc(var(--u) * -108); width: calc(var(--u) * 330); height: auto; }
-  .quote { position: absolute; right: calc(var(--u) * 98); bottom: calc(var(--u) * 126.5); width: calc(var(--u) * 330);
-           text-align: center; font-size: calc(var(--u) * 22); line-height: calc(var(--u) * 29.5); color: var(--muted); }
-  .mascot { position: absolute; right: calc(var(--u) * 44); bottom: 0; width: calc(var(--u) * 132); height: auto; }
+  .shot { position: absolute; left: calc(50% + var(--u) * 49.08); top: calc(var(--u) * -108.46); width: calc(var(--u) * 368.9); height: auto; }
+  .quote { position: absolute; right: calc(var(--u) * 179.5); bottom: calc(var(--u) * 148.73); width: calc(var(--u) * 330);   /* last line sits on the mascot's head */
+           text-align: center; font-weight: 700; font-size: calc(var(--u) * 22); line-height: calc(var(--u) * 29.5); color: var(--slate); }
+  .mascot { position: absolute; right: calc(var(--u) * 104.5); bottom: 0; width: calc(var(--u) * 155.96); height: auto; }
 
   /* ── Screen 2 · the gold band ── */
   .band { position: relative; overflow: hidden; background: var(--gold); }
-  .band .stage { width: auto; margin: 0; min-height: calc(var(--u) * 504); padding: calc(var(--u) * 27) calc(var(--u) * 51) calc(var(--u) * 34) calc(var(--u) * 418);
-                 display: flex; flex-direction: column; justify-content: center; }
-  .burst { position: absolute; left: calc(var(--u) * -180); top: 0;   /* anchored to the window's left edge, as drawn */
-           width: calc(var(--u) * 570); height: calc(var(--u) * 470); color: var(--light); }
+  .sticker { position: absolute; inset: 0; color: var(--light); }
+  .burst { position: absolute; left: calc(var(--u) * -143.7); top: calc(var(--u) * 3.36); width: calc(var(--u) * 583.3); height: calc(var(--u) * 481.2); }
   .burst svg { position: absolute; inset: 0; width: 100%; height: 100%; }
-  .price { position: absolute; left: calc(var(--u) * 200.5); top: calc(var(--u) * 137); }
-  .amount { display: inline-block; transform: skewX(-13deg); transform-origin: 0 100%;   /* the wordmark's 13° slant */
-            font-weight: 700; font-size: calc(var(--u) * 36); line-height: 1; letter-spacing: .105em; margin-left: calc(var(--u) * -16); }
-  .once { display: block; width: max-content; transform: skewX(-13deg); transform-origin: 0 100%;   /* one piece with the price: same slant, same width */
-          font-weight: 700; font-size: calc(var(--u) * 21); line-height: 1; letter-spacing: .031em; margin: calc(var(--u) * 6) 0 0 calc(var(--u) * -16); }
-  .price ul { margin-top: calc(var(--u) * 12); font-size: calc(var(--u) * 17.8); line-height: calc(var(--u) * 21.4); }
-  .band h2, .little h2 { font-weight: 700; font-size: calc(var(--u) * 35.5); line-height: 1.15; }
-  .tilde li { position: relative; padding-left: .8em; }
-  .tilde li::before { content: '~'; position: absolute; left: 0; }
-  .big.tilde li { padding-left: 0; }
-  .big.tilde li::before { position: static; content: '~ '; }
-  .big { display: grid; grid-template-columns: minmax(0, calc(var(--u) * 470)); row-gap: calc(var(--u) * 27);
-         margin-top: calc(var(--u) * 24); font-size: calc(var(--u) * 22); line-height: calc(var(--u) * 27); }
-  .big li, .little li { text-wrap: pretty; }
-  @media (min-width: 1412px) {   /* room for two columns: items 1-2 left, 3-4 right */
-    .big { grid-template-columns: repeat(2, minmax(0, calc(var(--u) * 470))); grid-template-rows: auto auto; grid-auto-flow: column; column-gap: calc(var(--u) * 56); align-items: center; }   /* paired items share a centre line */
+  .amount, .once { position: absolute; font-weight: 700; line-height: 1; white-space: nowrap;
+                   transform: skewX(-13deg); transform-origin: 0 84.2%; }   /* the wordmark's 13° slant, pivoting on the baseline */
+  .amount { left: calc(var(--u) * 4.75); top: calc(var(--u) * 145.65); font-size: calc(var(--u) * 44.21); letter-spacing: .105em; }
+  .once { left: calc(var(--u) * 7.6); top: calc(var(--u) * 184.97); font-size: calc(var(--u) * 25.52); letter-spacing: .031em; }
+  .price-list { position: absolute; left: calc(var(--u) * 17.34); top: calc(var(--u) * 215.97); font-size: calc(var(--u) * 17.8); line-height: calc(var(--u) * 21.4); }
+  .band .stage { width: auto; margin: 0; min-height: calc(var(--u) * 504.3); padding: calc(var(--u) * 68.78) calc(var(--u) * 30) calc(var(--u) * 40) calc(var(--u) * 417.3); }
+  .band .inner { width: min(100%, calc(var(--u) * 1017.2)); }
+  .big { display: grid; grid-template-columns: minmax(0, 1fr); row-gap: calc(var(--u) * 28.5); margin-top: calc(var(--u) * 35.85);
+         font-size: calc(var(--u) * 23.75); line-height: calc(var(--u) * 28.5); text-align: center; }
+  .big li { text-wrap: balance; }
+  .big br { display: none; }
+  @media (min-width: 1412px) {   /* two columns: items 1-2 left, 3-4 right */
+    .big { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: auto auto; grid-auto-flow: column;
+           column-gap: calc(var(--u) * 12); row-gap: calc(var(--u) * 57); }
   }
+  @media (min-width: 1840px) { .big br { display: inline; } }   /* Elizabeth's line breaks, where the columns are full width */
 
   /* ── Screen 3 · little things ── */
-  .little.stage { width: min(calc(100% - var(--u) * 102), calc(var(--u) * 1336)); padding: calc(var(--u) * 15) 0 0; }   /* two 640 u columns when there is room */
-  .little ul { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: repeat(4, auto); grid-auto-flow: column; align-items: center;
-               column-gap: calc(var(--u) * 56); row-gap: calc(var(--u) * 6.5);
-               margin-top: calc(var(--u) * 26); font-size: calc(var(--u) * 22); line-height: calc(var(--u) * 29); }
+  .little.stage { width: min(calc(100% - var(--u) * 102), calc(var(--u) * 1273)); padding-top: calc(var(--u) * 32.37); }
+  .little ul { display: grid; grid-template-columns: fit-content(calc(51% - var(--u) * 20)) fit-content(calc(49% - var(--u) * 20)); grid-template-rows: repeat(4, auto);
+               grid-auto-flow: column; justify-content: space-between; column-gap: calc(var(--u) * 40);
+               margin-top: calc(var(--u) * 43.76); font-size: calc(var(--u) * 23.75); line-height: calc(var(--u) * 38); }
 
-  /* ── Screen 4 · close ── */
-  .close { display: flex; flex-direction: column; align-items: center; padding-top: calc(var(--u) * 80); }
-  .close .buy { width: calc(var(--u) * 315); }
-  .guarantee { margin-top: calc(var(--u) * 12); font-size: calc(var(--u) * 14); color: var(--label); }
+  /* ── Screen 4 · buy ── */
+  .close { display: flex; flex-direction: column; align-items: center; padding-top: calc(var(--u) * 58.8); }
+  .buy { --c: calc(var(--u) * 9.5); display: flex; align-items: center; justify-content: center;
+         width: calc(var(--u) * 366.6); height: calc(var(--u) * 66.5); background: var(--slate); color: var(--light);
+         font-weight: 700; font-size: calc(var(--u) * 18.6); letter-spacing: .1em; text-transform: uppercase;
+         text-decoration: none; white-space: nowrap; transition: background-color .15s; }
+  .buy:hover { background: var(--slate-hi); }
+  .buy:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+  .guarantee { margin-top: calc(var(--u) * 2.9); font-size: calc(var(--u) * 16.3); line-height: 1.2; color: var(--label); }
 
-  /* ── The base: facts + footer on asphalt, full width (the app's texture made seamless, drawn at 2x) ── */
-  .base { margin-top: calc(var(--u) * 88); background: #5E5F5B url('./assets/asphalt-tile.jpg') 0 0 / 338px 570px repeat; color: var(--light); }
+  /* ── Screen 5 · the app on asphalt, with the TRY ME! star on its top edge ── */
+  .showcase { position: relative; margin-top: calc(var(--u) * 70.9); padding: calc(var(--u) * 114.8) 0 calc(var(--u) * 97.4);
+              background: #5E5F5B url('./assets/asphalt-tile.jpg') 0 0 / 338px 570px repeat; }
+  .showcase .panel { display: block; width: calc(var(--u) * 368.9); height: auto; margin: 0 auto; }
+  .tryme { position: absolute; left: min(calc(50% + var(--u) * 311.6), calc(100% - var(--u) * 430)); top: calc(var(--u) * -133.65); width: calc(var(--u) * 410.9); height: calc(var(--u) * 390.8); }
+  .tryme svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .tryme p { position: absolute; left: 0; right: 0; top: calc(var(--u) * 141.73); text-align: center; color: var(--slate);
+             font-weight: 700; font-size: calc(var(--u) * 71.1); line-height: calc(var(--u) * 55.2);
+             transform: skewX(-13deg); transform-origin: 50% calc(var(--u) * 51.92); }
+
+  /* ── Facts + footer, on the light ground ── */
   .facts { display: grid; grid-template-columns: repeat(4, auto); justify-content: space-between; gap: calc(var(--u) * 24);
-           width: calc(var(--u) * 784); padding-top: calc(var(--u) * 44); }
-  .facts dt { font-size: calc(var(--u) * 13); font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); }
-  .facts dd { margin-top: calc(var(--u) * 8); font-size: calc(var(--u) * 15); line-height: 1.4; }
+           width: calc(var(--u) * 784); margin-top: calc(var(--u) * 30.6); color: var(--slate); }
+  .facts dt { font-size: calc(var(--u) * 13); line-height: 1.25; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+  .facts dd { margin-top: calc(var(--u) * 7.3); font-size: calc(var(--u) * 15); line-height: calc(var(--u) * 21); }
   .facts a { text-decoration: none; }
-  footer.stage { display: flex; gap: calc(var(--u) * 24); width: calc(var(--u) * 784); margin-top: calc(var(--u) * 40);
-           padding-bottom: calc(var(--u) * 44); font-size: calc(var(--u) * 13); color: var(--chrome); }
-  footer a { color: var(--chrome); text-decoration: none; }
-  footer a:hover, .facts a:hover { color: var(--gold); }
+  footer.stage { display: flex; gap: calc(var(--u) * 24); width: calc(var(--u) * 784); margin-top: calc(var(--u) * 41.1);
+                 padding-bottom: calc(var(--u) * 38.1); font-size: calc(var(--u) * 13); line-height: 1.25; color: var(--slate); }
+  footer a { text-decoration: none; }
+  footer a:hover, .facts a:hover { color: var(--ink); }
 
   /* ── Below 880 px: one column ── */
   @media (max-width: 879px) {
@@ -134,20 +135,22 @@
     .shot { width: min(100%, 330px); margin-top: 40px; }
     .quote { width: auto; max-width: 330px; margin-top: 28px; font-size: 19px; line-height: 26px; text-wrap: balance; }
     .quote br { display: none; }
-    .mascot { width: 96px; align-self: flex-end; margin: 20px 12px 0 0; }
+    .mascot { width: 110px; align-self: flex-end; margin: 20px 12px 0 0; }
+    .sticker { --u: .8px; position: relative; inset: auto; height: calc(var(--u) * 470); }
     .band .stage { padding: 0 16px 48px; min-height: 0; }
-    .burst { --u: .84px; position: relative; margin-bottom: -8px; }
-    .big { font-size: 19px; line-height: 25px; }
-    .big.tilde li { padding-left: .8em; }
-    .big.tilde li::before { position: absolute; content: '~'; }
-    .band h2, .little h2 { font-size: 30px; }
+    .band .inner { width: auto; }
+    .big { font-size: 19px; line-height: 25px; row-gap: 22px; margin-top: 20px; }
+    h2 { font-size: 28px; }
     .little.stage { width: auto; padding: 56px 16px 0; }
-    .little ul { display: block; font-size: 18px; line-height: 24px; }
-    .little li + li { margin-top: 6px; }
-    .buy { width: min(100%, 330px); }
-    .close { padding: 40px 16px 0; }
-    .base { margin-top: 56px; }
-    .facts { grid-template-columns: 1fr 1fr; justify-content: stretch; margin: 0 16px; padding-top: 36px; row-gap: 24px; }
+    .little ul { display: block; font-size: 18px; line-height: 24px; margin-top: 24px; }
+    .little li + li { margin-top: 8px; }
+    .close { padding: 48px 16px 0; }
+    .buy { width: min(100%, 330px); height: 56px; font-size: 16px; }
+    .guarantee { margin-top: 8px; font-size: 14px; }
+    .showcase { margin-top: 110px; padding: 150px 16px 48px; }
+    .showcase .panel { width: min(100%, 300px); }
+    .tryme { --u: .5px; left: auto; right: 6px; }
+    .facts { grid-template-columns: 1fr 1fr; justify-content: stretch; margin: 36px 16px 0; row-gap: 24px; }
     footer.stage { flex-wrap: wrap; margin: 32px 16px 0; padding-bottom: 36px; }
   }
 </style>
@@ -160,41 +163,41 @@
   <div class="stage">
     <div class="card chamfer">
       <h1><img class="wordmark" src="./assets/wordmark.svg" alt="CONVERTIKON" width="1793" height="240"></h1>
-      <p class="tagline">~ a small desktop converter for architects, interior designers, engineers and everyone who works between metric and imperial. For Mac and&nbsp;Windows.</p>
+      <p class="tagline">~ a small desktop converter for architects, interior designers, engineers and everyone who works between metric and imperial.<br>Mac and Windows.</p>
     </div>
     <img class="shot" src="./assets/screenshots/convertikon-typing-ft@2x.png" alt="The CONVERTIKON panel: 6'-3 1/2&quot; typed in FT, the other fields already converted" width="660" height="910">
-    <p class="quote">Built by a designer who got <br>tired of opening a browser <br>to convert.</p>
+    <p class="quote">built by a designer who got <br>tired of opening a browser <br>to convert</p>
     <img class="mascot" src="./assets/mascot.png" alt="" width="448" height="448">
   </div>
 </header>
 
 <!-- Screen 2 · price + big things -->
 <section class="band">
+  <div class="sticker">
     <div class="burst">
       <svg viewBox="-180 0 570 470" preserveAspectRatio="none" aria-hidden="true">
         <polygon fill="#3E5A6E" points="104,6 134,94 225,60 194,131 382,107 229,170 304,196 241,216 321,246 223,268 287,317 180,331 240,404 134,357 92,463 13,350 -70,409 -40,300 -175,246 -45,192 -86,25 47,95"/>
       </svg>
-      <div class="price">
-        <p class="amount">CAD$9.99</p>
-        <p class="once">one time purchase</p>
-        <ul>
-          <li>free updates</li>
-          <li>no subscriptions</li>
-          <li>no ads</li>
-          <li>no account</li>
-          <li>no fuss</li>
-        </ul>
-      </div>
     </div>
-  <div class="stage">
-    <h2>Big things you can do</h2>
-    <ul class="big tilde">
-      <li>type ft-and-inch any way you write it, from the full <span class="v">6'-3 1/2"</span> down to a quick <span class="v">6 3 1/2</span>, it gets every one</li>
-      <li>get feet back in ft-and-inch every time, in standard architectural format <span class="v">6'-3 1/2"</span>, never 6.29'</li>
-      <li>watch fractions simplified to the nearest <span class="v">1/16"</span>, so <span class="v">8/16</span> shows as <span class="v">1/2</span></li>
-      <li>flip between fractional and decimal with one click, and your numbers survive the switch, just in a new format</li>
+    <p class="amount">CAD$9.99</p>
+    <p class="once">one time purchase</p>
+    <ul class="price-list">
+      <li>free updates</li>
+      <li>no subscriptions</li>
+      <li>no ads</li>
+      <li>no account</li>
+      <li>no fuss</li>
     </ul>
   </div>
+  <div class="stage"><div class="inner">
+    <h2>Big things you can do</h2>
+    <ul class="big tilde">
+      <li>type ft-and-inch any way you write it,<br> from the full 6'-3 1/2" down to a quick 6 3 1/2,<br> it gets every one</li>
+      <li>get feet back in ft-and-inch every time,<br> as in standard architectural format<br> 6'-3 1/2", never 6.29'</li>
+      <li>watch fractions simplified<br> to the nearest 1/16",<br> so 8/16 shows as 1/2</li>
+      <li>flip between fractional and decimal with<br> one click, and your numbers survive the<br> switch, just in a new format</li>
+    </ul>
+  </div></div>
 </section>
 
 <!-- Screen 3 · little things -->
@@ -204,21 +207,31 @@
     <li>copies any value with a double-click, ready to paste</li>
     <li>stays on top of all your windows when you click the pin</li>
     <li>waits by your clock as a small icon, one click away</li>
-    <li>rolls extra inches into feet: <span class="v">6-15</span> becomes <span class="v">7'-3"</span></li>
+    <li>rolls extra inches into feet: 6-15 becomes 7'-3"</li>
     <li>takes a comma as a decimal point too</li>
-    <li>shows the finished result on Enter, clears everything on Esc</li>
+    <li>shows the result on Enter, clears everything on Esc</li>
     <li>resizes smaller or larger to suit your screen</li>
-    <li>reopens just how you left it: same size, fractional or decimal, pinned or not</li>
+    <li>reopens as you left: size, numeric form, pinned or not</li>
   </ul>
 </section>
 
-<!-- Screen 4 · close -->
+<!-- Screen 4 · buy -->
 <section class="close stage">
   <a class="buy chamfer" href="https://convertikon.gumroad.com/l/convertikon">Get it for CAD$9.99</a>
   <p class="guarantee">14-day money back guarantee</p>
 </section>
 
-<div class="base">
+<!-- Screen 5 · the app on asphalt -->
+<section class="showcase">
+  <img class="panel" src="./assets/screenshots/convertikon-typing-ft@2x.png" alt="The CONVERTIKON panel" width="660" height="910">
+  <div class="tryme">
+    <svg viewBox="-100 -95.106 200 190.211" aria-hidden="true">
+      <polygon fill="#E8C32B" points="100.00,0.00 45.81,14.89 80.90,58.78 28.31,38.97 30.90,95.11 0.00,48.17 -30.90,95.11 -28.31,38.97 -80.90,58.78 -45.81,14.89 -100.00,0.00 -45.81,-14.89 -80.90,-58.78 -28.31,-38.97 -30.90,-95.11 0.00,-48.17 30.90,-95.11 28.31,-38.97 80.90,-58.78 45.81,-14.89"/>
+    </svg>
+    <p>TRY<br>ME!</p>
+  </div>
+</section>
+
 <dl class="facts stage">
   <div><dt>Mac</dt><dd>macOS 10.15 or later<br>Apple Silicon and Intel</dd></div>
   <div><dt>Windows</dt><dd>Windows 10 and 11<br>64-bit</dd></div>
@@ -231,7 +244,6 @@
   <a href="./privacy/">Privacy</a>
   <a href="./support/">Support</a>
 </footer>
-</div>
 
 </div>
 </body>
