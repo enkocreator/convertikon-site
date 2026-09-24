@@ -7,8 +7,8 @@
 <!-- LAUNCH PAGE — DRAFT. On launch day this file replaces index.html (rename it; keep the
      coming-soon page as index-coming-soon.html). Every [BRACKETED] bit is a placeholder.
      Layout: Elizabeth's PSD of 24 Sep 2026 (CONVERTIKON_DESIGN/photoshop/convertikon-launch-page-2026-09-24.psd,
-     1920 x 926 window). Every measurement is in u = 1.2632 px at that size; below 880 px the page
-     reflows into one column. -->
+     1920 x 941 px). Every measurement is in u; the design scales as one block with the window; below 960 px
+     the page reflows into one column. -->
 <title>CONVERTIKON — metric and imperial, feet, inches and fractions</title>
 <meta name="description" content="A small desktop converter for architects, interior designers, engineers and everyone who works between metric and imperial. Mac and Windows, one-time purchase.">
 <meta property="og:title" content="CONVERTIKON">
@@ -26,11 +26,12 @@
   :root {
     --ground: #DCD9D3; --ink: #2E2B27; --gold: #E8C32B; --slate: #3E5A6E; --slate-hi: #4A6B82;
     --label: #6B665E; --light: #DCD9D3;
-    --u: min(calc(min(100vw, 1200px) / 950), calc(100vh / 680));
+    --u: min(calc(100vw / 1520), calc(100vh / 745));
   }
-  /* u = one unit of the page's design grid: 1.2632 px on a 1920 x 926 window (Elizabeth's PSD of 24 Sep).
-     Short windows shrink u so the first screen still fits. */
-  @supports (width: 1cqw) { .page > * { --u: min(calc(min(100cqw, 1200px) / 950), calc(100vh / 680)); } }
+  /* u = one unit of the design: Elizabeth's PSD of 24 Sep is 1520 u wide and its first screen 745 u tall
+     (1920 x 941 px, u = 1.2632 px). The whole design scales as one block with the window: u follows the
+     window's width, or its height when the window is short, so nothing moves relative to anything else. */
+  @supports (width: 1cqw) { .page > * { --u: min(calc(100cqw / 1520), calc(100vh / 745)); } }
   * { box-sizing: border-box; }
   html { background: var(--ground); }
   body { margin: 0; background: var(--ground); color: var(--ink); font-family: 'Chakra Petch', 'Segoe UI', system-ui, sans-serif;
@@ -46,20 +47,19 @@
   .v { color: var(--slate); font-weight: 700; white-space: nowrap; }   /* numbers: bold slate, like a value being typed in the app */
 
   /* ── Screen 1 · hero: fills the window; the gold band starts right below it ── */
-  .hero { --hero-h: max(100vh, calc(var(--u) * 680)); position: relative; overflow: hidden; height: var(--hero-h); }
-  @supports (height: 100svh) { .hero { --hero-h: max(100svh, calc(var(--u) * 680)); } }
-  .hero .stage { width: auto; height: 100%; }
+  .hero { --hero-h: min(100vh, calc(var(--u) * 968));   /* fills the window, but never stretches past 1.3 x the design */ position: relative; overflow: hidden; height: var(--hero-h); }
+  @supports (height: 100svh) { .hero { --hero-h: min(100svh, calc(var(--u) * 968)); } }
+  .hero .stage { width: calc(var(--u) * 1520); height: 100%; }
   /* The card scales as one piece (cu = its own unit): its bottom stays 115.6 u above the band, it keeps
      24 u clear of the panel, and it sits in the free space left of the panel at 61 % / 39 %. */
-  .card { --cu: min(calc((var(--hero-h) - var(--u) * 115.58) / 512), calc((50vw - var(--u) * 12.92) / 372));
-          --c: calc(var(--cu) * 32); position: absolute; left: calc((50% + var(--u) * 49.08 - var(--cu) * 372) * .613); top: calc(var(--u) * 44.33);
+  .card { --cu: calc(var(--u) * 1.2293);   /* the card is drawn in its own unit, 1.2293 u */
+          --c: calc(var(--cu) * 32); position: absolute; left: calc(var(--u) * 215.3); top: calc(var(--u) * 44.33);
           width: calc(var(--cu) * 372); height: calc(var(--cu) * 512); padding: calc(var(--cu) * 71) calc(var(--cu) * 21) 0;
           background: #5E5F5B url('./assets/backdrop-asphalt.png') center / cover; color: var(--light); }
-  @supports (width: 1cqw) { .card { --cu: min(calc((var(--hero-h) - var(--u) * 115.58) / 512), calc((50cqw - var(--u) * 12.92) / 372)); } }
   .card h1 { line-height: 0; }
   .wordmark { width: calc(var(--cu) * 330); height: auto; }
   .tagline { margin-top: calc(var(--cu) * 20); font-weight: 700; font-size: calc(var(--cu) * 24); line-height: calc(var(--cu) * 32.5); }
-  .shot { position: absolute; left: calc(50% + var(--u) * 49.08); top: calc(var(--u) * -119);   /* the page edge cuts the MM row below its corner cut */ width: calc(var(--u) * 368.9); height: auto; }
+  .shot { position: absolute; left: calc(var(--u) * 809.1); top: calc(var(--u) * -119);   /* the page edge cuts the MM row below its corner cut */ width: calc(var(--u) * 368.9); height: auto; }
   .quote { position: absolute; right: calc(var(--u) * 179.5); bottom: calc(var(--u) * 148.73); width: calc(var(--u) * 330);   /* last line sits on the mascot's head */
            text-align: center; font-weight: 700; font-size: calc(var(--u) * 22); line-height: calc(var(--u) * 29.5); color: var(--slate); }
   .mascot { position: absolute; right: calc(var(--u) * 104.5); bottom: 0; width: calc(var(--u) * 155.96); height: auto; }
@@ -73,18 +73,13 @@
                    transform: skewX(-13deg); transform-origin: 0 84.2%; }   /* the wordmark's 13° slant, pivoting on the baseline */
   .amount { left: calc(var(--u) * 4.75); top: calc(var(--u) * 145.65); font-size: calc(var(--u) * 44.21); letter-spacing: .105em; }
   .once { left: calc(var(--u) * 7.6); top: calc(var(--u) * 184.97); font-size: calc(var(--u) * 25.52); letter-spacing: .031em; }
-  .price-list { position: absolute; left: calc(var(--u) * 17.34); top: calc(var(--u) * 215.97); font-size: calc(var(--u) * 17.8); line-height: calc(var(--u) * 21.4); }
+  .price-list { position: absolute; left: calc(var(--u) * 17.34); top: calc(var(--u) * 215.97); font-size: max(12px, calc(var(--u) * 17.8)); line-height: max(14.5px, calc(var(--u) * 21.4)); }
   .band .stage { width: auto; margin: 0; min-height: calc(var(--u) * 504.3); padding: calc(var(--u) * 68.78) calc(var(--u) * 30) calc(var(--u) * 40) calc(var(--u) * 417.3); }
   .band .inner { width: min(100%, calc(var(--u) * 1017.2)); }
-  .big { display: grid; grid-template-columns: minmax(0, 1fr); row-gap: calc(var(--u) * 28.5); margin-top: calc(var(--u) * 35.85);
+  .big { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: auto auto; grid-auto-flow: column;
+         column-gap: calc(var(--u) * 12); row-gap: calc(var(--u) * 57); margin-top: calc(var(--u) * 35.85);
          font-size: calc(var(--u) * 23.75); line-height: calc(var(--u) * 28.5); text-align: center; }
   .big li { text-wrap: balance; }
-  .big br { display: none; }
-  @media (min-width: 1412px) {   /* two columns: items 1-2 left, 3-4 right */
-    .big { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: auto auto; grid-auto-flow: column;
-           column-gap: calc(var(--u) * 12); row-gap: calc(var(--u) * 57); }
-  }
-  @media (min-width: 1840px) { .big br { display: inline; } }   /* Elizabeth's line breaks, where the columns are full width */
 
   /* ── Screen 3 · little things ── */
   .little.stage { width: min(calc(100% - var(--u) * 102), calc(var(--u) * 1273)); padding-top: calc(var(--u) * 32.37); }
@@ -108,7 +103,7 @@
               background: #5E5F5B url('./assets/asphalt-seamless.png') 0 0 / calc(var(--u) * 368.9) auto repeat; }   /* the app's asphalt, at the panel's scale */
   .showcase .panel { display: block; width: calc(var(--u) * 368.9); aspect-ratio: 330 / 455; height: auto; margin: 0 auto;
                      border: 0; background: transparent; color-scheme: normal; }   /* the free web version (app/), no panel background of its own */
-  .tryme { position: absolute; left: min(calc(50% + var(--u) * 311.6), calc(100% - var(--u) * 430)); top: calc(var(--u) * -133.65); width: calc(var(--u) * 410.9); height: calc(var(--u) * 390.8); }
+  .tryme { position: absolute; left: calc(50% + var(--u) * 311.6); top: calc(var(--u) * -133.65); width: calc(var(--u) * 410.9); height: calc(var(--u) * 390.8); }
   .tryme svg { position: absolute; inset: 0; width: 100%; height: 100%; }
   .tryme p { position: absolute; left: 0; right: 0; top: calc(var(--u) * 141.73); text-align: center; color: var(--slate);
              font-weight: 700; font-size: calc(var(--u) * 71.1); line-height: calc(var(--u) * 55.2);
@@ -116,21 +111,21 @@
 
   /* ── Facts + footer, on the light ground ── */
   .facts { display: grid; grid-template-columns: repeat(4, auto); justify-content: space-between; gap: calc(var(--u) * 24);
-           width: calc(var(--u) * 784); margin-top: calc(var(--u) * 30.6); color: var(--slate); }
-  .facts dt { font-size: calc(var(--u) * 13); line-height: 1.25; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
-  .facts dd { margin-top: calc(var(--u) * 7.3); font-size: calc(var(--u) * 15); line-height: calc(var(--u) * 21); }
+           width: max(640px, calc(var(--u) * 784)); margin-top: calc(var(--u) * 30.6); color: var(--slate); }
+  .facts dt { font-size: max(11px, calc(var(--u) * 13)); line-height: 1.25; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+  .facts dd { margin-top: calc(var(--u) * 7.3); font-size: max(13px, calc(var(--u) * 15)); line-height: calc(var(--u) * 21); }
   .facts a { text-decoration: none; }
-  footer.stage { display: flex; gap: calc(var(--u) * 24); width: calc(var(--u) * 784); margin-top: calc(var(--u) * 41.1);
-                 padding-bottom: calc(var(--u) * 38.1); font-size: calc(var(--u) * 13); line-height: 1.25; color: var(--slate); }
+  footer.stage { display: flex; gap: calc(var(--u) * 24); width: max(640px, calc(var(--u) * 784)); margin-top: calc(var(--u) * 41.1);
+                 padding-bottom: calc(var(--u) * 38.1); font-size: max(11px, calc(var(--u) * 13)); line-height: 1.25; color: var(--slate); }
   footer a { text-decoration: none; }
   footer a:hover, .facts a:hover { color: var(--ink); }
 
-  /* ── Below 880 px: one column ── */
-  @media (max-width: 879px) {
+  /* ── Below 960 px: one column ── */
+  @media (max-width: 959px) {
     .page > *, .page .stage { --u: 1px; }
     .stage, .facts, footer.stage { width: auto; }
     .hero { height: auto; }
-    .hero .stage { height: auto; display: flex; flex-direction: column; align-items: center; padding: 16px 16px 0; }
+    .hero .stage { width: auto; height: auto; display: flex; flex-direction: column; align-items: center; padding: 16px 16px 0; }
     .card, .shot, .quote, .mascot { position: static; }
     .card { --cu: 1px; width: 100%; max-width: 420px; height: auto; padding: 48px 22px 36px; }
     .wordmark { width: 100%; }
@@ -142,7 +137,9 @@
     .sticker { --u: .8px; position: relative; inset: auto; height: calc(var(--u) * 470); }
     .band .stage { padding: 0 16px 48px; min-height: 0; }
     .band .inner { width: auto; }
-    .big { font-size: 19px; line-height: 25px; row-gap: 22px; margin-top: 20px; }
+    .big { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; grid-auto-flow: row;
+           font-size: 19px; line-height: 25px; row-gap: 22px; margin-top: 20px; }
+    .big br { display: none; }
     h2 { font-size: 28px; }
     .little.stage { width: auto; padding: 56px 16px 0; }
     .little ul { display: block; font-size: 18px; line-height: 24px; margin-top: 24px; }
