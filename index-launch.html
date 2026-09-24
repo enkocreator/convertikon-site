@@ -101,21 +101,21 @@
   .little .more { display: inline-block; margin-top: calc(var(--u) * 6.5); }
 
   /* ── Screen 4 · close ── */
-  .close { display: flex; flex-direction: column; align-items: center; padding-top: calc(var(--u) * 39); }
+  .close { display: flex; flex-direction: column; align-items: center; padding-top: calc(var(--u) * 80); }
   .close .buy { width: calc(var(--u) * 315); }
   .guarantee { margin-top: calc(var(--u) * 12); font-size: calc(var(--u) * 14); color: var(--label); }
 
-  /* ── Facts + footer ── */
+  /* ── The base: facts + footer on asphalt, full width (the app's texture made seamless, drawn at 2x) ── */
+  .base { margin-top: calc(var(--u) * 88); background: #5E5F5B url('./assets/asphalt-tile.jpg') 0 0 / 338px 570px repeat; color: var(--light); }
   .facts { display: grid; grid-template-columns: repeat(4, auto); justify-content: space-between; gap: calc(var(--u) * 24);
-           width: calc(var(--u) * 784); margin-top: calc(var(--u) * 88); padding-top: calc(var(--u) * 26); border-top: 2px solid var(--ink); }
-  .facts dt { font-size: calc(var(--u) * 13); font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--label); }
+           width: calc(var(--u) * 784); padding-top: calc(var(--u) * 44); }
+  .facts dt { font-size: calc(var(--u) * 13); font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); }
   .facts dd { margin-top: calc(var(--u) * 8); font-size: calc(var(--u) * 15); line-height: 1.4; }
-  .facts a { text-decoration-color: var(--gold); text-decoration-thickness: 2px; text-underline-offset: 3px; }
-  footer.stage { display: flex; justify-content: space-between; width: calc(var(--u) * 784); margin-top: calc(var(--u) * 40);
-           padding-bottom: calc(var(--u) * 40); font-size: calc(var(--u) * 13); color: var(--label); }
-  footer nav { display: flex; gap: calc(var(--u) * 24); }
-  footer a { color: var(--ink); text-decoration: none; }
-  footer a:hover, .facts a:hover { color: var(--slate); }
+  .facts a { text-decoration: none; }
+  footer.stage { display: flex; gap: calc(var(--u) * 24); width: calc(var(--u) * 784); margin-top: calc(var(--u) * 40);
+           padding-bottom: calc(var(--u) * 44); font-size: calc(var(--u) * 13); color: var(--chrome); }
+  footer a { color: var(--chrome); text-decoration: none; }
+  footer a:hover, .facts a:hover { color: var(--gold); }
 
   /* ── Below 880 px: one column ── */
   @media (max-width: 879px) {
@@ -143,8 +143,9 @@
     .little ul { columns: 1; font-size: 18px; line-height: 24px; }
     .buy { width: min(100%, 330px); }
     .close { padding: 40px 16px 0; }
-    .facts { grid-template-columns: 1fr 1fr; justify-content: stretch; margin: 56px 16px 0; row-gap: 24px; }
-    footer.stage { flex-direction: column; gap: 12px; margin: 32px 16px 0; }
+    .base { margin-top: 56px; }
+    .facts { grid-template-columns: 1fr 1fr; justify-content: stretch; margin: 0 16px; padding-top: 36px; row-gap: 24px; }
+    footer.stage { flex-wrap: wrap; margin: 32px 16px 0; padding-bottom: 36px; }
   }
 </style>
 </head>
@@ -211,20 +212,23 @@
 <!-- Screen 4 · close -->
 <section class="close stage">
   <a class="buy chamfer" href="https://convertikon.gumroad.com/l/convertikon">Get it for CAD$9.99</a>
-  <p class="guarantee"><span class="todo">[REFUND DAYS]</span>-day money back guarantee</p>
+  <p class="guarantee">14-day money back guarantee</p>
 </section>
 
+<div class="base">
 <dl class="facts stage">
   <div><dt>Mac</dt><dd>macOS 10.15 or later<br>Apple Silicon and Intel</dd></div>
   <div><dt>Windows</dt><dd>Windows 10 and 11<br>64-bit</dd></div>
   <div><dt>Your key</dt><dd>One key, two computers<br>Checked once, then offline</dd></div>
-  <div><dt>Help</dt><dd><a href="mailto:support@convertikon.app">support@convertikon.app</a><br>A real person answers</dd></div>
+  <div><dt>Help</dt><dd><a href="mailto:support@convertikon.app">support@convertikon.app</a><br>Happy to hear from you</dd></div>
 </dl>
 
 <footer class="stage">
   <span>© 2026 Elizabeth Enko</span>
-  <nav><a href="./privacy/">Privacy</a><a href="./support/">Support</a><a href="mailto:support@convertikon.app">Contact</a></nav>
+  <a href="./privacy/">Privacy</a>
+  <a href="./support/">Support</a>
 </footer>
+</div>
 
 </div>
 </body>
