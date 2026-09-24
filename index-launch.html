@@ -26,9 +26,9 @@
   :root {
     --ground: #DCD9D3; --ink: #2E2B27; --gold: #E8C32B; --gold-hi: #F2D049; --slate: #3E5A6E;
     --muted: #5C5A56; --label: #6B665E; --chrome: #C6C2BA; --light: #DCD9D3;
-    --u: calc(min(100vw, 1200px) / 950);
+    --u: min(calc(min(100vw, 1200px) / 950), calc(100vh / 600));
   }
-  @supports (width: 1cqw) { .page > * { --u: calc(min(100cqw, 1200px) / 950); } }
+  @supports (width: 1cqw) { .page > * { --u: min(calc(min(100cqw, 1200px) / 950), calc(100vh / 600)); } }   /* short windows: the first screen still fits */
   * { box-sizing: border-box; }
   html { background: var(--ground); }
   body { margin: 0; background: var(--ground); color: var(--ink); font-family: 'Chakra Petch', 'Segoe UI', system-ui, sans-serif;
@@ -51,8 +51,11 @@
   .buy:focus-visible { outline: 3px solid var(--slate); outline-offset: 3px; }
 
   /* ── Screen 1 · hero ── */
-  .hero { overflow: hidden; }
-  .hero .stage { height: calc(var(--u) * 660); }
+  /* The first screen fills the window; the gold band starts right below it. The card keeps to the
+     left edge, the quote and mascot to the bottom-right corner, the panel hangs in the middle. */
+  .hero { position: relative; overflow: hidden; height: max(100vh, calc(var(--u) * 600)); }
+  @supports (height: 100svh) { .hero { height: max(100svh, calc(var(--u) * 600)); } }
+  .hero .stage { width: auto; height: 100%; }
   .card { --c: calc(var(--u) * 32); position: absolute; left: calc(var(--u) * 83); top: calc(var(--u) * 33);
           width: calc(var(--u) * 372); height: calc(var(--u) * 512); padding: calc(var(--u) * 71) calc(var(--u) * 21) 0;
           background: #5E5F5B url('./assets/backdrop-asphalt.png') center / cover; color: var(--light);
@@ -60,13 +63,12 @@
   .card h1 { line-height: 0; }
   .wordmark { width: calc(var(--u) * 330); height: auto; }
   .tagline { margin-top: calc(var(--u) * 20); font-weight: 700; font-size: calc(var(--u) * 24); line-height: calc(var(--u) * 32.5); }
-  .card .buy { margin-top: 0; margin-bottom: calc(var(--u) * 26); }
-  .card .for { margin: auto 0 calc(var(--u) * 12); font-size: calc(var(--u) * 13); font-weight: 700; letter-spacing: .14em;
+  .card .for { margin: calc(var(--u) * 22) 0 0; font-size: calc(var(--u) * 13); font-weight: 700; letter-spacing: .14em;
                text-transform: uppercase; color: var(--chrome); }
-  .shot { position: absolute; left: calc(var(--u) * 522); top: calc(var(--u) * -108); width: calc(var(--u) * 330); height: auto; }
-  .quote { position: absolute; left: calc(var(--u) * 522); top: calc(var(--u) * 445); width: calc(var(--u) * 330);
+  .shot { position: absolute; left: calc(50% + var(--u) * 47); top: calc(var(--u) * -108); width: calc(var(--u) * 330); height: auto; }
+  .quote { position: absolute; right: calc(var(--u) * 98); bottom: calc(var(--u) * 126.5); width: calc(var(--u) * 330);
            text-align: center; font-size: calc(var(--u) * 22); line-height: calc(var(--u) * 29.5); color: var(--muted); }
-  .mascot { position: absolute; left: calc(var(--u) * 774); top: calc(var(--u) * 528); width: calc(var(--u) * 132); height: auto; }
+  .mascot { position: absolute; right: calc(var(--u) * 44); bottom: 0; width: calc(var(--u) * 132); height: auto; }
 
   /* ── Screen 2 · the gold band ── */
   .band { position: relative; overflow: hidden; background: var(--gold); }
@@ -115,13 +117,13 @@
   @media (max-width: 879px) {
     .page > *, .page .stage { --u: 1px; }
     .stage, .facts, footer.stage { width: auto; }
+    .hero { height: auto; }
     .hero .stage { height: auto; display: flex; flex-direction: column; align-items: center; padding: 16px 16px 0; }
     .card, .shot, .quote, .mascot { position: static; }
     .card { width: 100%; max-width: 420px; height: auto; padding: 48px 22px 0; }
     .wordmark { width: 100%; }
     .tagline { font-size: 22px; line-height: 30px; }
-    .card .for { margin-top: 36px; }
-    .card .buy { width: 100%; }
+    .card .for { margin: 18px 0 32px; }
     .shot { width: min(100%, 330px); margin-top: 40px; }
     .quote { width: auto; max-width: 330px; margin-top: 28px; font-size: 19px; line-height: 26px; text-wrap: balance; }
     .quote br { display: none; }
@@ -153,7 +155,6 @@
       <h1><img class="wordmark" src="./assets/wordmark.svg" alt="CONVERTIKON" width="1793" height="240"></h1>
       <p class="tagline">~ a small desktop converter for architects, interior designers, engineers and everyone who works between metric and imperial.</p>
       <p class="for">For Mac and Windows</p>
-      <a class="buy chamfer" href="https://convertikon.gumroad.com/l/convertikon">Get it for CAD$9.99</a>
     </div>
     <img class="shot" src="./assets/screenshots/convertikon-typing-ft@2x.png" alt="The CONVERTIKON panel: 6'-3 1/2&quot; typed in FT, the other fields already converted" width="660" height="910">
     <p class="quote">Built by a designer who got <br>tired of opening a browser <br>to convert.</p>
