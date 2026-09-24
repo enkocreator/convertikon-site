@@ -75,29 +75,35 @@
 
   /* ── Screen 2 · the gold band ── */
   .band { position: relative; overflow: hidden; background: var(--gold); }
-  .band .stage { min-height: calc(var(--u) * 504); padding: calc(var(--u) * 27) 0 calc(var(--u) * 34) calc(var(--u) * 418); }
+  .band .stage { width: auto; margin: 0; min-height: calc(var(--u) * 504); padding: calc(var(--u) * 27) calc(var(--u) * 51) calc(var(--u) * 34) calc(var(--u) * 418);
+                 display: flex; flex-direction: column; justify-content: center; }
   .burst { position: absolute; left: calc(var(--u) * -180); top: 0;   /* anchored to the window's left edge, as drawn */
            width: calc(var(--u) * 570); height: calc(var(--u) * 470); color: var(--light); }
   .burst svg { position: absolute; inset: 0; width: 100%; height: 100%; }
   .price { position: absolute; left: calc(var(--u) * 200.5); top: calc(var(--u) * 137); }
   .amount { display: inline-block; transform: skewX(-13deg); transform-origin: 0 100%;   /* the wordmark's 13° slant */
             font-weight: 700; font-size: calc(var(--u) * 36); line-height: 1; letter-spacing: .105em; margin-left: calc(var(--u) * -16); }
-  .price ul { margin-top: calc(var(--u) * 6); font-size: calc(var(--u) * 17.8); line-height: calc(var(--u) * 21.4); }
-  .price li:first-child { font-weight: 700; }
+  .once { display: block; width: max-content; transform: skewX(-13deg); transform-origin: 0 100%;   /* one piece with the price: same slant, same width */
+          font-weight: 700; font-size: calc(var(--u) * 21); line-height: 1; letter-spacing: .031em; margin: calc(var(--u) * 6) 0 0 calc(var(--u) * -16); }
+  .price ul { margin-top: calc(var(--u) * 12); font-size: calc(var(--u) * 17.8); line-height: calc(var(--u) * 21.4); }
   .band h2, .little h2 { font-weight: 700; font-size: calc(var(--u) * 35.5); line-height: 1.15; }
   .tilde li { position: relative; padding-left: .8em; }
   .tilde li::before { content: '~'; position: absolute; left: 0; }
   .big.tilde li { padding-left: 0; }
   .big.tilde li::before { position: static; content: '~ '; }
-  .big { margin-top: calc(var(--u) * 24); font-size: calc(var(--u) * 22); line-height: calc(var(--u) * 27); }
-  .big li + li { margin-top: calc(var(--u) * 27); }
+  .big { display: grid; grid-template-columns: minmax(0, calc(var(--u) * 470)); row-gap: calc(var(--u) * 27);
+         margin-top: calc(var(--u) * 24); font-size: calc(var(--u) * 22); line-height: calc(var(--u) * 27); }
+  .big li, .little li { text-wrap: pretty; }
+  @media (min-width: 1412px) {   /* room for two columns: items 1-2 left, 3-4 right */
+    .big { grid-template-columns: repeat(2, minmax(0, calc(var(--u) * 470))); grid-template-rows: auto auto; grid-auto-flow: column; column-gap: calc(var(--u) * 56); }
+  }
   .big s { text-decoration-thickness: .09em; }
 
   /* ── Screen 3 · little things ── */
-  .little { padding: calc(var(--u) * 15) calc(var(--u) * 51) 0; }
-  .little ul { margin-top: calc(var(--u) * 26); font-size: calc(var(--u) * 22); line-height: calc(var(--u) * 29); }
-  .little li + li { margin-top: calc(var(--u) * 6.5); }
-  .little .more { display: inline-block; margin-top: calc(var(--u) * 6.5); }
+  .little.stage { width: min(calc(100% - var(--u) * 102), calc(var(--u) * 1336)); padding: calc(var(--u) * 15) 0 0; }   /* two 640 u columns when there is room */
+  .little ul { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: repeat(4, auto); grid-auto-flow: column;
+               column-gap: calc(var(--u) * 56); row-gap: calc(var(--u) * 6.5);
+               margin-top: calc(var(--u) * 26); font-size: calc(var(--u) * 22); line-height: calc(var(--u) * 29); }
 
   /* ── Screen 4 · close ── */
   .close { display: flex; flex-direction: column; align-items: center; padding-top: calc(var(--u) * 80); }
@@ -133,13 +139,12 @@
     .band .stage { padding: 0 16px 48px; min-height: 0; }
     .burst { --u: .84px; position: relative; margin-bottom: -8px; }
     .big { font-size: 19px; line-height: 25px; }
-    .big br, .little br { display: none; }
     .big.tilde li { padding-left: .8em; }
     .big.tilde li::before { position: absolute; content: '~'; }
     .band h2, .little h2 { font-size: 30px; }
-    .little { padding: 56px 16px 0; }
-    .little .more { display: inline; margin: 0; }
-    .little ul { columns: 1; font-size: 18px; line-height: 24px; }
+    .little.stage { width: auto; padding: 56px 16px 0; }
+    .little ul { display: block; font-size: 18px; line-height: 24px; }
+    .little li + li { margin-top: 6px; }
     .buy { width: min(100%, 330px); }
     .close { padding: 40px 16px 0; }
     .base { margin-top: 56px; }
@@ -172,8 +177,8 @@
       </svg>
       <div class="price">
         <p class="amount">CAD$9.99</p>
+        <p class="once">one time purchase</p>
         <ul>
-          <li>one time purchase</li>
           <li>free updates</li>
           <li>no subscriptions</li>
           <li>no ads</li>
@@ -185,10 +190,10 @@
   <div class="stage">
     <h2>Big things you can do</h2>
     <ul class="big tilde">
-      <li>type ft-and-inch any way you write it,<br> from the full <span class="v">6'-3 1/2"</span> down to a quick <span class="v">6 3 1/2</span>,<br> it gets every one</li>
-      <li>get feet back in ft-and-inch every time,<br> in standard architectural format <span class="v">6'-3 1/2"</span>,<br> never <s>6.29'</s></li>
-      <li>watch fractions simplified to the nearest<br> <span class="v">1/16"</span>, so <span class="v">8/16</span> shows as <span class="v">1/2</span></li>
-      <li>flip between fractional and decimal with<br> one click, and your numbers survive the<br> switch, just in a new format</li>
+      <li>type ft-and-inch any way you write it, from the full <span class="v">6'-3 1/2"</span> down to a quick <span class="v">6 3 1/2</span>, it gets every one</li>
+      <li>get feet back in ft-and-inch every time, in standard architectural format <span class="v">6'-3 1/2"</span>, never <s>6.29'</s></li>
+      <li>watch fractions simplified to the nearest <span class="v">1/16"</span>, so <span class="v">8/16</span> shows as <span class="v">1/2</span></li>
+      <li>flip between fractional and decimal with one click, and your numbers survive the switch, just in a new format</li>
     </ul>
   </div>
 </section>
@@ -204,7 +209,7 @@
     <li>takes a comma as a decimal point too</li>
     <li>shows the finished result on Enter, clears everything on Esc</li>
     <li>resizes smaller or larger to suit your screen</li>
-    <li>reopens just how you left it:<br> <span class="more">same size, fractional or decimal, pinned or not</span></li>
+    <li>reopens just how you left it: same size, fractional or decimal, pinned or not</li>
   </ul>
 </section>
 
