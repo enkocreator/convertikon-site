@@ -3,10 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex"><!-- PREVIEW: remove on launch day -->
 <!-- LAUNCH PAGE — DRAFT. On launch day this file replaces index.html (rename it; keep the
      coming-soon page as index-coming-soon.html). Every [BRACKETED] bit is a placeholder.
      Layout: Elizabeth's redesign of 24 Sep 2026, drawn on a 950 px canvas. On wide screens every
-     measurement is in u = one canvas pixel (scaled so the canvas is 880–1040 px wide); below 880 px
+     measurement is in u = one canvas pixel (scaled so the canvas is 880–1200 px wide); below 880 px
      the page reflows into one column. -->
 <title>CONVERTIKON — metric and imperial, feet, inches and fractions</title>
 <meta name="description" content="A small desktop converter for architects, interior designers, engineers and everyone who works between metric and imperial. Mac and Windows, one-time purchase.">
@@ -25,9 +26,9 @@
   :root {
     --ground: #DCD9D3; --ink: #2E2B27; --gold: #E8C32B; --gold-hi: #F2D049; --slate: #3E5A6E;
     --muted: #5C5A56; --label: #6B665E; --chrome: #C6C2BA; --light: #DCD9D3;
-    --u: calc(min(100vw, 1040px) / 950);
+    --u: calc(min(100vw, 1200px) / 950);
   }
-  @supports (width: 1cqw) { .page > * { --u: calc(min(100cqw, 1040px) / 950); } }
+  @supports (width: 1cqw) { .page > * { --u: calc(min(100cqw, 1200px) / 950); } }
   * { box-sizing: border-box; }
   html { background: var(--ground); }
   body { margin: 0; background: var(--ground); color: var(--ink); font-family: 'Chakra Petch', 'Segoe UI', system-ui, sans-serif;
@@ -68,32 +69,34 @@
   .mascot { position: absolute; left: calc(var(--u) * 774); top: calc(var(--u) * 528); width: calc(var(--u) * 132); height: auto; }
 
   /* ── Screen 2 · the gold band ── */
-  .band { background: var(--gold); }
-  .band .stage { min-height: calc(var(--u) * 504); padding: calc(var(--u) * 48) 0 calc(var(--u) * 52) calc(var(--u) * 418); }
-  .burst { position: absolute; left: calc(var(--u) * -180); top: 50%; transform: translateY(-50%);
+  .band { position: relative; overflow: hidden; background: var(--gold); }
+  .band .stage { min-height: calc(var(--u) * 504); padding: calc(var(--u) * 27) 0 calc(var(--u) * 34) calc(var(--u) * 418); }
+  .burst { position: absolute; left: calc(var(--u) * -180); top: 0;   /* anchored to the window's left edge, as drawn */
            width: calc(var(--u) * 570); height: calc(var(--u) * 470); color: var(--light); }
   .burst svg { position: absolute; inset: 0; width: 100%; height: 100%; }
-  .price { position: absolute; left: calc(var(--u) * 196); top: calc(var(--u) * 126); }
+  .price { position: absolute; left: calc(var(--u) * 200.5); top: calc(var(--u) * 137); }
   .amount { display: inline-block; transform: skewX(-13deg); transform-origin: 0 100%;   /* the wordmark's 13° slant */
-            font-weight: 700; font-size: calc(var(--u) * 39); line-height: 1; letter-spacing: .04em; margin-left: calc(var(--u) * -4); }
-  .price ul { margin-top: calc(var(--u) * 12); font-size: calc(var(--u) * 17.5); line-height: calc(var(--u) * 21.4); }
+            font-weight: 700; font-size: calc(var(--u) * 36); line-height: 1; letter-spacing: .105em; margin-left: calc(var(--u) * -16); }
+  .price ul { margin-top: calc(var(--u) * 6); font-size: calc(var(--u) * 17.8); line-height: calc(var(--u) * 21.4); }
   .price li:first-child { font-weight: 700; }
   .band h2, .little h2 { font-weight: 700; font-size: calc(var(--u) * 35.5); line-height: 1.15; }
-  .tilde li { position: relative; padding-left: 1.05em; }
+  .tilde li { position: relative; padding-left: .8em; }
   .tilde li::before { content: '~'; position: absolute; left: 0; }
   .big.tilde li { padding-left: 0; }
   .big.tilde li::before { position: static; content: '~ '; }
-  .big { margin-top: calc(var(--u) * 26); font-size: calc(var(--u) * 22); line-height: calc(var(--u) * 27); }
-  .big li + li { margin-top: calc(var(--u) * 26); }
+  .big { margin-top: calc(var(--u) * 24); font-size: calc(var(--u) * 22); line-height: calc(var(--u) * 27); }
+  .big li + li { margin-top: calc(var(--u) * 27); }
   .big s { text-decoration-thickness: .09em; }
 
   /* ── Screen 3 · little things ── */
-  .little { padding: calc(var(--u) * 88) calc(var(--u) * 83) 0; }
-  .little ul { margin-top: calc(var(--u) * 30); font-size: calc(var(--u) * 22); line-height: calc(var(--u) * 29); }
+  .little { padding: calc(var(--u) * 15) calc(var(--u) * 51) 0; }
+  .little ul { margin-top: calc(var(--u) * 26); font-size: calc(var(--u) * 22); line-height: calc(var(--u) * 29); }
   .little li + li { margin-top: calc(var(--u) * 6.5); }
+  .little .more { display: inline-block; margin-top: calc(var(--u) * 6.5); }
 
   /* ── Screen 4 · close ── */
-  .close { display: flex; flex-direction: column; align-items: center; padding-top: calc(var(--u) * 64); }
+  .close { display: flex; flex-direction: column; align-items: center; padding-top: calc(var(--u) * 39); }
+  .close .buy { width: calc(var(--u) * 315); }
   .guarantee { margin-top: calc(var(--u) * 12); font-size: calc(var(--u) * 14); color: var(--label); }
 
   /* ── Facts + footer ── */
@@ -124,13 +127,14 @@
     .quote br { display: none; }
     .mascot { width: 96px; align-self: flex-end; margin: 20px 12px 0 0; }
     .band .stage { padding: 0 16px 48px; min-height: 0; }
-    .burst { --u: .84px; position: relative; top: 0; transform: none; left: -140px; margin-bottom: -8px; }
+    .burst { --u: .84px; position: relative; margin-bottom: -8px; }
     .big { font-size: 19px; line-height: 25px; }
     .big br, .little br { display: none; }
-    .big.tilde li { padding-left: 1.05em; }
+    .big.tilde li { padding-left: .8em; }
     .big.tilde li::before { position: absolute; content: '~'; }
     .band h2, .little h2 { font-size: 30px; }
     .little { padding: 56px 16px 0; }
+    .little .more { display: inline; margin: 0; }
     .little ul { columns: 1; font-size: 18px; line-height: 24px; }
     .buy { width: min(100%, 330px); }
     .close { padding: 40px 16px 0; }
@@ -159,7 +163,6 @@
 
 <!-- Screen 2 · price + big things -->
 <section class="band">
-  <div class="stage">
     <div class="burst">
       <svg viewBox="-180 0 570 470" preserveAspectRatio="none" aria-hidden="true">
         <polygon fill="#3E5A6E" points="104,6 134,94 225,60 194,131 382,107 229,170 304,196 241,216 321,246 223,268 287,317 180,331 240,404 134,357 92,463 13,350 -70,409 -40,300 -175,246 -45,192 -86,25 47,95"/>
@@ -176,6 +179,7 @@
         </ul>
       </div>
     </div>
+  <div class="stage">
     <h2>Big things you can do</h2>
     <ul class="big tilde">
       <li>type ft-and-inch any way you write it,<br> from the full <span class="v">6'-3 1/2"</span> down to a quick <span class="v">6 3 1/2</span>,<br> it gets every one</li>
@@ -197,7 +201,7 @@
     <li>takes a comma as a decimal point too</li>
     <li>shows the finished result on Enter, clears everything on Esc</li>
     <li>resizes smaller or larger to suit your screen</li>
-    <li>reopens just how you left it:<br> same size, fractional or decimal, pinned or not</li>
+    <li>reopens just how you left it:<br> <span class="more">same size, fractional or decimal, pinned or not</span></li>
   </ul>
 </section>
 
