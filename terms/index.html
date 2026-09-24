@@ -24,11 +24,9 @@
     min-height: 100vh; display: flex; flex-direction: column; align-items: center;
   }
   header { width: 100%; max-width: 680px; padding: 40px 20px 0; }
-  header a { display: inline-block; }
-  header img { display: block; width: 220px; height: auto; }
-  /* The wordmark SVG is gold; on the light ground it sits on a small asphalt slab with the app's corner cut. */
-  .slab { display: inline-block; padding: 14px 18px 12px; background: #8A8A88 url('../assets/backdrop-asphalt.png') top left / 330px auto;
-          clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px); }
+  /* The gold wordmark on the light ground, as wide as the text column below it. */
+  header a { display: block; }
+  header img { display: block; width: 100%; height: auto; }
   main { width: 100%; max-width: 680px; padding: 28px 20px 40px; }
   h1 { font-size: 30px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; margin: 0 0 6px; }
   .updated { color: var(--label); font-size: 14px; margin: 0 0 28px; }
@@ -47,7 +45,7 @@
 </head>
 <body>
 <header>
-  <a href="../" aria-label="CONVERTIKON home"><span class="slab"><img src="../assets/wordmark.svg" alt="CONVERTIKON" width="1793" height="240"></span></a>
+  <a href="../" aria-label="CONVERTIKON home"><img src="../assets/wordmark.svg" alt="CONVERTIKON" width="1793" height="240"></a>
 </header>
 
 <main>
