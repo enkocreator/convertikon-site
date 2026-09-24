@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CONVERTIKON — terms</title>
+<meta name="description" content="The short terms for buying and using CONVERTIKON.">
+<meta name="robots" content="noindex"><!-- PREVIEW: remove on launch day -->
+<meta name="theme-color" content="#DCD9D3">
+<link rel="icon" href="../assets/icon.png" type="image/png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+  /* Same face and colours as the landing page (index.html); a reading layout instead of the panel. */
+  @font-face { font-family: 'Chakra Petch'; font-weight: 500; font-style: normal; font-display: swap;
+               src: url('../assets/fonts/ChakraPetch-Medium.ttf') format('truetype'); }
+  @font-face { font-family: 'Chakra Petch'; font-weight: 700; font-style: normal; font-display: swap;
+               src: url('../assets/fonts/ChakraPetch-Bold.ttf') format('truetype'); }
+  :root { --ground: #DCD9D3; --ink: #2E2B27; --gold: #E8C32B; --asphalt: #4A4845; --label: #6B665E; }
+  * { box-sizing: border-box; }
+  html { background: var(--ground); }
+  body {
+    margin: 0; background: var(--ground); color: var(--ink);
+    font-family: 'Chakra Petch', 'Segoe UI', system-ui, sans-serif; font-weight: 500; line-height: 1.55;
+    min-height: 100vh; display: flex; flex-direction: column; align-items: center;
+  }
+  header { width: 100%; max-width: 680px; padding: 40px 20px 0; }
+  header a { display: inline-block; }
+  header img { display: block; width: 220px; height: auto; }
+  /* The wordmark SVG is gold; on the light ground it sits on a small asphalt slab with the app's corner cut. */
+  .slab { display: inline-block; padding: 14px 18px 12px; background: #8A8A88 url('../assets/backdrop-asphalt.png') top left / 330px auto;
+          clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px); }
+  main { width: 100%; max-width: 680px; padding: 28px 20px 40px; }
+  h1 { font-size: 30px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; margin: 0 0 6px; }
+  .updated { color: var(--label); font-size: 14px; margin: 0 0 28px; }
+  h2 { font-size: 16px; font-weight: 700; letter-spacing: .11em; text-transform: uppercase; margin: 34px 0 10px; padding-top: 12px; border-top: 2px solid var(--gold); }
+  p, li { font-size: 17px; margin: 0 0 12px; }
+  ul { padding-left: 22px; }
+  a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--gold); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+  a:hover { text-decoration-color: var(--ink); }
+  .box { background: #fff; border: 1px solid rgba(53,49,43,.10); padding: 14px 18px; margin: 0 0 14px;
+         clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px); }
+  .box p:last-child { margin-bottom: 0; }
+  .todo { background: var(--gold); color: var(--ink); font-weight: 700; padding: 0 5px; }   /* PLACEHOLDER: replace before publishing */
+  footer { margin-top: auto; padding: 32px 20px 40px; font-size: 13px; opacity: .8; text-align: center; }
+  footer a { margin: 0 8px; }
+</style>
+</head>
+<body>
+<header>
+  <a href="../" aria-label="CONVERTIKON home"><span class="slab"><img src="../assets/wordmark.svg" alt="CONVERTIKON" width="1793" height="240"></span></a>
+</header>
+
+<main>
+  <h1>Terms</h1>
+  <p class="updated">Last updated 24 September 2026</p>
+
+  <h2>Payment</h2>
+  <p>CONVERTIKON is sold through Gumroad (Gumroad, Inc.), the seller of record. Gumroad takes your payment, charges any sales tax that applies and sends your receipt.</p>
+
+  <h2>Your licence</h2>
+  <p>CONVERTIKON is a one-time purchase, with no subscription. Your licence key works on two computers. To move it to a different computer, write to <a href="mailto:support@convertikon.app">support@convertikon.app</a>.</p>
+
+  <h2>Refunds</h2>
+  <p>You can get a full refund within 14 days of purchase. Write to <a href="mailto:support@convertikon.app">support@convertikon.app</a> with the email address you paid with.</p>
+
+  <h2>Updates</h2>
+  <p>Updates are free.</p>
+
+  <h2>No warranty</h2>
+  <p>The CONVERTIKON app and the free web version on this site are provided as is, without warranty of any kind. Check important measurements before you build from them.</p>
+
+  <h2>Contact</h2>
+  <p><a href="mailto:support@convertikon.app">support@convertikon.app</a></p>
+</main>
+
+<footer>© 2026 Elizabeth Enko <a href="../">Home</a> <a href="../privacy/">Privacy</a> <a href="../support/">Support</a></footer>
+<script src="../assets/mail.js"></script>
+</body>
+</html>
