@@ -70,6 +70,8 @@
     );
     color: var(--ground);
     flex: none;
+    display: flex;
+    flex-direction: column;
   }
   .wordmark { display: block; width: calc(var(--u) * 294); height: auto; }
 
@@ -86,25 +88,21 @@
     text-align: center;
   }
 
-  /* Five justified lines and a centred last one, as set in the design. Each line is its
-     own block so the breaks never move, whatever the screen size. */
-  .copy {
-    margin: calc(var(--u) * 62.4) calc(var(--u) * 2.5) 0 0;
-    font-weight: 500;
-    font-size: calc(var(--u) * 21.4);   /* the launch page's description, 24 Sep: 21.4 u keeps it to six even lines */
-    line-height: 1.204;
-  }
-  .copy span { display: block; white-space: nowrap; text-align: justify; text-align-last: justify; }
-  .copy span:last-child { text-align: center; text-align-last: center; }
 
   /* Sign-up: one gold block the size of the button. Clicked, the same gold block becomes
      the email field, lettered exactly like the button — a light hint in the page colour
      and a thick pulsing caret, like the app's own. Enter sends, Esc closes it. */
+  /* 24 Sep: the sign-up sits at the bottom of the card, 18 u from its edges (like the wordmark),
+     cut like the card itself; the bottom-right cut runs parallel to the card's, 18 u inside it. */
+  .signup, .signup-done {
+    --c: calc(var(--u) * 17.5);
+    clip-path: polygon(var(--c) 0, 100% 0, 100% calc(100% - var(--c)), calc(100% - var(--c)) 100%, 0 100%, 0 var(--c));
+  }
   .signup {
     position: relative;
-    width: var(--panel-w);
+    width: 100%;
     height: calc(var(--u) * 59.33);
-    margin-top: calc(var(--u) * 28.3);
+    margin: auto 0 calc(var(--u) * 18);
     background: var(--gold);
   }
   .signup .field-row { display: none; position: relative; height: 100%; }
@@ -169,8 +167,8 @@
     font-size: 14px;
   }
   .signup-done {
-    width: var(--panel-w);
-    margin-top: calc(var(--u) * 28.3);
+    width: 100%;
+    margin: auto 0 calc(var(--u) * 18);
     height: calc(var(--u) * 59.33);
     display: flex;
     align-items: center;
@@ -206,7 +204,7 @@
   }
   .btn:hover { background: #F0CE3F; }
   .btn:disabled { cursor: default; opacity: .7; }
-  .btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+  .btn:focus-visible { outline: 2px solid var(--ground); outline-offset: -5px; }
 
   footer {
     margin-top: auto;
@@ -215,15 +213,20 @@
     opacity: 0.8;
   }
 
-  /* The mascot stands in the bottom-right corner, feet on the page's bottom edge. */
-  .mascot {
+  /* The mascot peeks in from the bottom-right corner, so big that only his eye shows: the
+     window's edges cut him just right of and below the eye (eye = x 66-302, y 106-192 of 448). */
+  .peek {
+    --mw: clamp(240px, 32vw, 640px);            /* the whole mascot's width */
     position: absolute;
-    right: clamp(16px, 4.25vw, 54.5px);
+    right: 0;
     bottom: 0;
-    width: clamp(72px, 11.64vw, 149px);
-    height: auto;
+    width: calc(var(--mw) * 0.737);
+    height: calc(var(--mw) * 0.496);
+    overflow: hidden;
     pointer-events: none;
   }
+  .peek img { position: absolute; left: 0; top: 0; width: var(--mw); height: auto; }
+  @media (max-width: 700px) { .wrap { padding-bottom: calc(clamp(240px, 32vw, 640px) * 0.496 + 8px); } }
 
   @media (prefers-reduced-motion: no-preference) {
     .btn { transition: background-color .15s; }
@@ -236,36 +239,28 @@
   <div class="app-shape">
     <img class="wordmark" src="./assets/wordmark.svg" alt="CONVERTIKON" width="1793" height="240">
     <h1 class="tagline">on its way to end your<br>metric–imperial pain</h1>
-    <p class="copy">
-      <span>A small desktop converter for</span>
-      <span>architects, interior designers,</span>
-      <span>engineers and everyone who</span>
-      <span>works between metric and</span>
-      <span>imperial. Coming to Mac and</span>
-      <span>Windows.</span>
-    </p>
+    <!-- Email sign-up. Each address becomes a row in a private Google Sheet, through a
+         small Apps Script web app (README explains the setup). -->
+    <form class="signup" id="signup" novalidate>
+      <button class="btn" type="button" id="signup-open" aria-expanded="false" aria-controls="email">Tell me when it launches</button>
+      <div class="field-row">
+        <label for="email" class="trap">Your email</label>
+        <!-- type="text", not "email": email fields hide the cursor position, which the pulsing
+             caret needs. inputmode + autocomplete still give the email keyboard and autofill. -->
+        <input type="text" id="email" name="email" placeholder="your@email.com" autocomplete="email" inputmode="email"
+               autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="send" required>
+        <span class="caret" aria-hidden="true"></span>
+      </div>
+      <input type="text" name="website" class="trap" tabindex="-1" autocomplete="off" aria-hidden="true">
+    </form>
   </div>
 
-  <!-- Email sign-up. Each address becomes a row in a private Google Sheet, through a
-       small Apps Script web app (README explains the setup). -->
-  <form class="signup" id="signup" novalidate>
-    <button class="btn" type="button" id="signup-open" aria-expanded="false" aria-controls="email">Tell me when it launches</button>
-    <div class="field-row">
-      <label for="email" class="trap">Your email</label>
-      <!-- type="text", not "email": email fields hide the cursor position, which the pulsing
-           caret needs. inputmode + autocomplete still give the email keyboard and autofill. -->
-      <input type="text" id="email" name="email" placeholder="your@email.com" autocomplete="email" inputmode="email"
-             autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="send" required>
-      <span class="caret" aria-hidden="true"></span>
-    </div>
-    <input type="text" name="website" class="trap" tabindex="-1" autocomplete="off" aria-hidden="true">
-  </form>
   <p class="signup-msg" id="signup-msg" role="status" aria-live="polite"></p>
 
   <footer>© 2026 Elizabeth Enko</footer>
 
 </div>
-<img class="mascot" src="./assets/mascot.png" alt="" width="448" height="448">
+<div class="peek"><img src="./assets/mascot.png" alt="" width="448" height="448"></div>
 <script>
   // Where sign-ups go: a Google Form whose answers land in a Google Sheet. `url` is the
   // form's formResponse address, `field` its email question (entry.NNN).
