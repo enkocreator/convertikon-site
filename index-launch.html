@@ -4,146 +4,221 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- LAUNCH PAGE — DRAFT. On launch day this file replaces index.html (rename it; keep the
-     coming-soon page as index-coming-soon.html). Every [BRACKETED, GOLD] bit is a placeholder. -->
-<title>CONVERTIKON — feet, inches and fractions</title>
-<meta name="description" content="Feet, inches and fractions, the way you actually write them. A small converter that pins over your drawing. Mac and Windows, one-time purchase.">
+     coming-soon page as index-coming-soon.html). Every [BRACKETED] bit is a placeholder.
+     Layout: Elizabeth's redesign of 24 Sep 2026, drawn on a 950 px canvas. On wide screens every
+     measurement is in u = one canvas pixel (scaled so the canvas is 880–1040 px wide); below 880 px
+     the page reflows into one column. -->
+<title>CONVERTIKON — metric and imperial, feet, inches and fractions</title>
+<meta name="description" content="A small desktop converter for architects, interior designers, engineers and everyone who works between metric and imperial. Mac and Windows, one-time purchase.">
 <meta property="og:title" content="CONVERTIKON">
-<meta property="og:description" content="A small converter that pins over your drawing. Feet, inches and fractions, the way you actually write them.">
+<meta property="og:description" content="A small desktop converter for architects, interior designers, engineers and everyone who works between metric and imperial.">
 <meta property="og:image" content="https://convertikon.app/assets/icon.png">
 <meta property="og:url" content="https://convertikon.app/">
 <meta name="theme-color" content="#DCD9D3">
 <link rel="icon" href="./assets/icon.png" type="image/png">
 <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png">
 <style>
-  /* Same face, colours and panel geometry as the coming-soon page. Units: 1 u = --panel-w / 330,
-     so everything measured against the app scales as one block. */
   @font-face { font-family: 'Chakra Petch'; font-weight: 500; font-style: normal; font-display: swap;
                src: url('./assets/fonts/ChakraPetch-Medium.ttf') format('truetype'); }
   @font-face { font-family: 'Chakra Petch'; font-weight: 700; font-style: normal; font-display: swap;
                src: url('./assets/fonts/ChakraPetch-Bold.ttf') format('truetype'); }
   :root {
-    --ground: #DCD9D3; --ink: #2E2B27; --gold: #E8C32B; --label: #6B665E; --chrome: #C6C2BA;
-    --panel-w: clamp(280px, calc(100vw - 32px), 425.5px);
-    --u: calc(var(--panel-w) / 330);
-    --col: 1040px;
+    --ground: #DCD9D3; --ink: #2E2B27; --gold: #E8C32B; --gold-hi: #F2D049; --slate: #3E5A6E;
+    --muted: #5C5A56; --label: #6B665E; --chrome: #C6C2BA; --light: #DCD9D3;
+    --u: calc(min(100vw, 1040px) / 950);
   }
+  @supports (width: 1cqw) { .page > * { --u: calc(min(100cqw, 1040px) / 950); } }
   * { box-sizing: border-box; }
-  html { background: var(--ground); scroll-behavior: smooth; }
+  html { background: var(--ground); }
   body { margin: 0; background: var(--ground); color: var(--ink); font-family: 'Chakra Petch', 'Segoe UI', system-ui, sans-serif;
-         font-weight: 500; line-height: 1.5; }
-  .todo { background: var(--gold); color: var(--ink); font-weight: 700; padding: 0 5px; }   /* PLACEHOLDER: replace before publishing */
-  section { width: 100%; max-width: var(--col); margin: 0 auto; padding: 64px 20px; }
-  h2 { font-size: 15px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--label); margin: 0 0 18px; }
-  h2::before { content: ''; display: inline-block; width: 28px; height: 3px; background: var(--gold); vertical-align: middle; margin-right: 12px; }
-  p { font-size: 18px; margin: 0 0 14px; max-width: 620px; }
-  .cut { clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px); }
+         font-weight: 500; -webkit-font-smoothing: antialiased; }
+  .page { container-type: inline-size; overflow-x: clip; }
+  h1, h2, p, ul, dl, dd { margin: 0; }
+  ul { list-style: none; padding: 0; }
+  a { color: inherit; }
+  .todo { background: var(--ink); color: var(--gold); font-weight: 700; padding: 0 .3em; }   /* PLACEHOLDER: replace before publishing */
+  .stage { position: relative; width: calc(var(--u) * 950); margin-left: auto; margin-right: auto; }
+  .v { color: var(--slate); font-weight: 700; white-space: nowrap; }
+  .chamfer { clip-path: polygon(var(--c) 0, 100% 0, 100% calc(100% - var(--c)), calc(100% - var(--c)) 100%, 0 100%, 0 var(--c)); }
 
-  /* ── Hero: the asphalt panel with the wordmark, as on the coming-soon page, plus the app itself. ── */
-  .hero { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; padding-top: 72px; }
-  .app-shape {
-    width: var(--panel-w); height: calc(var(--u) * 455); padding: calc(var(--u) * 49.64) calc(var(--u) * 18) 0;
-    background: #8A8A88 url('./assets/backdrop-asphalt.png') top left / var(--panel-w) auto no-repeat;
-    clip-path: polygon(calc(var(--u) * 28) 0, 100% 0, 100% calc(100% - var(--u) * 28), calc(100% - var(--u) * 28) 100%, 0 100%, 0 calc(var(--u) * 28));
-    color: var(--ground); flex: none; justify-self: center;
-  }
-  .wordmark { display: block; width: calc(var(--u) * 294); height: auto; }
-  .tagline { margin: calc(var(--u) * 9.5) calc(var(--u) * -12) 0; font-weight: 700; font-size: calc(var(--u) * 28.696); line-height: 1.189;
-             word-spacing: calc(var(--u) * -1.63); white-space: nowrap; text-align: center; }
-  .hero-copy { margin: calc(var(--u) * 40) calc(var(--u) * 2.5) 0 0; font-size: calc(var(--u) * 21); line-height: 1.25; text-align: center; color: var(--ground); }
-  .tagline.two { font-size: calc(var(--u) * 24.5); white-space: normal; }
-  .hero-shot { justify-self: center; width: min(100%, 420px); }
-  .hero-shot img { display: block; width: 100%; height: auto; }
-  .mascot-hero { position: absolute; right: clamp(16px, 4.25vw, 54.5px); top: 24px; width: clamp(56px, 8vw, 110px); height: auto; pointer-events: none; }
-  .top { position: relative; }
+  /* ── Buy button: gold block with the field rows' 8 px corner cuts ── */
+  .buy { --c: calc(var(--u) * 8); display: flex; align-items: center; justify-content: center;
+         width: calc(var(--u) * 330); height: calc(var(--u) * 56); background: var(--gold); color: var(--ink);
+         font-weight: 700; font-size: calc(var(--u) * 16); letter-spacing: .1em; text-transform: uppercase;
+         text-decoration: none; white-space: nowrap; transition: background-color .15s; }
+  .buy:hover { background: var(--gold-hi); }
+  .buy:focus-visible { outline: 3px solid var(--slate); outline-offset: 3px; }
 
-  /* ── Buy button: the gold block from the coming-soon page. ── */
-  .buy { display: flex; align-items: center; justify-content: center; width: var(--panel-w); max-width: 100%; height: calc(var(--u) * 59.33);
-         margin: 28px auto 0; background: var(--gold); color: var(--ink); font-weight: 700; font-size: calc(var(--u) * 16.6);
-         letter-spacing: calc(var(--u) * 1.49); text-transform: uppercase; text-decoration: none; white-space: nowrap; }
-  .buy:hover { background: #F0CE3F; }
-  .buy:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
-  .under { text-align: center; font-size: 14px; color: var(--label); margin-top: 10px; }
+  /* ── Screen 1 · hero ── */
+  .hero { overflow: hidden; }
+  .hero .stage { height: calc(var(--u) * 660); }
+  .card { --c: calc(var(--u) * 32); position: absolute; left: calc(var(--u) * 83); top: calc(var(--u) * 33);
+          width: calc(var(--u) * 372); height: calc(var(--u) * 512); padding: calc(var(--u) * 71) calc(var(--u) * 21) 0;
+          background: #5E5F5B url('./assets/backdrop-asphalt.png') center / cover; color: var(--light);
+          display: flex; flex-direction: column; }
+  .card h1 { line-height: 0; }
+  .wordmark { width: calc(var(--u) * 330); height: auto; }
+  .tagline { margin-top: calc(var(--u) * 20); font-weight: 700; font-size: calc(var(--u) * 24); line-height: calc(var(--u) * 32.5); }
+  .card .buy { margin-top: 0; margin-bottom: calc(var(--u) * 26); }
+  .card .for { margin: auto 0 calc(var(--u) * 12); font-size: calc(var(--u) * 13); font-weight: 700; letter-spacing: .14em;
+               text-transform: uppercase; color: var(--chrome); }
+  .shot { position: absolute; left: calc(var(--u) * 522); top: calc(var(--u) * -108); width: calc(var(--u) * 330); height: auto; }
+  .quote { position: absolute; left: calc(var(--u) * 522); top: calc(var(--u) * 445); width: calc(var(--u) * 330);
+           text-align: center; font-size: calc(var(--u) * 22); line-height: calc(var(--u) * 29.5); color: var(--muted); }
+  .mascot { position: absolute; left: calc(var(--u) * 774); top: calc(var(--u) * 528); width: calc(var(--u) * 132); height: auto; }
 
-  /* ── Feature rows ── */
-  /* ── Screen 2: proof, set large ── */
-  .proof { display: grid; grid-template-columns: 1.2fr 1fr; gap: 48px; align-items: center; }
-  .proof .big { font-size: 34px; font-weight: 700; line-height: 1.2; margin: 0 0 18px; max-width: none; }
-  .proof .ex { color: #3E5A6E; font-weight: 700; white-space: nowrap; }
-  .proof p { font-size: 20px; max-width: none; }
-  .proof img { display: block; width: min(100%, 400px); height: auto; justify-self: center; }
-  /* ── Screen 3: details ── */
-  .details ul { list-style: none; padding: 0; margin: 0; max-width: 620px; }
-  .details li { font-size: 18px; padding: 10px 0 10px 28px; border-bottom: 1px solid rgba(53,49,43,.15); position: relative; }
-  .details li::before { content: '~'; position: absolute; left: 0; color: var(--gold); font-weight: 700; }
-  /* ── Screen 4: close ── */
-  .close { text-align: center; }
-  .close .sign { font-size: 20px; margin: 36px auto 0; }
+  /* ── Screen 2 · the gold band ── */
+  .band { background: var(--gold); }
+  .band .stage { min-height: calc(var(--u) * 504); padding: calc(var(--u) * 48) 0 calc(var(--u) * 52) calc(var(--u) * 418); }
+  .burst { position: absolute; left: calc(var(--u) * -180); top: 50%; transform: translateY(-50%);
+           width: calc(var(--u) * 570); height: calc(var(--u) * 470); color: var(--light); }
+  .burst svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .price { position: absolute; left: calc(var(--u) * 196); top: calc(var(--u) * 126); }
+  .amount { display: inline-block; transform: skewX(-13deg); transform-origin: 0 100%;   /* the wordmark's 13° slant */
+            font-weight: 700; font-size: calc(var(--u) * 39); line-height: 1; letter-spacing: .04em; margin-left: calc(var(--u) * -4); }
+  .price ul { margin-top: calc(var(--u) * 12); font-size: calc(var(--u) * 17.5); line-height: calc(var(--u) * 21.4); }
+  .price li:first-child { font-weight: 700; }
+  .band h2, .little h2 { font-weight: 700; font-size: calc(var(--u) * 35.5); line-height: 1.15; }
+  .tilde li { position: relative; padding-left: 1.05em; }
+  .tilde li::before { content: '~'; position: absolute; left: 0; }
+  .big.tilde li { padding-left: 0; }
+  .big.tilde li::before { position: static; content: '~ '; }
+  .big { margin-top: calc(var(--u) * 26); font-size: calc(var(--u) * 22); line-height: calc(var(--u) * 27); }
+  .big li + li { margin-top: calc(var(--u) * 26); }
+  .big s { text-decoration-thickness: .09em; }
 
-  /* ── Feet and inches table ── */
+  /* ── Screen 3 · little things ── */
+  .little { padding: calc(var(--u) * 88) calc(var(--u) * 83) 0; }
+  .little ul { margin-top: calc(var(--u) * 30); font-size: calc(var(--u) * 22); line-height: calc(var(--u) * 29); }
+  .little li + li { margin-top: calc(var(--u) * 6.5); }
 
-  footer { padding: 40px 20px 48px; text-align: center; font-size: 13px; opacity: .8; }
-  footer a { color: var(--ink); margin: 0 8px; }
+  /* ── Screen 4 · close ── */
+  .close { display: flex; flex-direction: column; align-items: center; padding-top: calc(var(--u) * 64); }
+  .guarantee { margin-top: calc(var(--u) * 12); font-size: calc(var(--u) * 14); color: var(--label); }
 
-  @media (max-width: 860px) {
-    .hero, .proof { grid-template-columns: 1fr; }
-    section { padding: 48px 16px; }
+  /* ── Facts + footer ── */
+  .facts { display: grid; grid-template-columns: repeat(4, auto); justify-content: space-between; gap: calc(var(--u) * 24);
+           width: calc(var(--u) * 784); margin-top: calc(var(--u) * 88); padding-top: calc(var(--u) * 26); border-top: 2px solid var(--ink); }
+  .facts dt { font-size: calc(var(--u) * 13); font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--label); }
+  .facts dd { margin-top: calc(var(--u) * 8); font-size: calc(var(--u) * 15); line-height: 1.4; }
+  .facts a { text-decoration-color: var(--gold); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+  footer.stage { display: flex; justify-content: space-between; width: calc(var(--u) * 784); margin-top: calc(var(--u) * 40);
+           padding-bottom: calc(var(--u) * 40); font-size: calc(var(--u) * 13); color: var(--label); }
+  footer nav { display: flex; gap: calc(var(--u) * 24); }
+  footer a { color: var(--ink); text-decoration: none; }
+  footer a:hover, .facts a:hover { color: var(--slate); }
+
+  /* ── Below 880 px: one column ── */
+  @media (max-width: 879px) {
+    .page > *, .page .stage { --u: 1px; }
+    .stage, .facts, footer.stage { width: auto; }
+    .hero .stage { height: auto; display: flex; flex-direction: column; align-items: center; padding: 16px 16px 0; }
+    .card, .shot, .quote, .mascot { position: static; }
+    .card { width: 100%; max-width: 420px; height: auto; padding: 48px 22px 0; }
+    .wordmark { width: 100%; }
+    .tagline { font-size: 22px; line-height: 30px; }
+    .card .for { margin-top: 36px; }
+    .card .buy { width: 100%; }
+    .shot { width: min(100%, 330px); margin-top: 40px; }
+    .quote { width: auto; max-width: 330px; margin-top: 28px; font-size: 19px; line-height: 26px; text-wrap: balance; }
+    .quote br { display: none; }
+    .mascot { width: 96px; align-self: flex-end; margin: 20px 12px 0 0; }
+    .band .stage { padding: 0 16px 48px; min-height: 0; }
+    .burst { --u: .84px; position: relative; top: 0; transform: none; left: -140px; margin-bottom: -8px; }
+    .big { font-size: 19px; line-height: 25px; }
+    .big br, .little br { display: none; }
+    .big.tilde li { padding-left: 1.05em; }
+    .big.tilde li::before { position: absolute; content: '~'; }
+    .band h2, .little h2 { font-size: 30px; }
+    .little { padding: 56px 16px 0; }
+    .little ul { columns: 1; font-size: 18px; line-height: 24px; }
+    .buy { width: min(100%, 330px); }
+    .close { padding: 40px 16px 0; }
+    .facts { grid-template-columns: 1fr 1fr; justify-content: stretch; margin: 56px 16px 0; row-gap: 24px; }
+    footer.stage { flex-direction: column; gap: 12px; margin: 32px 16px 0; }
   }
 </style>
 </head>
 <body>
+<div class="page">
 
 <!-- Screen 1 · hero -->
-<div class="top">
-<section class="hero">
-  <div class="app-shape">
-    <img class="wordmark" src="./assets/wordmark.svg" alt="CONVERTIKON" width="1793" height="240">
-    <h1 class="tagline two">Feet, inches and fractions, the way you actually write them.</h1>
-    <p class="hero-copy">A small converter that pins over your drawing.</p>
+<header class="hero">
+  <div class="stage">
+    <div class="card chamfer">
+      <h1><img class="wordmark" src="./assets/wordmark.svg" alt="CONVERTIKON" width="1793" height="240"></h1>
+      <p class="tagline">~ a small desktop converter for architects, interior designers, engineers and everyone who works between metric and imperial.</p>
+      <p class="for">For Mac and Windows</p>
+      <a class="buy chamfer" href="https://convertikon.gumroad.com/l/convertikon">Get it for CAD$9.99</a>
+    </div>
+    <img class="shot" src="./assets/screenshots/convertikon-typing-ft@2x.png" alt="The CONVERTIKON panel: 6'-3 1/2&quot; typed in FT, the other fields already converted" width="660" height="910">
+    <p class="quote">Built by a designer who got <br>tired of opening a browser <br>to convert.</p>
+    <img class="mascot" src="./assets/mascot.png" alt="" width="448" height="448">
   </div>
-  <div class="hero-shot">
-    <img src="./assets/screenshots/convertikon-typing-ft@2x.png" alt="CONVERTIKON, typing 6'-3 1/2&quot; in the FT field" width="660" height="910">
+</header>
+
+<!-- Screen 2 · price + big things -->
+<section class="band">
+  <div class="stage">
+    <div class="burst">
+      <svg viewBox="-180 0 570 470" preserveAspectRatio="none" aria-hidden="true">
+        <polygon fill="#3E5A6E" points="104,6 134,94 225,60 194,131 382,107 229,170 304,196 241,216 321,246 223,268 287,317 180,331 240,404 134,357 92,463 13,350 -70,409 -40,300 -175,246 -45,192 -86,25 47,95"/>
+      </svg>
+      <div class="price">
+        <p class="amount">CAD$9.99</p>
+        <ul>
+          <li>one time purchase</li>
+          <li>free updates</li>
+          <li>no subscriptions</li>
+          <li>no ads</li>
+          <li>no account</li>
+          <li>no fuss</li>
+        </ul>
+      </div>
+    </div>
+    <h2>Big things you can do</h2>
+    <ul class="big tilde">
+      <li>type ft-and-inch any way you write it,<br> from the full <span class="v">6'-3 1/2"</span> down to a quick <span class="v">6 3 1/2</span>,<br> it gets every one</li>
+      <li>get feet back in ft-and-inch every time,<br> in standard architectural format <span class="v">6'-3 1/2"</span>,<br> never <s>6.29'</s></li>
+      <li>watch fractions simplified to the nearest<br> <span class="v">1/16"</span>, so <span class="v">8/16</span> shows as <span class="v">1/2</span></li>
+      <li>flip between fractional and decimal with<br> one click, and your numbers survive the<br> switch, just in a new format</li>
+    </ul>
   </div>
 </section>
-<img class="mascot-hero" src="./assets/mascot.png" alt="" width="448" height="448">
-</div>
 
-<section>
-  <a class="buy" href="https://convertikon.gumroad.com/l/convertikon">Get it for CAD$9.99</a>
-  <p class="under">Mac and Windows. One-time purchase, no subscriptions, no ads.</p>
-</section>
-
-<!-- Screen 2 · proof -->
-<section class="proof">
-  <div>
-    <h2>Type ft-and-inch any way you write it</h2>
-    <p class="big">From the full <span class="ex">6'-3 1/2"</span> down to a quick <span class="ex">6 3 1/2</span>. It gets every one.</p>
-    <p>In fractional mode, FT always answers in ft-and-inch, <span class="ex">6'-3 1/2"</span>, never 6.29'.</p>
-  </div>
-  <img src="./assets/screenshots/convertikon-typing-ft@2x.png" alt="The FT field mid-typing" width="660" height="910">
-</section>
-
-<!-- Screen 3 · details -->
-<section class="details">
+<!-- Screen 3 · little things -->
+<section class="little stage">
   <h2>Little things it gets right</h2>
-  <ul>
+  <ul class="tilde">
     <li>copies any value with a double-click, ready to paste</li>
     <li>stays on top of all your windows when you click the pin</li>
     <li>waits by your clock as a small icon, one click away</li>
-    <li>rolls extra inches into feet: 6-15 becomes 7'-3"</li>
+    <li>rolls extra inches into feet: <span class="v">6-15</span> becomes <span class="v">7'-3"</span></li>
     <li>takes a comma as a decimal point too</li>
     <li>shows the finished result on Enter, clears everything on Esc</li>
     <li>resizes smaller or larger to suit your screen</li>
-    <li>reopens just how you left it: same size, fractional or decimal, pinned or not</li>
+    <li>reopens just how you left it:<br> same size, fractional or decimal, pinned or not</li>
   </ul>
 </section>
 
 <!-- Screen 4 · close -->
-<section class="close">
-  <a class="buy" href="https://convertikon.gumroad.com/l/convertikon">Get it for CAD$9.99</a>
-  <p class="under"><span class="todo">[REFUND DAYS]</span>-day money back guarantee</p>
-  <p class="sign">Built by a designer who got tired of opening a browser to convert.</p>
+<section class="close stage">
+  <a class="buy chamfer" href="https://convertikon.gumroad.com/l/convertikon">Get it for CAD$9.99</a>
+  <p class="guarantee"><span class="todo">[REFUND DAYS]</span>-day money back guarantee</p>
 </section>
 
-<footer>© 2026 Elizabeth Enko <a href="./privacy/">Privacy</a> <a href="./support/">Support</a> <a href="mailto:support@convertikon.app">Contact</a></footer>
+<dl class="facts stage">
+  <div><dt>Mac</dt><dd>macOS 10.15 or later<br>Apple Silicon and Intel</dd></div>
+  <div><dt>Windows</dt><dd>Windows 10 and 11<br>64-bit</dd></div>
+  <div><dt>Your key</dt><dd>One key, two computers<br>Checked once, then offline</dd></div>
+  <div><dt>Help</dt><dd><a href="mailto:support@convertikon.app">support@convertikon.app</a><br>A real person answers</dd></div>
+</dl>
+
+<footer class="stage">
+  <span>© 2026 Elizabeth Enko</span>
+  <nav><a href="./privacy/">Privacy</a><a href="./support/">Support</a><a href="mailto:support@convertikon.app">Contact</a></nav>
+</footer>
+
+</div>
 </body>
 </html>
