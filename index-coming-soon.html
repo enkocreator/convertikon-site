@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex"><!-- the pre-launch page, kept for reference; not the homepage since 24 Sep 2026 -->
+<title>CONVERTIKON — coming soon</title>
+<meta name="description" content="CONVERTIKON: a small desktop converter for architects, interior designers, engineers and everyone who works between metric and imperial. Coming to Mac and Windows.">
+<meta property="og:title" content="CONVERTIKON — coming soon">
+<meta property="og:description" content="A small desktop converter for architects, interior designers, engineers and everyone who works between metric and imperial. Coming to Mac and Windows.">
+<meta property="og:image" content="https://convertikon.app/assets/icon.png">
+<meta property="og:url" content="https://convertikon.app/">
+<meta name="theme-color" content="#DCD9D3">
+<link rel="icon" href="./assets/icon.png" type="image/png">
+<link rel="apple-touch-icon" href="./assets/apple-touch-icon.png">
+<style>
+  /* Chakra Petch, the app's UI face, self-hosted (SIL OFL — licence in assets/fonts/OFL.txt). */
+  @font-face { font-family: 'Chakra Petch'; font-weight: 500; font-style: normal; font-display: swap;
+               src: url('./assets/fonts/ChakraPetch-Medium.ttf') format('truetype'); }
+  @font-face { font-family: 'Chakra Petch'; font-weight: 700; font-style: normal; font-display: swap;
+               src: url('./assets/fonts/ChakraPetch-Bold.ttf') format('truetype'); }
+
+  /* Layout follows convertikon-site-design/convertikon-coming-soon.pdf (a 1280 x 1100
+     frame). Everything in and under the panel is measured in the app's own units: the
+     panel is 330 u wide, like the real app, and 1 u = --panel-w / 330. At the design's
+     full size the panel is 425.5 px, and on smaller screens the whole block scales down. */
+  :root {
+    --ground: #DCD9D3;
+    --ink:    #2E2B27;
+    --gold:   #E8C32B;
+    --panel-w: clamp(280px, calc(100vw - 32px), 425.5px);
+    --u: calc(var(--panel-w) / 330);
+  }
+
+  * { box-sizing: border-box; }
+  html { background: var(--ground); }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: 'Chakra Petch', 'Segoe UI', system-ui, sans-serif;
+    font-weight: 500;
+    line-height: 1.5;
+    min-height: 100vh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .wrap {
+    width: 100%;
+    padding: 13.95vh 16px 32px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* The app panel: asphalt texture, the app's 28 u corner cuts, 330 x 455 u. */
+  .app-shape {
+    width: var(--panel-w);
+    height: calc(var(--u) * 455);
+    padding: calc(var(--u) * 49.64) calc(var(--u) * 18) 0;
+    background: #8A8A88 url('./assets/backdrop-asphalt.png') top left / var(--panel-w) auto no-repeat;
+    clip-path: polygon(
+      calc(var(--u) * 28) 0, 100% 0,
+      100% calc(100% - var(--u) * 28), calc(100% - var(--u) * 28) 100%,
+      0 100%, 0 calc(var(--u) * 28)
+    );
+    color: var(--ground);
+    flex: none;
+    display: flex;
+    flex-direction: column;
+  }
+  .wordmark { display: block; width: calc(var(--u) * 294); height: auto; }
+
+  /* The first line is a hair wider than the wordmark, so the box reaches past it on
+     both sides (negative side margins) to keep both lines truly centred. Word spacing
+     matches the design's tighter spaces. */
+  .tagline {
+    margin: calc(var(--u) * 9.5) calc(var(--u) * -12) 0;
+    font-weight: 700;
+    font-size: calc(var(--u) * 28.696);
+    line-height: 1.189;
+    word-spacing: calc(var(--u) * -1.63);
+    white-space: nowrap;
+    text-align: center;
+  }
+
+
+  /* Sign-up: one gold block the size of the button. Clicked, the same gold block becomes
+     the email field, lettered exactly like the button — a light hint in the page colour
+     and a thick pulsing caret, like the app's own. Enter sends, Esc closes it. */
+  /* 24 Sep: the sign-up sits at the bottom of the card, 18 u from its edges (like the wordmark),
+     cut like the card itself; the bottom-right cut runs parallel to the card's, 18 u inside it. */
+  .signup, .signup-done {
+    --c: calc(var(--u) * 17.5);
+    clip-path: polygon(var(--c) 0, 100% 0, 100% calc(100% - var(--c)), calc(100% - var(--c)) 100%, 0 100%, 0 var(--c));
+  }
+  /* 24 Sep, launch day: the go-live notice replaces the sign-up, in the same gold block. The sign-up
+     markup was taken out; its styles and script stay (the script does nothing without the form). */
+  .golive {
+    --c: calc(var(--u) * 17.5);
+    clip-path: polygon(var(--c) 0, 100% 0, 100% calc(100% - var(--c)), calc(100% - var(--c)) 100%, 0 100%, 0 var(--c));
+    margin: auto 0 calc(var(--u) * 18);
+    padding: calc(var(--u) * 14) calc(var(--u) * 10);
+    background: var(--gold);
+    color: var(--ink);
+    font-weight: 700;
+    font-size: calc(var(--u) * 16.6);
+    letter-spacing: calc(var(--u) * 1.49);
+    line-height: 1.35;
+    text-transform: uppercase;
+  }
+  .signup {
+    position: relative;
+    width: 100%;
+    height: calc(var(--u) * 59.33);
+    margin: auto 0 calc(var(--u) * 18);
+    background: var(--gold);
+  }
+  .signup .field-row { display: none; position: relative; height: 100%; }
+  .signup.open .btn { display: none; }
+  .signup.open .field-row { display: block; }
+  .signup #email {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 0 calc(var(--u) * 18);
+    font: inherit;
+    font-weight: 700;
+    font-size: calc(var(--u) * 16.6);
+    letter-spacing: calc(var(--u) * 1.49);     /* the button's own lettering */
+    text-align: center;
+    color: var(--ink);
+    caret-color: transparent;                  /* the fake caret below replaces the thin native one */
+    background: var(--gold);
+    border: 0;
+    border-radius: 0;
+    outline: none;
+  }
+  .signup #email::placeholder { color: var(--ground); opacity: 1; }
+  /* Browser autofill paints the field white/blue over our colours, and that paint can't be
+     switched off. A gold inner shadow covers it, the text-fill keeps the typed colour, and
+     the long transition stops Chrome fading its own colour back in. Firefox tints with a
+     filter instead, so that is cleared too. */
+  .signup #email:-webkit-autofill,
+  .signup #email:-webkit-autofill:hover,
+  .signup #email:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 1000px var(--gold) inset;
+    box-shadow: 0 0 0 1000px var(--gold) inset;
+    -webkit-text-fill-color: var(--ink);
+    caret-color: transparent;
+    filter: none;
+    transition: background-color 600000s 0s, color 600000s 0s;
+  }
+  /* separate rule: a browser that doesn't know :autofill would drop the whole list above */
+  .signup #email:autofill {
+    box-shadow: 0 0 0 1000px var(--gold) inset;
+    -webkit-text-fill-color: var(--ink);
+    filter: none;
+  }
+  .signup .caret {
+    position: absolute;
+    top: 50%;
+    width: calc(var(--u) * 2.4);
+    height: calc(var(--u) * 19);
+    margin-top: calc(var(--u) * -9.5);
+    background: var(--ink);
+    pointer-events: none;
+    display: none;
+    animation: caret-pulse 1.1s ease-in-out infinite;
+  }
+  .signup .caret.on { display: block; }
+  @keyframes caret-pulse { 0%, 100% { opacity: 1; } 50% { opacity: .12; } }
+  .signup .trap { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+  .signup-msg {
+    width: var(--panel-w);
+    margin: calc(var(--u) * 10) 0 0;
+    min-height: 1.5em;
+    font-size: 14px;
+  }
+  .signup-done {
+    width: 100%;
+    margin: auto 0 calc(var(--u) * 18);
+    height: calc(var(--u) * 59.33);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: calc(var(--u) * 16.6);
+    letter-spacing: calc(var(--u) * 1.49);
+    text-transform: uppercase;
+    color: var(--ink);
+    background: var(--gold);
+  }
+
+  .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: calc(var(--u) * 16.6);
+    letter-spacing: calc(var(--u) * 1.49);
+    text-transform: uppercase;
+    color: var(--ink);
+    background: var(--gold);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .btn:hover { background: #F0CE3F; }
+  .btn:disabled { cursor: default; opacity: .7; }
+  .btn:focus-visible { outline: 2px solid var(--ground); outline-offset: -5px; }
+
+  footer {
+    margin-top: auto;
+    padding-top: 48px;
+    font-size: 13px;
+    opacity: 0.8;
+  }
+
+  /* The mascot peeks in from the bottom-right corner, so big that only his eye shows: the
+     window's edges cut him just right of and below the eye (eye = x 66-302, y 106-192 of 448). */
+  .peek {
+    --mw: clamp(240px, 32vw, 640px);            /* the whole mascot's width */
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: calc(var(--mw) * 0.737);
+    height: calc(var(--mw) * 0.496);
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .peek img { position: absolute; left: 0; top: 0; width: var(--mw); height: auto; }
+  @media (max-width: 700px) { .wrap { padding-bottom: calc(clamp(240px, 32vw, 640px) * 0.496 + 8px); } }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .btn { transition: background-color .15s; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="app-shape">
+    <img class="wordmark" src="./assets/wordmark.svg" alt="CONVERTIKON" width="1793" height="240">
+    <h1 class="tagline">on its way to end your<br>metric–imperial pain</h1>
+    <p class="golive">Goes live today from<br>12:15PM to 12:45PM EDT</p>
+  </div>
+
+  <footer>© 2026 Elizabeth Enko</footer>
+
+</div>
+<div class="peek"><img src="./assets/mascot.png" alt="" width="448" height="448"></div>
+<script>
+  // Where sign-ups go: a Google Form whose answers land in a Google Sheet. `url` is the
+  // form's formResponse address, `field` its email question (entry.NNN).
+  var SIGNUP = {
+    url: 'https://docs.google.com/forms/d/e/1FAIpQLSd3Uc2S6SZ-JmmQx1zKFOch7JgQe3TaTFTBQvv5V0dxAndRxQ/formResponse',
+    field: 'entry.446317156'                   // the form's "email" question
+  };
+
+  (function () {
+    var form = document.getElementById('signup');
+    if (!form) return;                         // no sign-up on the page (launch day)
+    var opener = document.getElementById('signup-open');
+    var field = document.getElementById('email');
+    var msg = document.getElementById('signup-msg');
+    var sending = false;
+
+    function thank() {
+      var done = document.createElement('div');
+      done.className = 'signup-done';
+      done.textContent = 'See you soon';
+      form.replaceWith(done);
+      msg.textContent = '';
+    }
+    var valid = function (v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) && v.length <= 254; };
+
+    // The fake caret: measured with the field's own font, so it sits exactly where the
+    // real (hidden) caret is; restarting the pulse keeps it solid while it moves.
+    var caret = form.querySelector('.caret');
+    var ctx = document.createElement('canvas').getContext('2d');
+    function textWidth(t) {                    // letter-spacing follows every character
+      var cs = getComputedStyle(field);
+      ctx.font = cs.fontStyle + ' ' + cs.fontWeight + ' ' + cs.fontSize + ' ' + cs.fontFamily;
+      return ctx.measureText(t).width + t.length * (parseFloat(cs.letterSpacing) || 0);
+    }
+    function placeCaret() {
+      if (document.activeElement !== field || field.selectionStart !== field.selectionEnd) {
+        caret.classList.remove('on'); return;
+      }
+      var cs = getComputedStyle(field);
+      var padL = parseFloat(cs.paddingLeft), padR = parseFloat(cs.paddingRight);
+      var room = field.clientWidth - padL - padR;
+      var x;
+      if (!field.value) {
+        x = padL + Math.max(0, (room - textWidth(field.placeholder)) / 2);   // start of the hint
+      } else {
+        var total = textWidth(field.value);
+        var start = total <= room ? padL + (room - total) / 2 : padL - field.scrollLeft;
+        x = start + textWidth(field.value.slice(0, field.selectionStart));
+      }
+      caret.style.left = (x - caret.offsetWidth / 2) + 'px';
+      caret.classList.add('on');
+      caret.style.animation = 'none'; void caret.offsetWidth; caret.style.animation = '';
+    }
+    ['focus', 'input', 'keydown', 'keyup', 'click', 'select'].forEach(function (ev) {
+      field.addEventListener(ev, function () { setTimeout(placeCaret, 0); });   // after the browser moves the cursor
+    });
+    document.addEventListener('selectionchange', function () {
+      if (document.activeElement === field) setTimeout(placeCaret, 0);
+    });
+    field.addEventListener('blur', function () { caret.classList.remove('on'); });
+    window.addEventListener('resize', function () { setTimeout(placeCaret, 0); });
+
+    function open() {
+      form.classList.add('open');
+      opener.setAttribute('aria-expanded', 'true');
+      field.focus();
+      document.fonts.ready.then(placeCaret);
+    }
+    function close() {
+      form.classList.remove('open');
+      opener.setAttribute('aria-expanded', 'false');
+      msg.textContent = '';
+      opener.focus();
+    }
+    opener.addEventListener('click', open);
+    field.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') { e.preventDefault(); close(); }
+      if (e.key === 'Enter') { e.preventDefault(); if (!sending) form.requestSubmit(); }
+    });
+    // Clicking away from an empty field turns it back into the button.
+    field.addEventListener('blur', function () {
+      setTimeout(function () {
+        if (!field.value.trim() && !form.contains(document.activeElement)) close();
+      }, 150);
+    });
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var email = field.value.trim();
+      if (!valid(email)) { msg.textContent = 'That doesn\u2019t look like an email address.'; field.focus(); return; }
+      if (form.website.value) { thank(); return; }       // a bot filled the hidden field
+      sending = true; msg.textContent = 'Sending\u2026';
+      var body = new URLSearchParams();
+      body.append(SIGNUP.field, email);
+      // no-cors: Google can't answer a cross-origin post, so the reply is opaque; a network
+      // failure still rejects, which is the case worth telling the visitor about.
+      fetch(SIGNUP.url, { method: 'POST', mode: 'no-cors', body: body })
+        .then(thank)
+        .catch(function () {
+          sending = false;
+          msg.textContent = 'Couldn\u2019t send just now \u2014 please try again.';
+        });
+    });
+  })();
+</script>
+</body>
+</html>

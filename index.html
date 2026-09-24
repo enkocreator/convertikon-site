@@ -3,264 +3,314 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CONVERTIKON — coming soon</title>
-<meta name="description" content="CONVERTIKON: a small desktop converter for architects, interior designers, engineers and everyone who works between metric and imperial. Coming to Mac and Windows.">
-<meta property="og:title" content="CONVERTIKON — coming soon">
-<meta property="og:description" content="A small desktop converter for architects, interior designers, engineers and everyone who works between metric and imperial. Coming to Mac and Windows.">
+<!-- HOMEPAGE — the launch page, live since 24 Sep 2026. (The coming-soon page it replaced is kept as
+     index-coming-soon.html, noindex.) Layout: Elizabeth's PSD of 24 Sep 2026
+     (CONVERTIKON_DESIGN/photoshop/convertikon-launch-page-2026-09-24.psd, 1920 x 941 px). Every measurement
+     is in u; the design scales as one block with the window; below 960 px the page reflows into one column. -->
+<title>CONVERTIKON — metric and imperial, feet, inches and fractions</title>
+<meta name="description" content="A small desktop converter for architects, interior designers, engineers and everyone who works between metric and imperial. Mac and Windows, one-time purchase.">
+<meta property="og:title" content="CONVERTIKON">
+<meta property="og:description" content="A small desktop converter for architects, interior designers, engineers and everyone who works between metric and imperial.">
 <meta property="og:image" content="https://convertikon.app/assets/icon.png">
 <meta property="og:url" content="https://convertikon.app/">
 <meta name="theme-color" content="#DCD9D3">
 <link rel="icon" href="./assets/icon.png" type="image/png">
 <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png">
 <style>
-  /* Chakra Petch, the app's UI face, self-hosted (SIL OFL — licence in assets/fonts/OFL.txt). */
   @font-face { font-family: 'Chakra Petch'; font-weight: 500; font-style: normal; font-display: swap;
                src: url('./assets/fonts/ChakraPetch-Medium.ttf') format('truetype'); }
   @font-face { font-family: 'Chakra Petch'; font-weight: 700; font-style: normal; font-display: swap;
                src: url('./assets/fonts/ChakraPetch-Bold.ttf') format('truetype'); }
-
-  /* Layout follows convertikon-site-design/convertikon-coming-soon.pdf (a 1280 x 1100
-     frame). Everything in and under the panel is measured in the app's own units: the
-     panel is 330 u wide, like the real app, and 1 u = --panel-w / 330. At the design's
-     full size the panel is 425.5 px, and on smaller screens the whole block scales down. */
   :root {
-    --ground: #DCD9D3;
-    --ink:    #2E2B27;
-    --gold:   #E8C32B;
-    --panel-w: clamp(280px, calc(100vw - 32px), 425.5px);
-    --u: calc(var(--panel-w) / 330);
+    --ground: #DCD9D3; --ink: #2E2B27; --gold: #E8C32B; --slate: #3E5A6E; --slate-hi: #4A6B82;
+    --label: #6B665E; --light: #DCD9D3;
+    --u: min(calc(100vw / 1520), calc(100vh / 745));
   }
-
+  /* u = one unit of the design: Elizabeth's PSD of 24 Sep is 1520 u wide and its first screen 745 u tall
+     (1920 x 941 px, u = 1.2632 px). The whole design scales as one block with the window: u follows the
+     window's width, or its height when the window is short, so nothing moves relative to anything else. */
+  @supports (width: 1cqw) { .page > * { --u: min(calc(100cqw / 1520), calc(100vh / 745)); } }
+  .page > * { --screen: min(100vh, calc(var(--u) * 968)); }   /* a section that fills one screen */
+  @supports (height: 100svh) { .page > * { --screen: min(100svh, calc(var(--u) * 968)); } }
   * { box-sizing: border-box; }
   html { background: var(--ground); }
-  body {
-    margin: 0;
-    background: var(--ground);
-    color: var(--ink);
-    font-family: 'Chakra Petch', 'Segoe UI', system-ui, sans-serif;
-    font-weight: 500;
-    line-height: 1.5;
-    min-height: 100vh;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
+  body { margin: 0; background: var(--ground); color: var(--ink); font-family: 'Chakra Petch', 'Segoe UI', system-ui, sans-serif;
+         font-weight: 500; -webkit-font-smoothing: antialiased; }
+  .page { container-type: inline-size; overflow-x: clip; }
+  h1, h2, p, ul, dl, dd { margin: 0; }
+  ul { list-style: none; padding: 0; }
+  a { color: inherit; }
+  .stage { position: relative; width: calc(var(--u) * 950); margin-left: auto; margin-right: auto; }
+  .chamfer { clip-path: polygon(var(--c) 0, 100% 0, 100% calc(100% - var(--c)), calc(100% - var(--c)) 100%, 0 100%, 0 var(--c)); }
+  h2 { font-weight: 700; font-size: calc(var(--u) * 71); line-height: 1.1; text-transform: uppercase; text-align: center; }
+  /* Each heading is exactly as wide as the text block below it, edges lined up (sizes and nudges measured). */
+  .band h2 { color: var(--ground); font-size: calc(var(--u) * 85.26); position: relative; left: calc(var(--u) * -11.4); }   /* the page's backdrop colour on the gold */
+  .little h2 { color: var(--slate); font-size: calc(var(--u) * 89.06); position: relative; left: calc(var(--u) * 9.7); }
+  .tilde li::before { content: '~ '; }
+  .v { color: var(--slate); font-weight: 700; white-space: nowrap; }   /* numbers: bold slate, like a value being typed in the app */
 
-  .wrap {
-    width: 100%;
-    padding: 13.95vh 16px 32px;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+  /* ── Screen 1 · hero: fills the window; the gold band starts right below it ── */
+  .hero { --hero-h: min(100vh, calc(var(--u) * 968));   /* fills the window, but never stretches past 1.3 x the design */ position: relative; overflow: hidden; height: var(--hero-h); }
+  @supports (height: 100svh) { .hero { --hero-h: min(100svh, calc(var(--u) * 968)); } }
+  .hero .stage { width: calc(var(--u) * 1520); height: 100%; }
+  /* The card scales as one piece (cu = its own unit): its bottom stays 115.6 u above the band, it keeps
+     24 u clear of the panel, and it sits in the free space left of the panel at 61 % / 39 %. */
+  .card { --cu: calc(var(--u) * 1.2293);   /* the card is drawn in its own unit, 1.2293 u */
+          --c: calc(var(--cu) * 32); position: absolute; left: calc(var(--u) * 215.3); top: calc(var(--u) * 44.33);
+          width: calc(var(--cu) * 372); height: calc(var(--cu) * 512); padding: calc(var(--cu) * 71) calc(var(--cu) * 21) 0;
+          background: #5E5F5B url('./assets/backdrop-asphalt.png') center / cover; color: var(--light); }
+  .card h1 { line-height: 0; }
+  .wordmark { width: calc(var(--cu) * 330); height: auto; }
+  .tagline { margin-top: calc(var(--cu) * 20); font-weight: 700; font-size: calc(var(--cu) * 24); line-height: calc(var(--cu) * 32.5); }
+  .shot { position: absolute; left: calc(var(--u) * 809.1); top: calc(var(--u) * -119);   /* the page edge cuts the MM row below its corner cut */ width: calc(var(--u) * 368.9); height: auto; }
+  .quote { position: absolute; right: calc(var(--u) * 179.5); bottom: calc(var(--u) * 148.73); width: calc(var(--u) * 330);   /* last line sits on the mascot's head */
+           text-align: center; font-weight: 700; font-size: calc(var(--u) * 22); line-height: calc(var(--u) * 29.5); color: var(--slate); }
+  .mascot { position: absolute; right: calc(var(--u) * 104.5); bottom: 0; width: calc(var(--u) * 155.96); height: auto; }
 
-  /* The app panel: asphalt texture, the app's 28 u corner cuts, 330 x 455 u. */
-  .app-shape {
-    width: var(--panel-w);
-    height: calc(var(--u) * 455);
-    padding: calc(var(--u) * 49.64) calc(var(--u) * 18) 0;
-    background: #8A8A88 url('./assets/backdrop-asphalt.png') top left / var(--panel-w) auto no-repeat;
-    clip-path: polygon(
-      calc(var(--u) * 28) 0, 100% 0,
-      100% calc(100% - var(--u) * 28), calc(100% - var(--u) * 28) 100%,
-      0 100%, 0 calc(var(--u) * 28)
-    );
-    color: var(--ground);
-    flex: none;
-    display: flex;
-    flex-direction: column;
-  }
-  .wordmark { display: block; width: calc(var(--u) * 294); height: auto; }
+  /* ── Screen 2 · the gold band ── */
+  .band { position: relative; overflow: hidden; background: var(--gold); }
+  .sticker { position: absolute; inset: 0; z-index: 1; color: var(--light); text-decoration: none; pointer-events: none; }   /* a buy link: only the star itself is clickable */
+  .sticker polygon, .sticker .amount, .sticker .once, .sticker .price-list { pointer-events: auto; cursor: pointer; }
+  .sticker polygon { transition: fill .15s; }
+  .sticker:hover polygon { fill: var(--slate-hi); }
+  .sticker:focus-visible { outline: none; }
+  .sticker:focus-visible polygon { stroke: var(--gold); stroke-width: 3; }
+  .burst { position: absolute; left: calc(var(--u) * -143.7); top: calc(var(--u) * 3.36); width: calc(var(--u) * 583.3); height: calc(var(--u) * 481.2); }
+  .burst svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .amount, .once { position: absolute; font-weight: 700; line-height: 1; white-space: nowrap;
+                   transform: skewX(-13deg); transform-origin: 0 84.2%; }   /* the wordmark's 13° slant, pivoting on the baseline */
+  .amount { left: calc(var(--u) * 4.75); top: calc(var(--u) * 145.65); font-size: calc(var(--u) * 44.21); letter-spacing: .105em; }
+  .once { left: calc(var(--u) * 7.6); top: calc(var(--u) * 184.97); font-size: calc(var(--u) * 25.52); letter-spacing: .031em; }
+  .price-list { position: absolute; left: calc(var(--u) * 17.34); top: calc(var(--u) * 215.97); font-size: max(12px, calc(var(--u) * 17.8)); line-height: max(14.5px, calc(var(--u) * 21.4)); }
+  .band .stage { width: auto; margin: 0; min-height: max(calc(var(--u) * 504.3), var(--screen));
+                 padding: calc(var(--u) * 48) calc(var(--u) * 30) calc(var(--u) * 48) calc(var(--u) * 417.3);
+                 display: flex; flex-direction: column; justify-content: center; }
+  .band .inner { width: min(100%, calc(var(--u) * 1017.2)); }
+  .big { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: auto auto; grid-auto-flow: column;
+         column-gap: calc(var(--u) * 12); row-gap: calc(var(--u) * 57); margin-top: calc(var(--u) * 64.5);
+         font-size: calc(var(--u) * 23.75); line-height: calc(var(--u) * 28.5); text-align: center; }
+  .big li { white-space: nowrap; }   /* desktop lines follow Elizabeth's breaks only; bold numbers must not push a word onto its own line */
 
-  /* The first line is a hair wider than the wordmark, so the box reaches past it on
-     both sides (negative side margins) to keep both lines truly centred. Word spacing
-     matches the design's tighter spaces. */
-  .tagline {
-    margin: calc(var(--u) * 9.5) calc(var(--u) * -12) 0;
-    font-weight: 700;
-    font-size: calc(var(--u) * 28.696);
-    line-height: 1.189;
-    word-spacing: calc(var(--u) * -1.63);
-    white-space: nowrap;
-    text-align: center;
-  }
+  /* ── Screen 3 · little things ── */
+  .ground { min-height: calc(var(--screen) + var(--u) * 62.75); padding: calc(var(--u) * 40) 0 calc(var(--u) * 102.75);
+            display: flex; flex-direction: column; justify-content: center; }
+  .little.stage { width: min(calc(100% - var(--u) * 102), calc(var(--u) * 1273)); }
+  .little ul { display: grid; grid-template-columns: fit-content(calc(51% - var(--u) * 20)) fit-content(calc(49% - var(--u) * 20)); grid-template-rows: repeat(4, auto);
+               grid-auto-flow: column; justify-content: space-between; column-gap: calc(var(--u) * 40);
+               margin-top: calc(var(--u) * 59); font-size: calc(var(--u) * 23.75); line-height: calc(var(--u) * 38); }
 
+  /* ── Screen 4 · buy ── */
+  .close { display: flex; flex-direction: column; align-items: center; padding-top: calc(var(--u) * 72); }
+  .buy { --c: calc(var(--u) * 9.5); display: flex; align-items: center; justify-content: center;
+         width: calc(var(--u) * 366.6); height: calc(var(--u) * 66.5); background: var(--slate); color: var(--light);
+         font-weight: 700; font-size: calc(var(--u) * 24); letter-spacing: .1em; text-transform: uppercase;
+         text-decoration: none; white-space: nowrap; transition: background-color .15s; }
+  .buy .slant { display: inline-block; transform: skewX(-13deg); }   /* same slant as the price */
+  .buy:hover { background: var(--slate-hi); }
+  .buy:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+  .guarantee { margin-top: calc(var(--u) * 2.9); font-size: calc(var(--u) * 16.3); line-height: 1.2; color: var(--label); }
 
-  /* Sign-up: one gold block the size of the button. Clicked, the same gold block becomes
-     the email field, lettered exactly like the button — a light hint in the page colour
-     and a thick pulsing caret, like the app's own. Enter sends, Esc closes it. */
-  /* 24 Sep: the sign-up sits at the bottom of the card, 18 u from its edges (like the wordmark),
-     cut like the card itself; the bottom-right cut runs parallel to the card's, 18 u inside it. */
-  .signup, .signup-done {
-    --c: calc(var(--u) * 17.5);
-    clip-path: polygon(var(--c) 0, 100% 0, 100% calc(100% - var(--c)), calc(100% - var(--c)) 100%, 0 100%, 0 var(--c));
-  }
-  /* 24 Sep, launch day: the go-live notice replaces the sign-up, in the same gold block. The sign-up
-     markup was taken out; its styles and script stay (the script does nothing without the form). */
-  .golive {
-    --c: calc(var(--u) * 17.5);
-    clip-path: polygon(var(--c) 0, 100% 0, 100% calc(100% - var(--c)), calc(100% - var(--c)) 100%, 0 100%, 0 var(--c));
-    margin: auto 0 calc(var(--u) * 18);
-    padding: calc(var(--u) * 14) calc(var(--u) * 10);
-    background: var(--gold);
-    color: var(--ink);
-    font-weight: 700;
-    font-size: calc(var(--u) * 16.6);
-    letter-spacing: calc(var(--u) * 1.49);
-    line-height: 1.35;
-    text-transform: uppercase;
-  }
-  .signup {
-    position: relative;
-    width: 100%;
-    height: calc(var(--u) * 59.33);
-    margin: auto 0 calc(var(--u) * 18);
-    background: var(--gold);
-  }
+  /* ── Screen 5 · the app on asphalt, with the TRY ME! star on its top edge ── */
+  .showcase { position: relative; margin-top: calc(var(--u) * 70.9); padding: calc(var(--u) * 114.8) 0 calc(var(--u) * 97.4);
+              background: #5E5F5B url('./assets/asphalt-seamless.png') 0 0 / calc(var(--u) * 368.9) auto repeat; }   /* the app's asphalt, at the panel's scale */
+  .showcase .panel { display: block; width: calc(var(--u) * 368.9); aspect-ratio: 330 / 455; height: auto; margin: 0 auto;
+                     border: 0; background: transparent; color-scheme: normal; }   /* the free web version (app/), no panel background of its own */
+  .tryme { position: absolute; left: calc(50% + var(--u) * 311.6); top: calc(var(--u) * -133.65); width: calc(var(--u) * 410.9); height: calc(var(--u) * 390.8); }
+  .tryme svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .tryme p { position: absolute; left: 0; right: 0; top: calc(var(--u) * 141.73); text-align: center; color: var(--slate);
+             font-weight: 700; font-size: calc(var(--u) * 71.1); line-height: calc(var(--u) * 55.2);
+             transform: skewX(-13deg); transform-origin: 50% calc(var(--u) * 51.92); }
+
+  /* ── Stay in touch: the coming-soon page's sign-up, sized to this page. One gold block; clicked,
+        it becomes the email field, lettered like the button, with the app's thick pulsing caret.
+        Enter sends to the same Google Form (the launch list), Esc closes. ── */
+  .keep { display: flex; flex-direction: column; align-items: center; margin-top: calc(var(--u) * 56); }
+  .signup { --c: calc(var(--u) * 9.5); position: relative; width: calc(var(--u) * 492); height: calc(var(--u) * 66.5); background: var(--gold); }
   .signup .field-row { display: none; position: relative; height: 100%; }
   .signup.open .btn { display: none; }
   .signup.open .field-row { display: block; }
-  .signup #email {
-    display: block;
-    width: 100%;
-    height: 100%;
-    padding: 0 calc(var(--u) * 18);
-    font: inherit;
-    font-weight: 700;
-    font-size: calc(var(--u) * 16.6);
-    letter-spacing: calc(var(--u) * 1.49);     /* the button's own lettering */
-    text-align: center;
-    color: var(--ink);
-    caret-color: transparent;                  /* the fake caret below replaces the thin native one */
-    background: var(--gold);
-    border: 0;
-    border-radius: 0;
-    outline: none;
-  }
+  .signup .btn, .signup #email, .signup-done { font-family: inherit; font-weight: 700; font-size: calc(var(--u) * 18.6); letter-spacing: .1em; color: var(--ink); }
+  .signup .btn { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; margin: 0; padding: 0; border: 0; border-radius: 0;
+                 cursor: pointer; text-transform: uppercase; background: var(--gold); white-space: nowrap; transition: background-color .15s; }
+  .signup .btn:hover { background: #F0CE3F; }
+  .signup .btn:focus-visible { outline: 3px solid var(--slate); outline-offset: 3px; }
+  .signup #email { display: block; width: 100%; height: 100%; padding: 0 calc(var(--u) * 18); text-align: center; caret-color: transparent;
+                   background: var(--gold); border: 0; border-radius: 0; outline: none; }
   .signup #email::placeholder { color: var(--ground); opacity: 1; }
-  /* Browser autofill paints the field white/blue over our colours, and that paint can't be
-     switched off. A gold inner shadow covers it, the text-fill keeps the typed colour, and
-     the long transition stops Chrome fading its own colour back in. Firefox tints with a
-     filter instead, so that is cleared too. */
-  .signup #email:-webkit-autofill,
-  .signup #email:-webkit-autofill:hover,
-  .signup #email:-webkit-autofill:focus {
-    -webkit-box-shadow: 0 0 0 1000px var(--gold) inset;
-    box-shadow: 0 0 0 1000px var(--gold) inset;
-    -webkit-text-fill-color: var(--ink);
-    caret-color: transparent;
-    filter: none;
-    transition: background-color 600000s 0s, color 600000s 0s;
-  }
-  /* separate rule: a browser that doesn't know :autofill would drop the whole list above */
-  .signup #email:autofill {
-    box-shadow: 0 0 0 1000px var(--gold) inset;
-    -webkit-text-fill-color: var(--ink);
-    filter: none;
-  }
-  .signup .caret {
-    position: absolute;
-    top: 50%;
-    width: calc(var(--u) * 2.4);
-    height: calc(var(--u) * 19);
-    margin-top: calc(var(--u) * -9.5);
-    background: var(--ink);
-    pointer-events: none;
-    display: none;
-    animation: caret-pulse 1.1s ease-in-out infinite;
-  }
+  .signup #email:-webkit-autofill, .signup #email:-webkit-autofill:hover, .signup #email:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 1000px var(--gold) inset; box-shadow: 0 0 0 1000px var(--gold) inset;
+    -webkit-text-fill-color: var(--ink); caret-color: transparent; filter: none; transition: background-color 600000s 0s, color 600000s 0s; }
+  .signup #email:autofill { box-shadow: 0 0 0 1000px var(--gold) inset; -webkit-text-fill-color: var(--ink); filter: none; }
+  .signup .caret { position: absolute; top: 50%; width: calc(var(--u) * 2.7); height: calc(var(--u) * 21); margin-top: calc(var(--u) * -10.5);
+                   background: var(--ink); pointer-events: none; display: none; animation: caret-pulse 1.1s ease-in-out infinite; }
   .signup .caret.on { display: block; }
   @keyframes caret-pulse { 0%, 100% { opacity: 1; } 50% { opacity: .12; } }
   .signup .trap { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
-  .signup-msg {
-    width: var(--panel-w);
-    margin: calc(var(--u) * 10) 0 0;
-    min-height: 1.5em;
-    font-size: 14px;
-  }
-  .signup-done {
-    width: 100%;
-    margin: auto 0 calc(var(--u) * 18);
-    height: calc(var(--u) * 59.33);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    font-size: calc(var(--u) * 16.6);
-    letter-spacing: calc(var(--u) * 1.49);
-    text-transform: uppercase;
-    color: var(--ink);
-    background: var(--gold);
-  }
+  .signup-msg { min-height: 1.5em; margin-top: calc(var(--u) * 8); font-size: max(13px, calc(var(--u) * 14)); color: var(--label); }
+  .signup-done { --c: calc(var(--u) * 9.5); display: flex; align-items: center; justify-content: center; width: calc(var(--u) * 492); height: calc(var(--u) * 66.5);
+                 text-transform: uppercase; background: var(--gold); }
 
-  .btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    border: 0;
-    border-radius: 0;
-    cursor: pointer;
-    font-family: inherit;
-    font-weight: 700;
-    font-size: calc(var(--u) * 16.6);
-    letter-spacing: calc(var(--u) * 1.49);
-    text-transform: uppercase;
-    color: var(--ink);
-    background: var(--gold);
-    text-decoration: none;
-    white-space: nowrap;
-  }
-  .btn:hover { background: #F0CE3F; }
-  .btn:disabled { cursor: default; opacity: .7; }
-  .btn:focus-visible { outline: 2px solid var(--ground); outline-offset: -5px; }
+  /* ── Facts + footer, on the light ground ── */
+  .facts { display: grid; grid-template-columns: repeat(4, auto); justify-content: space-between; gap: calc(var(--u) * 24);
+           width: max(640px, calc(var(--u) * 784)); margin-top: calc(var(--u) * 40); color: var(--slate); }
+  .facts dt { font-size: max(11px, calc(var(--u) * 13)); line-height: 1.25; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+  .facts dd { margin-top: calc(var(--u) * 7.3); font-size: max(13px, calc(var(--u) * 15)); line-height: calc(var(--u) * 21); }
+  .facts a { text-decoration: none; }
+  footer.stage { display: flex; gap: calc(var(--u) * 24); width: max(640px, calc(var(--u) * 784)); margin-top: calc(var(--u) * 41.1);
+                 padding-bottom: calc(var(--u) * 38.1); font-size: max(11px, calc(var(--u) * 13)); line-height: 1.25; color: var(--slate); }
+  footer a { text-decoration: none; }
+  footer a:hover, .facts a:hover { color: var(--ink); }
 
-  footer {
-    margin-top: auto;
-    padding-top: 48px;
-    font-size: 13px;
-    opacity: 0.8;
-  }
-
-  /* The mascot peeks in from the bottom-right corner, so big that only his eye shows: the
-     window's edges cut him just right of and below the eye (eye = x 66-302, y 106-192 of 448). */
-  .peek {
-    --mw: clamp(240px, 32vw, 640px);            /* the whole mascot's width */
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    width: calc(var(--mw) * 0.737);
-    height: calc(var(--mw) * 0.496);
-    overflow: hidden;
-    pointer-events: none;
-  }
-  .peek img { position: absolute; left: 0; top: 0; width: var(--mw); height: auto; }
-  @media (max-width: 700px) { .wrap { padding-bottom: calc(clamp(240px, 32vw, 640px) * 0.496 + 8px); } }
-
-  @media (prefers-reduced-motion: no-preference) {
-    .btn { transition: background-color .15s; }
+  /* ── Below 960 px: one column ── */
+  @media (max-width: 959px) {
+    .page > *, .page .stage { --u: 1px; }
+    .stage, .facts, footer.stage { width: auto; }
+    .hero { height: auto; }
+    .hero .stage { width: auto; height: auto; display: flex; flex-direction: column; align-items: center; padding: 16px 16px 0; }
+    .card, .shot, .quote, .mascot { position: static; }
+    .card { --cu: 1px; width: 100%; max-width: 420px; height: auto; padding: 48px 22px 36px; }
+    .wordmark { width: 100%; }
+    .tagline { font-size: 22px; line-height: 30px; }
+    .shot { width: min(100%, 330px); margin-top: 40px; }
+    .quote { width: auto; max-width: 330px; margin-top: 28px; font-size: 19px; line-height: 26px; text-wrap: balance; }
+    .quote br { display: none; }
+    .mascot { width: 110px; align-self: flex-end; margin: 20px 12px 0 0; }
+    .sticker { --u: .8px; position: relative; inset: auto; height: calc(var(--u) * 470); }
+    .band .stage { padding: 0 16px 48px; min-height: 0; }
+    .ground { display: block; min-height: 0; padding: 0; }
+    .band .inner { width: auto; }
+    .big { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; grid-auto-flow: row;
+           font-size: 19px; line-height: 25px; row-gap: 22px; margin-top: 20px; }
+    .big br { display: none; }
+    .big li { white-space: normal; text-wrap: balance; }
+    h2, .band h2, .little h2 { font-size: 28px; left: 0; }
+    .little.stage { width: auto; padding: 56px 16px 0; }
+    .little ul { display: block; font-size: 18px; line-height: 24px; margin-top: 24px; }
+    .little li + li { margin-top: 8px; }
+    .close { padding: 48px 16px 0; }
+    .buy { width: min(100%, 330px); height: 56px; font-size: 19px; }
+    .guarantee { margin-top: 8px; font-size: 14px; }
+    .showcase { margin-top: 110px; padding: 150px 16px 48px; }
+    .showcase { background-size: 300px auto; }
+    .showcase .panel { width: min(100%, 300px); }
+    .tryme { --u: .5px; left: auto; right: 6px; }
+    .keep { margin: 40px 16px 0; }
+    .signup, .signup-done { width: min(100%, 420px); height: 56px; }
+    .signup .btn, .signup #email, .signup-done { font-size: 14px; }
+    .facts { grid-template-columns: 1fr 1fr; justify-content: stretch; margin: 36px 16px 0; row-gap: 24px; }
+    footer.stage { flex-wrap: wrap; margin: 32px 16px 0; padding-bottom: 36px; }
   }
 </style>
 </head>
 <body>
-<div class="wrap">
+<div class="page">
 
-  <div class="app-shape">
-    <img class="wordmark" src="./assets/wordmark.svg" alt="CONVERTIKON" width="1793" height="240">
-    <h1 class="tagline">on its way to end your<br>metric–imperial pain</h1>
-    <p class="golive">Goes live today from<br>12:15PM to 12:45PM EDT</p>
+<!-- Screen 1 · hero -->
+<header class="hero">
+  <div class="stage">
+    <div class="card chamfer">
+      <h1><img class="wordmark" src="./assets/wordmark.svg" alt="CONVERTIKON" width="1793" height="240"></h1>
+      <p class="tagline">~ a small desktop converter for architects, interior designers, engineers and everyone who works between metric and imperial.<br>Mac and Windows.</p>
+    </div>
+    <img class="shot" src="./assets/screenshots/convertikon-typing-ft@2x.png" alt="The CONVERTIKON panel: 6'-3 1/2&quot; typed in FT, the other fields already converted" width="660" height="910">
+    <p class="quote">built by a designer who got <br>tired of opening a browser <br>to convert</p>
+    <img class="mascot" src="./assets/mascot.png" alt="" width="448" height="448">
   </div>
+</header>
 
-  <footer>© 2026 Elizabeth Enko</footer>
+<!-- Screen 2 · price + big things -->
+<section class="band">
+  <a class="sticker" href="https://convertikon.gumroad.com/l/convertikon" aria-label="Get CONVERTIKON for CAD$9.99">
+    <div class="burst">
+      <svg viewBox="-180 0 570 470" preserveAspectRatio="none" aria-hidden="true">
+        <polygon fill="#3E5A6E" points="104,6 134,94 225,60 194,131 382,107 229,170 304,196 241,216 321,246 223,268 287,317 180,331 240,404 134,357 92,463 13,350 -70,409 -40,300 -175,246 -45,192 -86,25 47,95"/>
+      </svg>
+    </div>
+    <p class="amount">CAD$9.99</p>
+    <p class="once">one time purchase</p>
+    <ul class="price-list">
+      <li>free updates</li>
+      <li>no subscriptions</li>
+      <li>no ads</li>
+      <li>no account</li>
+      <li>no fuss</li>
+    </ul>
+  </a>
+  <div class="stage"><div class="inner">
+    <h2>Big things you can do</h2>
+    <ul class="big tilde">
+      <li>type ft-and-inch any way you write it,<br> from the full <span class="v">6'-3 1/2"</span> down to a quick <span class="v">6 3 1/2</span>,<br> it gets every one</li>
+      <li>get feet back in ft-and-inch every time,<br> as in standard architectural format<br> <span class="v">6'-3 1/2"</span>, never 6.29'</li>
+      <li>watch fractions simplified<br> to the nearest <span class="v">1/16"</span>,<br> so <span class="v">8/16</span> shows as <span class="v">1/2</span></li>
+      <li>flip between fractional and decimal with<br> one click, and your numbers survive the<br> switch, just in a new format</li>
+    </ul>
+  </div></div>
+</section>
+
+<!-- Screen 3 · little things + buy, one screen -->
+<div class="ground">
+<section class="little stage">
+  <h2>Little things it gets right</h2>
+  <ul class="tilde">
+    <li>copies any value with a double-click, ready to paste</li>
+    <li>stays on top of all your windows when you click the pin</li>
+    <li>waits by your clock as a small icon, one click away</li>
+    <li>rolls extra inches into feet: <span class="v">6-15</span> becomes <span class="v">7'-3"</span></li>
+    <li>takes a comma as a decimal point too</li>
+    <li>shows the result on Enter, clears everything on Esc</li>
+    <li>resizes smaller or larger to suit your screen</li>
+    <li>reopens as you left: size, numeric form, pinned or not</li>
+  </ul>
+</section>
+
+<!-- Screen 4 · buy -->
+<section class="close stage">
+  <a class="buy chamfer" href="https://convertikon.gumroad.com/l/convertikon"><span class="slant">Get it for CAD$9.99</span></a>
+  <p class="guarantee">14-day money back guarantee</p>
+</section>
+</div>
+
+<!-- Screen 5 · the app on asphalt -->
+<section class="showcase">
+  <iframe class="panel" src="./app/index.html" title="CONVERTIKON: type a length into any field" scrolling="no" allow="clipboard-write"></iframe>
+  <div class="tryme">
+    <svg viewBox="-100 -95.106 200 190.211" aria-hidden="true">
+      <polygon fill="#E8C32B" points="100.00,0.00 45.81,14.89 80.90,58.78 28.31,38.97 30.90,95.11 0.00,48.17 -30.90,95.11 -28.31,38.97 -80.90,58.78 -45.81,14.89 -100.00,0.00 -45.81,-14.89 -80.90,-58.78 -28.31,-38.97 -30.90,-95.11 0.00,-48.17 30.90,-95.11 28.31,-38.97 80.90,-58.78 45.81,-14.89"/>
+    </svg>
+    <p>TRY<br>ME!</p>
+  </div>
+</section>
+
+<!-- Stay in touch: email sign-up (same Google Form as the coming-soon page) -->
+<section class="keep">
+  <form class="signup chamfer" id="signup" novalidate>
+    <button class="btn" type="button" id="signup-open" aria-expanded="false" aria-controls="email">Stay in touch for product updates</button>
+    <div class="field-row">
+      <label for="email" class="trap">Your email</label>
+      <input type="text" id="email" name="email" placeholder="your@email.com" autocomplete="email" inputmode="email"
+             autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="send" required>
+      <span class="caret" aria-hidden="true"></span>
+    </div>
+    <input type="text" name="website" class="trap" tabindex="-1" autocomplete="off" aria-hidden="true">
+  </form>
+  <p class="signup-msg" id="signup-msg" role="status" aria-live="polite"></p>
+</section>
+
+<dl class="facts stage">
+  <div><dt>Mac</dt><dd>macOS 10.15 or later<br>Apple Silicon and Intel</dd></div>
+  <div><dt>Windows</dt><dd>Windows 10 and 11<br>64-bit</dd></div>
+  <div><dt>Your key</dt><dd>One key, two computers<br>Checked once, then offline</dd></div>
+  <div><dt>Help</dt><dd><a href="mailto:support@convertikon.app">support@convertikon.app</a><br>Happy to hear from you~</dd></div>
+</dl>
+
+<footer class="stage">
+  <span>© 2026 Elizabeth Enko</span>
+  <a href="./privacy/">Privacy</a>
+  <a href="./support/">Support</a>
+  <a href="./terms/">Terms</a>
+</footer>
 
 </div>
-<div class="peek"><img src="./assets/mascot.png" alt="" width="448" height="448"></div>
 <script>
   // Where sign-ups go: a Google Form whose answers land in a Google Sheet. `url` is the
   // form's formResponse address, `field` its email question (entry.NNN).
@@ -271,7 +321,6 @@
 
   (function () {
     var form = document.getElementById('signup');
-    if (!form) return;                         // no sign-up on the page (launch day)
     var opener = document.getElementById('signup-open');
     var field = document.getElementById('email');
     var msg = document.getElementById('signup-msg');
@@ -279,8 +328,8 @@
 
     function thank() {
       var done = document.createElement('div');
-      done.className = 'signup-done';
-      done.textContent = 'See you soon';
+      done.className = 'signup-done chamfer';
+      done.textContent = 'You’re on the list';
       form.replaceWith(done);
       msg.textContent = '';
     }
@@ -366,5 +415,6 @@
     });
   })();
 </script>
+<script src="./assets/mail.js"></script>
 </body>
 </html>
