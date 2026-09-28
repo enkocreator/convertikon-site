@@ -5,6 +5,8 @@
 Copies ../CONVERTIKON/index.html and convert.js into app/, unchanged except for:
   - asset paths point at the site's assets/ (same wordmark and fonts as the app);
   - the panel has no background of its own, so it blends into whatever it sits on;
+  - on phones FT and IN open the regular keyboard (its 123 page has - ' " / and space);
+    MM, CM and M keep the number pad;
   - a small stand-in for the desktop-only electronAPI: never asks for a licence key,
     remembers FRACTIONAL/DECIMAL in this browser, the pin lights up, x clears the fields,
     - does nothing.
@@ -26,6 +28,13 @@ head_extra = """<meta name="robots" content="noindex">
 <!-- WEB VERSION, built by convertikon-site/tools/build_web_app.py from the desktop app's index.html. Don't edit by hand. -->
 """
 page = page.replace("<title>CONVERTIKON</title>", head_extra + "<title>CONVERTIKON</title>", 1)
+
+# Phones: FT and IN need - ' " / and space, which the number pad (inputmode="decimal") doesn't have.
+for unit in ("ft", "in"):
+    old = '<input class="field-input" id="f-%s" type="text" inputmode="decimal" autocomplete="off" spellcheck="false">' % unit
+    assert page.count(old) == 1, unit
+    page = page.replace(old, '<input class="field-input" id="f-%s" type="text" inputmode="text" autocomplete="off" '
+                             'autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="done">' % unit)
 
 css_extra = """
   /* ── Web version: the panel blends into the page behind it ── */
