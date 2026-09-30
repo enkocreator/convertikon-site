@@ -22,15 +22,17 @@ function readNumber(raw) {
   const s = String(raw).replace(/ /g, '').trim().replace(',', '.');
   if (!s) return { state: 'empty' };
   let m;
+  // A mixed number may also be written the way suppliers print it, whole-dash-fraction: 3-3/8 = 3 3/8.
+  // (In the FT field the dash between feet and inches is taken off first, by readFeet.)
   if (/^\d+(\.\d*)?$|^\.\d+$/.test(s)) return { state: 'ok', value: parseFloat(s) };   // 12 · 12.5 · 12. · .5
   if ((m = s.match(/^(\d+)\/(\d+)$/))) {                                                // 3/8
     return +m[2] ? { state: 'ok', value: m[1] / m[2] } : { state: 'bad' };
   }
-  if ((m = s.match(/^(\d+)\s+(\d+)\/(\d+)$/))) {                                        // 4 1/2
+  if ((m = s.match(/^(\d+)\s*[\s-]\s*(\d+)\/(\d+)$/))) {                              // 4 1/2 · 4-1/2 (suppliers' form)
     return +m[3] ? { state: 'ok', value: +m[1] + m[2] / m[3] } : { state: 'bad' };
   }
   if (s === '.' || /^\d+\/$/.test(s)) return { state: 'partial' };                      // "." · "3/"
-  if ((m = s.match(/^(\d+)\s+(\d+\/?)?$/))) return { state: 'partial', value: +m[1] };   // "4 1" · "4 1/"
+  if ((m = s.match(/^(\d+)\s*[\s-]\s*(\d+\/?)?$/))) return { state: 'partial', value: +m[1] };   // "4 1" · "4 1/" · "4-" · "4-1/"
   return { state: 'bad' };
 }
 
@@ -51,7 +53,7 @@ function readInches(raw) {
 // FT: whole feet, then optionally a separator — ' or - or '- (the app's own 1'-8" form),
 // with or without spaces — and inches in any IN form, optionally closed with ".
 // A bare space also separates feet from inches, but only when whole inches come next
-// (6 3 · 6 3 1/2 · 6 3.5). A fraction straight after the space stays rejected: "6 1/2"
+// (6 3 · 6 3 1/2 · 6 3-1/2 · 6 3.5). A fraction straight after the space stays rejected: "6 1/2"
 // could mean 6'-1/2" or 6 1/2 feet.
 // In DECIMAL mode it also takes decimal feet: 6.25 · 6,25 · 6.25' · .5 — a single number
 // with a decimal point can only mean feet. FRACTIONAL mode keeps feet whole, so there
@@ -67,7 +69,7 @@ function readFeet(raw, mode) {
   if (mark) s = s.slice(0, -1).trimEnd();
   let m;
   if ((m = s.match(/^(\d+)\s*(?:'\s*-?|-)\s*(.*)$/)) ||
-      (m = s.match(/^(\d+)\s+(\d+(?:[.,]\d*)?(?:\s+\S*)?)$/))) {
+      (m = s.match(/^(\d+)\s+(\d+(?:[.,]\d*)?(?:\s+\S*|-\S*)?)$/))) {
     const ft = +m[1];
     if (!m[2]) return mark ? { state: 'bad' } : { state: 'ok', value: ft };        // 6' · 6- · 6'-
     const r = readNumber(m[2]);
