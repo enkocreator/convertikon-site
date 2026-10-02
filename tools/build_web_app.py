@@ -8,8 +8,8 @@ Copies ../CONVERTIKON/index.html and convert.js into app/, unchanged except for:
   - on phones FT and IN open the regular keyboard (its 123 page has - ' " / and space);
     MM, CM and M keep the number pad;
   - a small stand-in for the desktop-only electronAPI: never asks for a licence key,
-    remembers FRACTIONAL/DECIMAL in this browser, the pin lights up, x clears the fields,
-    - does nothing.
+    remembers FRACTIONAL/DECIMAL in this browser, the pin lights up, x clears the fields
+    (its tooltip says Clear, where the desktop app's says Hide), - does nothing.
 Rerun it after any change to the app's index.html or convert.js.
 """
 import pathlib, re
@@ -35,6 +35,12 @@ for unit in ("ft", "in"):
     assert page.count(old) == 1, unit
     page = page.replace(old, '<input class="field-input" id="f-%s" type="text" inputmode="text" autocomplete="off" '
                              'autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="done">' % unit)
+
+# The desktop app's x hides the panel to the tray (tooltip "Hide"); on the web there is no tray,
+# and x clears the fields (see the stand-in below), so the tooltip says so.
+old = '<button class="icon-btn" id="btn-close" aria-label="Hide" title="Hide">'
+assert page.count(old) == 1
+page = page.replace(old, '<button class="icon-btn" id="btn-close" aria-label="Clear" title="Clear">')
 
 css_extra = """
   /* ── Web version: the panel blends into the page behind it ── */
