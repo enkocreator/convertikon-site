@@ -10,7 +10,8 @@ Copies ../CONVERTIKON/index.html and convert.js into app/, unchanged except for:
   - a small stand-in for the desktop-only electronAPI: never asks for a licence key,
     remembers FRACTIONAL/DECIMAL in this browser, the pin lights up, x clears the fields
     (its tooltip says Clear, where the desktop app's says Hide), - does nothing.
-Rerun it after any change to the app's index.html or convert.js.
+Rerun it after any change to the app's index.html or convert.js. It also stamps the
+homepage's iframe and the app's convert.js link with a version, so browsers fetch the new files.
 """
 import pathlib, re
 
@@ -67,7 +68,21 @@ shim = """<script>
 assert page.count('<script src="./convert.js"></script>') == 1
 page = page.replace('<script src="./convert.js"></script>', shim, 1)
 
+# Cache-busting: browsers (iPhone Safari especially) keep the old app/index.html and convert.js
+# even when the page around them is refreshed. The homepage asks for the app by a version stamp
+# (a hash of what was built), and the app asks for convert.js the same way, so every rebuild
+# reaches everyone on the next visit.
+import hashlib
+stamp = hashlib.sha1((page + conv).encode("utf-8")).hexdigest()[:10]
+page = page.replace('<script src="./convert.js"></script>', '<script src="./convert.js?v=%s"></script>' % stamp)
+assert page.count("convert.js?v=") == 1
+home = SITE / "index.html"; h = home.read_text(encoding="utf-8")
+new = re.sub(r'src="\./app/index\.html(\?v=[0-9a-f]+)?"', 'src="./app/index.html?v=%s"' % stamp, h)
+assert new.count("app/index.html?v=" + stamp) == 1, "iframe not found in index.html"
+home.write_text(new, encoding="utf-8")
+
 OUT.mkdir(exist_ok=True)
 (OUT / "index.html").write_text(page, encoding="utf-8")
 (OUT / "convert.js").write_text(conv, encoding="utf-8")
+print("version stamp", stamp)
 print("built", OUT / "index.html", len(page), "bytes")
