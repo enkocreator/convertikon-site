@@ -33,7 +33,7 @@
   .page > * { --screen: min(100vh, calc(var(--u) * 968)); }   /* a section that fills one screen */
   @supports (height: 100svh) { .page > * { --screen: min(100svh, calc(var(--u) * 968)); } }
   * { box-sizing: border-box; }
-  html { background: var(--ground); scroll-behavior: smooth; }
+  html { background: var(--ground); }
   body { margin: 0; background: var(--ground); color: var(--ink); font-family: 'Chakra Petch', 'Segoe UI', system-ui, sans-serif;
          font-weight: 500; -webkit-font-smoothing: antialiased; }
   .page { container-type: inline-size; overflow-x: clip; }
@@ -228,7 +228,7 @@
 
 <!-- Screen 2 · price + big things -->
 <section class="band">
-  <a class="sticker" href="#buy" aria-label="Get CONVERTIKON for CAD$9.99">
+  <a class="sticker" href="https://convertikon.gumroad.com/l/convertikon" aria-label="Buy CONVERTIKON for Windows, CAD$9.99">
     <div class="burst">
       <svg viewBox="-180 0 570 470" preserveAspectRatio="none" aria-hidden="true">
         <polygon fill="#3E5A6E" points="104,6 134,94 225,60 194,131 382,107 229,170 304,196 241,216 321,246 223,268 287,317 180,331 240,404 134,357 92,463 13,350 -70,409 -40,300 -175,246 -45,192 -86,25 47,95"/>
