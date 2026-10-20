@@ -33,7 +33,7 @@
   .page > * { --screen: min(100vh, calc(var(--u) * 968)); }   /* a section that fills one screen */
   @supports (height: 100svh) { .page > * { --screen: min(100svh, calc(var(--u) * 968)); } }
   * { box-sizing: border-box; }
-  html { background: var(--ground); }
+  html { background: var(--ground); scroll-behavior: smooth; }
   body { margin: 0; background: var(--ground); color: var(--ink); font-family: 'Chakra Petch', 'Segoe UI', system-ui, sans-serif;
          font-weight: 500; -webkit-font-smoothing: antialiased; }
   .page { container-type: inline-size; overflow-x: clip; }
@@ -70,18 +70,21 @@
   /* ── Screen 2 · the gold band ── */
   .band { position: relative; overflow: hidden; background: var(--gold); }
   .sticker { position: absolute; inset: 0; z-index: 1; color: var(--light); text-decoration: none; pointer-events: none; }   /* a buy link: only the star itself is clickable */
-  .sticker polygon, .sticker .amount, .sticker .once, .sticker .price-list { pointer-events: auto; cursor: pointer; }
+  .sticker polygon, .sticker .amount, .sticker .once, .sticker .plat { pointer-events: auto; cursor: pointer; }
   .sticker polygon { transition: fill .15s; }
   .sticker:hover polygon { fill: var(--slate-hi); }
+  .band-badge { position: absolute; z-index: 2; left: calc(var(--u) * 7.6); top: calc(var(--u) * 266); height: calc(var(--u) * 58); display: block; }   /* Apple's badge in the star, under 'one time purchase' */
+  .band-badge img { display: block; height: 100%; width: auto; }
+  .band-badge:focus-visible { outline: 3px solid var(--slate); outline-offset: 3px; }
   .sticker:focus-visible { outline: none; }
   .sticker:focus-visible polygon { stroke: var(--gold); stroke-width: 3; }
-  .burst { position: absolute; left: calc(var(--u) * -143.7); top: calc(var(--u) * 3.36); width: calc(var(--u) * 583.3); height: calc(var(--u) * 481.2); }
+  .burst { position: absolute; left: calc(var(--u) * -143.7); top: calc(var(--u) * 3.36); width: calc(var(--u) * 612.5); height: calc(var(--u) * 505.3); }   /* 5 % bigger than the design's 583.3 x 481.2 */
   .burst svg { position: absolute; inset: 0; width: 100%; height: 100%; }
-  .amount, .once { position: absolute; font-weight: 700; line-height: 1; white-space: nowrap;
+  .amount, .once, .plat { position: absolute; font-weight: 700; line-height: 1; white-space: nowrap;
                    transform: skewX(-13deg); transform-origin: 0 84.2%; }   /* the wordmark's 13° slant, pivoting on the baseline */
   .amount { left: calc(var(--u) * 4.75); top: calc(var(--u) * 145.65); font-size: calc(var(--u) * 44.21); letter-spacing: .105em; }
-  .once { left: calc(var(--u) * 7.6); top: calc(var(--u) * 184.97); font-size: calc(var(--u) * 25.52); letter-spacing: .031em; }
-  .price-list { position: absolute; left: calc(var(--u) * 17.34); top: calc(var(--u) * 215.97); font-size: max(12px, calc(var(--u) * 17.8)); line-height: max(14.5px, calc(var(--u) * 21.4)); }
+  .once { left: calc(var(--u) * 7.6); top: calc(var(--u) * 236); font-size: calc(var(--u) * 25.52); letter-spacing: .031em; }   /* right above the badge */
+  .plat { left: calc(var(--u) * 7.6); top: calc(var(--u) * 122); font-size: calc(var(--u) * 17.8); letter-spacing: .62em; text-transform: uppercase; }   /* tracked out to the width of 'one time purchase' */   /* the price below is the Windows one */
   .band .stage { width: auto; margin: 0; min-height: max(calc(var(--u) * 504.3), var(--screen));
                  padding: calc(var(--u) * 48) calc(var(--u) * 30) calc(var(--u) * 48) calc(var(--u) * 417.3);
                  display: flex; flex-direction: column; justify-content: center; }
@@ -101,14 +104,17 @@
 
   /* ── Screen 4 · buy ── */
   .close { display: flex; flex-direction: column; align-items: center; padding-top: calc(var(--u) * 72); }
+  .buy-pair { display: flex; flex-direction: column; align-items: center; gap: calc(var(--u) * 16); }
+  .badge { display: block; height: calc(var(--u) * 66.5); }   /* Apple's badge, unaltered; the Windows button takes its height */
+  .badge img { display: block; height: 100%; width: auto; }
+  .badge:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
   .buy { --c: calc(var(--u) * 9.5); display: flex; align-items: center; justify-content: center;
-         width: calc(var(--u) * 366.6); height: calc(var(--u) * 66.5); background: var(--slate); color: var(--light);
+         padding: 0 calc(var(--u) * 34); height: calc(var(--u) * 66.5); background: var(--slate); color: var(--light);
          font-weight: 700; font-size: calc(var(--u) * 24); letter-spacing: .1em; text-transform: uppercase;
          text-decoration: none; white-space: nowrap; transition: background-color .15s; }
   .buy .slant { display: inline-block; transform: skewX(-13deg); }   /* same slant as the price */
   .buy:hover { background: var(--slate-hi); }
   .buy:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
-  .guarantee { margin-top: calc(var(--u) * 2.9); font-size: calc(var(--u) * 16.3); line-height: 1.2; color: var(--label); }
 
   /* ── Screen 5 · the app on asphalt, with the TRY ME! star on its top edge ── */
   .showcase { position: relative; margin-top: calc(var(--u) * 70.9); padding: calc(var(--u) * 114.8) 0 calc(var(--u) * 97.4);
@@ -176,6 +182,7 @@
     .quote br { display: none; }
     .mascot { width: 110px; align-self: flex-end; margin: 20px 12px 0 0; }
     .sticker { --u: .8px; display: block; position: relative; inset: auto; height: calc(var(--u) * 510); }   /* a block, so it takes its room; tall enough for the star's lowest tip */
+    .band-badge { --u: .8px; }   /* phones: the star's own scale */
     .band .stage { padding: 0 16px 48px; min-height: 0; }
     .ground { display: block; min-height: 0; padding: 0; }
     .band .inner { width: auto; }
@@ -188,8 +195,9 @@
     .little ul { display: block; font-size: 18px; line-height: 24px; margin-top: 24px; }
     .little li + li { margin-top: 8px; }
     .close { padding: 48px 16px 0; }
-    .buy { width: min(100%, 330px); height: 56px; font-size: 19px; }
-    .guarantee { margin-top: 8px; font-size: 14px; }
+    .buy-pair { gap: 14px; width: min(100%, 330px); }
+    .badge { height: 56px; }
+    .buy { width: 100%; padding: 0; height: 56px; font-size: 17px; }
     .showcase { margin-top: 110px; padding: 150px 16px 48px; }
     .showcase { background-size: 300px auto; }
     .showcase .panel { width: min(100%, 300px); }
@@ -220,22 +228,17 @@
 
 <!-- Screen 2 · price + big things -->
 <section class="band">
-  <a class="sticker" href="https://convertikon.gumroad.com/l/convertikon" aria-label="Get CONVERTIKON for CAD$9.99">
+  <a class="sticker" href="#buy" aria-label="Get CONVERTIKON for CAD$9.99">
     <div class="burst">
       <svg viewBox="-180 0 570 470" preserveAspectRatio="none" aria-hidden="true">
         <polygon fill="#3E5A6E" points="104,6 134,94 225,60 194,131 382,107 229,170 304,196 241,216 321,246 223,268 287,317 180,331 240,404 134,357 92,463 13,350 -70,409 -40,300 -175,246 -45,192 -86,25 47,95"/>
       </svg>
     </div>
     <p class="amount">CAD$9.99</p>
+    <p class="plat">for Windows</p>
     <p class="once">one time purchase</p>
-    <ul class="price-list">
-      <li>free updates</li>
-      <li>no subscriptions</li>
-      <li>no ads</li>
-      <li>no account</li>
-      <li>no fuss</li>
-    </ul>
   </a>
+  <a class="band-badge" href="https://apps.apple.com/app/id6814667253" rel="noopener"><img src="./assets/mac-app-store-badge.svg" alt="Download on the Mac App Store" width="156" height="40"></a>
   <div class="stage"><div class="inner">
     <h2>Big things you can do</h2>
     <ul class="big tilde">
@@ -264,9 +267,11 @@
 </section>
 
 <!-- Screen 4 · buy -->
-<section class="close stage">
-  <a class="buy chamfer" href="https://convertikon.gumroad.com/l/convertikon"><span class="slant">Get it for CAD$9.99</span></a>
-  <p class="guarantee">14-day money back guarantee</p>
+<section class="close stage" id="buy">
+  <div class="buy-pair">
+    <a class="badge" href="https://apps.apple.com/app/id6814667253" rel="noopener"><img src="./assets/mac-app-store-badge.svg" alt="Download on the Mac App Store" width="156" height="40"></a>
+    <a class="buy chamfer" href="https://convertikon.gumroad.com/l/convertikon"><span class="slant">Buy for Windows · CAD$9.99</span></a>
+  </div>
 </section>
 </div>
 
